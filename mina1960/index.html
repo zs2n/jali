@@ -1035,13 +1035,14 @@ function tailWin(){F.tailing=0;guards=[];F.tail=1;setBan(banL,'');sfx('ok');
 function canSeeTail(g,hc){const dx=hc.x-g.x,dy=hc.y-g.y,d=Math.hypot(dx,dy);if(d<14)return 6;if(d>g.range*DF().vis)return 0;
   let da=Math.atan2(dy,dx)-g.a;da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)>FOV)return 0;if(!los(g.x,g.y,hc.x,hc.y))return 0;return DF().det*(1.4+2.6*(1-d/(g.range*DF().vis)))}
 function updTail(dt){const g=guards[0];if(!g)return;g.t+=dt;g.mv=false;const hc=heroC();
-  if(g.stop>0){g.stop-=dt;g.a=g.back+Math.sin(g.t*1.6)*.55}
-  else{const[wx,wy]=TAILWP[g.wi];if(moveTo(g,tc(wx),tc(wy),23,dt)){if(TAILSTOP.has(g.wi)){g.stop=2.8;g.back=g.a+Math.PI}g.wi++;if(g.wi>=TAILWP.length){tailWin();return}}}
+  if(g.warn>0){g.warn-=dt;g.a=g.fwd+Math.sin(g.t*9)*.12;if(g.warn<=0){g.stop=2.8;g.turn=0;g.back=g.fwd+Math.PI}}
+  else if(g.stop>0){g.stop-=dt;g.turn=Math.min(1,(g.turn||0)+dt/.45);const k=g.turn*g.turn*(3-2*g.turn);g.a=g.fwd+Math.PI*k+(g.turn>=1?Math.sin(g.t*1.6)*.55:0)}
+  else{const[wx,wy]=TAILWP[g.wi];if(moveTo(g,tc(wx),tc(wy),23,dt)){if(TAILSTOP.has(g.wi)){g.warn=DF().tailWarn;g.fwd=g.a;sfx('alert')}g.wi++;if(g.wi>=TAILWP.length){tailWin();return}}}
   const r=canSeeTail(g,hc);g.sus=r>0?Math.min(1,g.sus+r*dt):Math.max(0,g.sus-dt*.4);g.state=g.sus>0?'suspect':'patrol';
   if(g.sus>=1){tailFail('انتبه لك! غيّر طريقه وضاع بين الناس.');return}
   const d=Math.hypot(hc.x-g.x,hc.y-g.y);
   if(d>DF().tailLost){tailFail('بعدت عنه كثير، وضيّعته بين الناس.');return}
-  setBan(banL,d>DF().tailLost-38?'بعدت عنه! قرّب شوي':g.stop>0?'وقف ويلتفت… تخبّى ورا البسطات!':'الحقه بدون ما يشوفك',d>DF().tailLost-38||g.stop>0?'alert':'calm');
+  setBan(banL,d>DF().tailLost-38?'بعدت عنه! قرّب شوي':g.warn>0?'وقف… بيلتفت! تخبّى الحين':g.stop>0?'يلتفت… لا تتحرك قدامه':'الحقه بدون ما يشوفك',d>DF().tailLost-38||g.stop>0||g.warn>0?'alert':'calm');
 }
 
 /* ================= warehouse ================= */
@@ -1854,7 +1855,7 @@ function renderWorld(){
       else if(g.state==='suspect'||g.state==='search'){drawGlyph(gx,gy,'?','#ffd04a');if(g.sus>0){ctx.fillStyle='#120c08';ctx.fillRect(gx-7,gy-5,14,3);ctx.fillStyle='#ffd04a';ctx.fillRect(gx-6,gy-4,12*g.sus,1)}}}
     if(alarm){ctx.fillStyle=`rgba(200,30,20,${.08+.06*Math.sin(tick*8)})`;ctx.fillRect(0,0,VW,VH)}
   }else{
-    for(const g of guards){drawCone(g);if(g.sus>0){const gx=Math.round(g.x)-camX,gy=Math.round(g.y-32)-camY;drawGlyph(gx,gy,'?','#ffd04a');ctx.fillStyle='#120c08';ctx.fillRect(gx-7,gy-5,14,3);ctx.fillStyle='#ffd04a';ctx.fillRect(gx-6,gy-4,12*g.sus,1)}}
+    for(const g of guards){drawCone(g);if(g.warn>0&&!(g.sus>0)){if(Math.sin(tick*22)>-.3)drawGlyph(Math.round(g.x)-camX,Math.round(g.y-32)-camY,'!','#ff9a3c')}else if(g.sus>0){const gx=Math.round(g.x)-camX,gy=Math.round(g.y-32)-camY;drawGlyph(gx,gy,'?','#ffd04a');ctx.fillStyle='#120c08';ctx.fillRect(gx-7,gy-5,14,3);ctx.fillStyle='#ffd04a';ctx.fillRect(gx-6,gy-4,12*g.sus,1)}}
     if(s.light==='indoor'){ctx.fillStyle='rgba(40,20,0,.18)';ctx.fillRect(0,0,VW,VH);ctx.globalCompositeOperation='lighter';for(const wx of[9,11]){const gr=ctx.createLinearGradient(0,2*T-camY,0,7*T-camY);gr.addColorStop(0,'rgba(255,220,150,.22)');gr.addColorStop(1,'rgba(255,220,150,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(wx*T-camX,2*T-camY);ctx.lineTo(wx*T+16-camX,2*T-camY);ctx.lineTo(wx*T+30-camX,7*T-camY);ctx.lineTo(wx*T+8-camX,7*T-camY);ctx.closePath();ctx.fill()}ctx.globalCompositeOperation='source-over'}else
     ctx.fillStyle=s.light==='sunset'?'rgba(255,110,40,.13)':s.light==='dawn'?'rgba(255,130,140,.12)':'rgba(255,170,80,.05)';ctx.fillRect(0,0,VW,VH);
   }
@@ -1949,9 +1950,9 @@ function saveSet(){try{localStorage.setItem(SKEY,JSON.stringify(SET))}catch(e){}
 function applyAudio(){if(mGain)mGain.gain.value=soundOn?SET.music/100:0;if(sfxG)sfxG.gain.value=soundOn?SET.sfx/100:0}
 const TEXTSP={slow:22,normal:40,fast:90,instant:99999};
 const DIFFS={
-  normal:{vis:.9,det:.8,chase:74,pat:1,decay:1.3,alarm:1.15,seaHp:5,breath:16,tailLost:160,fishZone:.3,interrog:0,name:'عادية'},
-  hard:{vis:1.2,det:1.5,chase:80,pat:1.18,decay:.75,alarm:.8,seaHp:3,breath:10,tailLost:132,fishZone:.2,interrog:0,name:'صعبة'},
-  nightmare:{vis:1.38,det:2.2,chase:84,pat:1.32,decay:.45,alarm:.62,seaHp:2,breath:7,tailLost:118,fishZone:.15,interrog:1,name:'كابوس'}};
+  normal:{vis:.9,det:.8,chase:74,pat:1,decay:1.3,alarm:1.15,seaHp:5,breath:16,tailLost:160,tailWarn:1.25,fishZone:.3,interrog:0,name:'عادية'},
+  hard:{vis:1.2,det:1.5,chase:80,pat:1.18,decay:.75,alarm:.8,seaHp:3,breath:10,tailLost:132,tailWarn:.9,fishZone:.2,interrog:0,name:'صعبة'},
+  nightmare:{vis:1.38,det:2.2,chase:84,pat:1.32,decay:.45,alarm:.62,seaHp:2,breath:7,tailLost:118,tailWarn:.6,fishZone:.15,interrog:1,name:'كابوس'}};
 let diffK='normal';const DF=()=>DIFFS[diffK]||DIFFS.normal;
 function progress(){try{return +localStorage.getItem(PKEY)||1}catch(e){return 1}}
 function unlock(n){try{if(n>progress())localStorage.setItem(PKEY,String(n))}catch(e){}}
@@ -2058,7 +2059,7 @@ var playEnding=null;
 openMenu('mMain');
 // expose a tiny hook for automated testing
 window.__mina={get state(){return{mode,view,scene:cur&&cur.id,hero:{...hero},F:{...F},clues:[...clues],guards:guards.map(g=>({x:g.x,y:g.y,state:g.state})),alarm}},
-  tp(x,y,d){hero.x=x;hero.y=y;if(d)hero.dir=d},go(id,x,y){mode='play';enterScene(id,x,y)},get fish(){return fish},openMenu,setDiff(k){diffK=k},startCh3,get stars(){return stars},clearGuards(){guards=[]},startTail,tailWin,clue,get walkers(){return walkers},get puz(){return{pos:puzPos,rot:puzRot}},openLock,get sea(){return sea},get dive(){return dive},SH,startCh2,startSea,startDive,act:action,setF(o){Object.assign(F,o)},startFish,startPuzzle};
+  tp(x,y,d){hero.x=x;hero.y=y;if(d)hero.dir=d},go(id,x,y){mode='play';enterScene(id,x,y)},get fish(){return fish},openMenu,setDiff(k){diffK=k},startCh3,get stars(){return stars},clearGuards(){guards=[]},get guards(){return guards},startTail,tailWin,clue,get walkers(){return walkers},get puz(){return{pos:puzPos,rot:puzRot}},openLock,get sea(){return sea},get dive(){return dive},SH,startCh2,startSea,startDive,act:action,setF(o){Object.assign(F,o)},startFish,startPuzzle};
 })();
 </script>
 

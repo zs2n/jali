@@ -571,9 +571,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         </div>
         <div class="panel promo" id="court-promo">
           <div class="promo-text">
-            <span class="eyebrow">المحكمة الصورية · بيكسل آرت</span>
-            <h3>قضية سالم ضد الشركة</h3>
-            <p>أنت المحامي فيصل. الشركة تقول إن موكلك استقال، ومستنداتك تقول غير ذلك. اعترض على الإفادات الكاذبة، واحسب حقه وفق نظام العمل.</p>
+            <span class="eyebrow">المحكمة الصورية · بيكسل آرت · 4 قضايا</span>
+            <h3>ادخل قاعة المحكمة</h3>
+            <p>أنت المحامي فيصل. أمامك أربع قضايا عمالية: إنهاء غير مشروع، ومهلة إشعار ناقصة، وعقد محدد المدة انتهى، ورواتب متأخرة. اعترض على الإفادات الكاذبة بمستنداتك، واحسب حق موكلك وفق نظام العمل.</p>
             <button class="btn btn-primary" type="button" id="playCourt">ادخل قاعة المحكمة</button>
           </div>
           <canvas id="promoArt" width="96" height="54" aria-hidden="true"></canvas>
@@ -612,8 +612,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 #court :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #court button{font:inherit;cursor:pointer}
 #court .hud{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-#court .title{font-family:var(--f-display);font-weight:900;font-size:1.25rem;letter-spacing:0}
+#court .title{font-family:var(--f-display);font-weight:900;font-size:1.25rem;letter-spacing:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 #court .title span{color:var(--gold)}
+#court .title small{font-family:var(--f-body);font-weight:500;font-size:.85rem;color:var(--muted)}
 #court .hud-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 #court .trust{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
 #court .trust i{width:14px;height:14px;background:var(--gold);display:inline-block;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
@@ -648,9 +649,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 #court .choices{display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}
 #court .choice{background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:4px;padding:9px 12px;text-align:start;font-weight:500}
 #court .choice:hover{border-color:var(--gold)}
-#court .prompt{font-family:var(--f-display);font-weight:800;color:var(--gold)}
 #court .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;z-index:10}
-#court .sheet{background:var(--panel);border:4px solid #000;box-shadow:0 0 0 2px var(--line);border-radius:6px;padding:18px;max-width:560px;width:100%;max-height:86vh;overflow:auto;display:grid;gap:12px}
+#court .sheet{background:var(--panel);border:4px solid #000;box-shadow:0 0 0 2px var(--line);border-radius:6px;padding:18px;max-width:600px;width:100%;max-height:88vh;overflow:auto;display:grid;gap:12px}
 #court .sheet h2{font-family:var(--f-display);font-weight:800;font-size:1.2rem;margin:0}
 #court .ev{background:var(--panel-2);border:2px solid var(--line);border-radius:4px;padding:12px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
 #court .ev canvas{width:44px;height:44px;image-rendering:pixelated;background:#0d0b09;border:2px solid #000}
@@ -662,6 +662,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 #court .start h1{font-family:var(--f-display);font-weight:900;font-size:clamp(2rem,6vw,3rem);margin:0;line-height:1.3}
 #court .start h1 span{color:var(--gold)}
 #court .start p{margin:0;color:var(--muted);max-width:30rem}
+#court .cases{display:grid;gap:10px;width:100%;text-align:start}
+#court .case{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--panel-2);border:2px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--ink);text-align:start;box-shadow:0 3px 0 #000}
+#court .case:hover{border-color:var(--gold)}
+#court .case .no{font-family:var(--f-display);font-weight:900;color:var(--gold);font-size:1.4rem;line-height:1}
+#court .case b{font-family:var(--f-display);font-weight:800;display:block}
+#court .case small{color:var(--muted);font-size:.85rem;display:block;line-height:1.6}
+#court .case .badge{font-size:.75rem;font-weight:700;border-radius:3px;padding:1px 8px;white-space:nowrap}
+#court .case .badge.done{background:var(--good);color:#0D1F14}
+#court .case .badge.new{background:var(--line);color:var(--ink)}
+#court .end-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 #court .foot{font-size:.8rem;color:var(--muted);text-align:center}
 @media (prefers-reduced-motion: reduce){#court .stage.shake,#court .flash.on,#court .objection b,#court .more{animation:none}}
 #court{position:fixed;inset:0;z-index:50;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8;overflow-y:auto;overscroll-behavior:contain;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -672,10 +682,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 <div id="court" hidden role="dialog" aria-modal="true" aria-label="محكمة جَلِيّ">
 <div class="cwrap" dir="rtl" lang="ar">
   <div class="hud">
-    <div class="title"><button class="pbtn" id="c-exit" type="button" style="margin-inline-end:10px">خروج</button>محكمة <span>جَلِيّ</span></div>
+    <div class="title"><button class="pbtn" id="c-exit" type="button" style="margin-inline-end:4px">خروج</button>محكمة <span>جَلِيّ</span> <small id="c-caseTitle"></small></div>
     <div class="hud-r">
       <div class="trust" aria-label="ثقة المحكمة"><span>ثقة المحكمة</span><span id="c-trust"></span></div>
       <button class="pbtn" id="c-recBtn" type="button">المستندات</button>
+      <button class="pbtn" id="c-casesBtn" type="button">القضايا</button>
       <button class="pbtn" id="c-sndBtn" type="button" aria-pressed="true"><span data-s="on">الصوت: مفتوح</span><span data-s="off" hidden>الصوت: مغلق</span></button>
     </div>
   </div>
@@ -688,7 +699,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 
   <div class="box" id="c-box" tabindex="0" aria-live="polite">
     <span class="name" id="c-name">جَلِيّ</span>
-    <p class="text" id="c-text">اضغط «ابدأ الجلسة» لتبدأ القضية.</p>
+    <p class="text" id="c-text">اختر قضية لتبدأ الجلسة.</p>
     <div class="ctrl" id="c-crossCtrl" hidden>
       <button class="pbtn" id="c-prevBtn" type="button">السابق</button>
       <button class="pbtn" id="c-nextBtn" type="button">التالي</button>
@@ -699,14 +710,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     <span class="more" id="c-more" hidden>▼</span>
   </div>
 
-  <p class="foot">محاكاة تعليمية مبسّطة لقضية عمالية متخيَّلة. الإجراءات الفعلية أمام المحاكم تختلف، والشخصيات والأسماء من وحي الخيال.</p>
+  <p class="foot">محاكاة تعليمية مبسّطة لقضايا عمالية متخيَّلة. الإجراءات الفعلية أمام المحاكم تختلف، والشخصيات والأسماء من وحي الخيال.</p>
 </div>
 
 <div class="modal" id="c-startModal">
   <div class="sheet start">
     <h1>محكمة <span>جَلِيّ</span></h1>
-    <p>أنت المحامي فيصل. موكلك سالم فقد عمله بعد ست سنوات، والشركة تقول إنه استقال. اقرأ مستنداتك، واعترض على كل تناقض، واطلب لموكلك حقه كاملاً.</p>
-    <button class="pbtn gold" id="c-startBtn" type="button">ابدأ الجلسة</button>
+    <p>أنت المحامي فيصل. اختر قضية، واقرأ مستنداتك، واعترض على كل إفادة كاذبة، ثم اطلب لموكلك حقه كاملاً وفق نظام العمل.</p>
+    <div class="cases" id="c-caseList"></div>
   </div>
 </div>
 
@@ -723,7 +734,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   <div class="sheet start">
     <h1 id="c-endTitle"></h1>
     <div id="c-endBody" style="display:grid;gap:8px;text-align:start"></div>
-    <button class="pbtn gold" id="c-againBtn" type="button">العب مرة أخرى</button>
+    <div class="end-btns">
+      <button class="pbtn gold" id="c-nextCaseBtn" type="button">القضية التالية</button>
+      <button class="pbtn" id="c-againBtn" type="button">أعد القضية</button>
+      <button class="pbtn" id="c-listBtn" type="button">كل القضايا</button>
+    </div>
   </div>
 </div>
 
@@ -736,68 +751,88 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   function R(x,y,w,h,c){ C.fillStyle=c; C.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h)); }
 
   /* ---------------- characters (all original) ---------------- */
-  var SKIN='#C98E62', SKIN_D='#A8714B', HAIR='#1C1410';
+  var SKIN='#C98E62', SKIN_D='#A8714B', SKIN_L='#D9A27A', HAIR='#1C1410';
   var CHARS = {
-    player:{name:'فيصل (أنت)', tag:'n-player', red:true,  bisht:'#15120F', trim:'#D9A93E', beard:'#1C1410', grey:false, glasses:false, view:'player'},
-    rival: {name:'ماجد، محامي الشركة', tag:'n-rival', red:true, bisht:'#5B3A22', trim:'#B98A43', beard:'#2A1E17', grey:false, glasses:true, view:'rival'},
-    judge: {name:'القاضي', tag:'n-judge', red:false, bisht:'#121110', trim:'#E2B04A', beard:'#8E8A84', grey:true, glasses:false, view:'judge'},
-    client:{name:'سالم', tag:'n-client', red:false, bisht:null, trim:null, beard:'#2B2019', grey:false, glasses:false, view:'lobby'}
+    player:{name:'فيصل (أنت)', tag:'n-player', red:true,  bisht:'#15120F', trim:'#D9A93E', beard:'#1C1410', beardStyle:'full', glasses:false, view:'player'},
+    rival: {name:'ماجد، محامي الشركة', tag:'n-rival', red:true, bisht:'#5B3A22', trim:'#B98A43', beard:'#2A1E17', beardStyle:'goatee', glasses:true, view:'rival'},
+    judge: {name:'القاضي', tag:'n-judge', red:false, bisht:'#121110', trim:'#E2B04A', beard:'#8E8A84', beardStyle:'full', grey:true, glasses:false, view:'judge'}
+  };
+  var CLIENTS = {
+    salem:   {name:'سالم',   tag:'n-client', red:false, beard:'#2B2019', beardStyle:'full',     skin:'#C98E62', view:'lobby'},
+    khalid:  {name:'خالد',   tag:'n-client', red:true,  beard:'#231914', beardStyle:'goatee',   skin:'#B98055', glasses:true, view:'lobby'},
+    nasser:  {name:'ناصر',   tag:'n-client', red:false, beard:'#9C968E', beardStyle:'full',     skin:'#C08A60', grey:true, view:'lobby'},
+    abdullah:{name:'عبدالله', tag:'n-client', red:true,  beard:'#1E1612', beardStyle:'moustache',skin:'#D29A6E', view:'lobby'}
   };
 
   function shemagh(x,y,w,h,red){
     R(x,y,w,h,'#F1EEE8');
     if(red){ for(var j=0;j<h;j+=2){ for(var i=((j>>1)%2);i<w;i+=2){ C.fillStyle='#C23B2E'; C.fillRect(Math.round(x+i),Math.round(y+j),1,1); } } }
-    else { R(x,y+h-1,w,1,'#D8D3CA'); }
+    else { for(var k=3;k<h;k+=6) R(x,y+k,w,1,'#E8E4DD'); }
   }
+  function fringe(x,y,w,red){ for(var i=0;i<w;i+=2){ R(x+i,y,1,2+((i>>1)%2),red?'#C23B2E':'#D8D3CA'); } }
   function person(ch, cx, top, st){
-    var thobe='#EDEFEA', thobeS='#D3D7D0';
-    // body
-    R(cx-31, top+42, 62, 160, thobe);
-    R(cx-31, top+42, 4, 160, thobeS);
-    R(cx-3, top+40, 6, 16, thobeS);
-    R(cx-1, top+56, 2, 2, '#9EA39A'); R(cx-1, top+64, 2, 2, '#9EA39A');
+    var thobe='#EDEFEA', thobeS='#D3D7D0', skin = ch.skin || SKIN;
+    var breath = st.breath ? 1 : 0;
+    // 1. shemagh falling behind the head and neck, one continuous cloth
+    shemagh(cx-24, top+4, 48, 46, ch.red);
+    R(cx-24, top+4, 2, 46, 'rgba(0,0,0,.08)'); R(cx+22, top+4, 2, 46, 'rgba(0,0,0,.08)');
+    // 2. body
+    R(cx-31, top+42+breath, 62, 160, thobe);
+    R(cx-31, top+42+breath, 4, 160, thobeS);
+    R(cx+20, top+60, 2, 120, thobeS); R(cx-14, top+70, 2, 110, thobeS);
+    R(cx-7, top+40, 14, 3, thobeS);
+    R(cx-1, top+44, 2, 26, thobeS);
+    R(cx-1, top+50, 2, 2, '#9EA39A'); R(cx-1, top+58, 2, 2, '#9EA39A'); R(cx-1, top+66, 2, 2, '#9EA39A');
     if(ch.bisht){
-      R(cx-40, top+42, 16, 160, ch.bisht); R(cx+24, top+42, 16, 160, ch.bisht);
+      R(cx-41, top+42, 17, 160, ch.bisht); R(cx+24, top+42, 17, 160, ch.bisht);
       R(cx-25, top+42, 2, 160, ch.trim); R(cx+23, top+42, 2, 160, ch.trim);
-      R(cx-40, top+40, 80, 4, ch.bisht);
+      R(cx-41, top+40, 82, 4, ch.bisht);
+      R(cx-39, top+60, 1, 120, 'rgba(255,255,255,.06)'); R(cx+37, top+60, 1, 120, 'rgba(255,255,255,.06)');
     }
-    // shemagh drape over shoulders
-    shemagh(cx-26, top+34, 11, 26, ch.red); shemagh(cx+15, top+34, 11, 26, ch.red);
-    // neck + head
+    // 3. shemagh ends draped over the chest
+    shemagh(cx-27, top+32, 12, 36, ch.red); fringe(cx-27, top+68, 12, ch.red);
+    shemagh(cx+15, top+32, 12, 30, ch.red); fringe(cx+15, top+62, 12, ch.red);
+    // 4. neck and head
     R(cx-6, top+30, 12, 12, SKIN_D);
-    R(cx-13, top+7, 26, 27, SKIN); R(cx-11, top+33, 22, 3, SKIN);
-    // shemagh frame around face
-    shemagh(cx-18, top-1, 36, 9, ch.red);
-    shemagh(cx-19, top+4, 6, 32, ch.red); shemagh(cx+13, top+4, 6, 32, ch.red);
-    // agal
-    R(cx-17, top+1, 34, 3, '#111'); R(cx-17, top+5, 34, 2, '#111');
+    R(cx-13, top+7, 26, 27, skin); R(cx-11, top+33, 22, 3, skin);
+    R(cx+9, top+12, 4, 18, 'rgba(0,0,0,.08)'); R(cx-12, top+10, 3, 6, 'rgba(255,255,255,.08)');
+    // 5. shemagh crown framing the face, with the front peak
+    shemagh(cx-19, top-1, 38, 9, ch.red);
+    R(cx-3, top-3, 6, 3, '#F1EEE8'); if(ch.red){ R(cx-2, top-3, 1, 1, '#C23B2E'); R(cx+1, top-2, 1, 1, '#C23B2E'); }
+    shemagh(cx-20, top+4, 7, 34, ch.red); shemagh(cx+13, top+4, 7, 34, ch.red);
+    // 6. agal, double ring
+    R(cx-18, top+1, 36, 3, '#111'); R(cx-18, top+5, 36, 2, '#111'); R(cx-18, top+4, 36, 1, '#2A2A2A');
     // brows
-    var browY = top+13 + (st.expr==='shock'?-1:0);
-    if(st.expr==='worried' || st.expr==='sweat'){ R(cx-9,browY+1,2,1,HAIR); R(cx-7,browY,3,1,HAIR); R(cx+4,browY,3,1,HAIR); R(cx+7,browY+1,2,1,HAIR); }
-    else if(st.expr==='stern'){ R(cx-9,browY,3,1,HAIR); R(cx-6,browY+1,2,1,HAIR); R(cx+4,browY+1,2,1,HAIR); R(cx+6,browY,3,1,HAIR); }
-    else { R(cx-9,browY,5,1,ch.grey?'#9b968f':HAIR); R(cx+4,browY,5,1,ch.grey?'#9b968f':HAIR); }
+    var browY = top+13 + (st.expr==='shock'?-1:0), bc = ch.grey?'#9b968f':HAIR;
+    if(st.expr==='worried' || st.expr==='sweat'){ R(cx-9,browY+1,2,1,bc); R(cx-7,browY,3,1,bc); R(cx+4,browY,3,1,bc); R(cx+7,browY+1,2,1,bc); }
+    else if(st.expr==='stern'){ R(cx-9,browY,3,1,bc); R(cx-6,browY+1,2,1,bc); R(cx+4,browY+1,2,1,bc); R(cx+6,browY,3,1,bc); }
+    else if(st.expr==='happy'){ R(cx-9,browY-1,5,1,bc); R(cx+4,browY-1,5,1,bc); }
+    else { R(cx-9,browY,5,1,bc); R(cx+4,browY,5,1,bc); }
     // eyes
     var ey = top+16;
-    if(st.blink){ R(cx-8,ey+1,3,1,'#1b1b1b'); R(cx+5,ey+1,3,1,'#1b1b1b'); }
+    if(st.blink || st.expr==='happy'){ R(cx-8,ey+1,3,1,'#1b1b1b'); R(cx+5,ey+1,3,1,'#1b1b1b'); }
     else if(st.expr==='shock'){ R(cx-9,ey-1,5,4,'#fff'); R(cx+4,ey-1,5,4,'#fff'); R(cx-7,ey,1,2,'#000'); R(cx+6,ey,1,2,'#000'); }
     else { R(cx-8,ey,3,3,'#1b1b1b'); R(cx+5,ey,3,3,'#1b1b1b'); R(cx-7,ey,1,1,'#fff'); R(cx+6,ey,1,1,'#fff'); }
-    if(ch.glasses){ R(cx-10,ey-2,7,1,'#222'); R(cx-10,ey+3,7,1,'#222'); R(cx-10,ey-2,1,6,'#222'); R(cx-4,ey-2,1,6,'#222'); R(cx+3,ey-2,7,1,'#222'); R(cx+3,ey+3,7,1,'#222'); R(cx+3,ey-2,1,6,'#222'); R(cx+9,ey-2,1,6,'#222'); R(cx-3,ey,6,1,'#222'); }
+    if(ch.glasses){ var g='#222'; R(cx-10,ey-2,7,1,g); R(cx-10,ey+3,7,1,g); R(cx-10,ey-2,1,6,g); R(cx-4,ey-2,1,6,g); R(cx+3,ey-2,7,1,g); R(cx+3,ey+3,7,1,g); R(cx+3,ey-2,1,6,g); R(cx+9,ey-2,1,6,g); R(cx-3,ey,6,1,g); }
     // nose
-    R(cx-1, top+19, 2, 5, SKIN_D);
-    // beard + moustache
-    R(cx-13, top+26, 4, 9, ch.beard); R(cx+9, top+26, 4, 9, ch.beard); R(cx-10, top+31, 20, 5, ch.beard);
-    R(cx-6, top+25, 12, 2, ch.beard);
+    R(cx-1, top+19, 2, 5, SKIN_D); R(cx-2, top+23, 4, 1, SKIN_D);
+    // beard styles
+    var b = ch.beard;
+    if(ch.beardStyle==='full'){ R(cx-13, top+24, 4, 11, b); R(cx+9, top+24, 4, 11, b); R(cx-10, top+31, 20, 5, b); R(cx-6, top+25, 12, 2, b); }
+    else if(ch.beardStyle==='goatee'){ R(cx-6, top+25, 12, 2, b); R(cx-4, top+31, 8, 5, b); }
+    else { R(cx-6, top+25, 12, 2, b); R(cx-1, top+32, 2, 2, b); }
     // mouth
     if(st.mouth){ R(cx-3, top+27, 6, 3, '#3A0E0E'); R(cx-2, top+29, 4, 1, '#8C3B3B'); }
+    else if(st.expr==='happy'){ R(cx-3, top+28, 6, 1, '#3A2016'); R(cx-4, top+27, 1, 1, '#3A2016'); R(cx+3, top+27, 1, 1, '#3A2016'); }
     else { R(cx-3, top+28, 6, 1, '#3A2016'); }
     // sweat
     if(st.expr==='sweat'){ R(cx+15, top+12, 2, 3, '#9FD3FF'); R(cx+14, top+15, 4, 2, '#9FD3FF'); }
-    // pointing arm
+    // pointing arm, attached at the shoulder
     if(st.pose==='point'){
       var dir = st.dir || 1, sx = dir>0 ? cx+18 : cx-18-58;
       R(sx, top+58, 58, 11, thobe); R(sx, top+67, 58, 2, thobeS);
       var hx = dir>0 ? sx+58 : sx-8;
-      R(hx, top+59, 8, 10, SKIN); R(dir>0? hx+8 : hx-7, top+61, 7, 3, SKIN);
+      R(hx, top+59, 8, 10, skin); R(dir>0? hx+8 : hx-7, top+61, 7, 3, skin);
     }
   }
 
@@ -807,6 +842,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     for(var x=0;x<320;x+=32){ R(x,0,2,180,dark); R(x+2,0,1,180,light); }
     R(0,38,320,3,dark); R(0,41,320,1,light);
   }
+  var BOOKS = ['#7A2E26','#2F4A3A','#B98A43','#3C4C6A','#5E3A22','#8E6A3A','#2A3A33','#6B2B3A'];
+  function shelf(x,y,w){
+    R(x,y,w,60,'#3A2414'); R(x+2,y+2,w-4,56,'#24160C');
+    for(var row=0;row<2;row++){
+      var yy=y+4+row*28, xx=x+4, k=row*3;
+      while(xx < x+w-8){ var bw=4+((k*7)%4), bh=20+((k*5)%5); R(xx, yy+(24-bh), bw, bh, BOOKS[k%BOOKS.length]); R(xx, yy+(24-bh)+3, bw, 1, 'rgba(255,255,255,.15)'); xx+=bw+1; k++; }
+      R(x+2, yy+24, w-4, 3, '#4A2E18');
+    }
+  }
   function scales(cx, y){
     R(cx-1,y,2,22,'#D9A93E'); R(cx-14,y+4,28,2,'#D9A93E');
     R(cx-15,y+6,1,8,'#D9A93E'); R(cx+14,y+6,1,8,'#D9A93E');
@@ -814,108 +858,251 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   }
   function desk(x, w, color, top){
     R(x, 134, w, 46, color); R(x, 130, w, 5, top); R(x, 150, w, 1, 'rgba(0,0,0,.25)');
+    for(var i=x+20;i<x+w;i+=60) R(i, 138, 1, 40, 'rgba(0,0,0,.18)');
   }
-  var gavelT = -1;
+  var gavelT = -1, client = 'salem';
   var VIEWS = {
     judge:function(st){
       wall('#5C3B25','#43291A','#74503A'); scales(160, 8);
+      R(96,40,128,4,'#43291A');
       person(CHARS.judge, 160, 46, st);
       R(40,112,240,68,'#6E4428'); R(40,108,240,6,'#8B5A35'); R(40,124,240,1,'#4A2D1A');
+      for(var i=60;i<280;i+=40) R(i,130,1,50,'#4A2D1A');
       R(140,128,40,24,'#5A381F'); scales(160,128);
-      // gavel and block on the bench
       R(222,102,24,6,'#3E2414'); R(224,100,20,3,'#6B4226');
       var down = gavelT>=0 && gavelT<0.35;
       if(down){ R(226,92,16,8,'#5E3A22'); R(242,94,22,3,'#8B5A35'); }
       else { R(230,74,10,16,'#5E3A22'); R(238,86,18,3,'#8B5A35'); }
+      R(70,101,30,7,'#E9E3D3'); R(72,99,26,2,'#D6CEBA');
     },
     player:function(st){
       wall('#3D4A3F','#2C372E','#4F5E52');
+      shelf(8,52,72); shelf(240,52,72);
       person(CHARS.player, 150, 36, st);
       desk(0,320,'#7A4B2A','#94603A');
-      R(30,124,40,8,'#E9E3D3'); R(32,122,36,2,'#D6CEBA'); R(250,122,28,10,'#2B241D');
+      R(30,124,40,8,'#E9E3D3'); R(32,122,36,2,'#D6CEBA'); R(250,122,28,10,'#2B241D'); R(252,120,24,2,'#3D342A');
     },
     rival:function(st){
       wall('#4B3B44','#382B32','#5E4B56');
+      shelf(8,52,72); shelf(240,52,72);
       person(CHARS.rival, 170, 36, st);
       desk(0,320,'#6A3F25','#83532F');
       R(240,122,46,10,'#E9E3D3'); R(30,123,22,9,'#B98A43');
     },
     lobby:function(st){
-      R(0,0,320,180,'#9DAA98'); R(0,120,320,60,'#6C665C'); R(0,118,320,3,'#5A554C');
+      R(0,0,320,180,'#9DAA98'); R(0,118,320,62,'#6C665C'); R(0,116,320,3,'#5A554C');
       R(232,30,56,90,'#5C3B25'); R(236,34,48,84,'#6E4428'); R(276,74,4,6,'#D9A93E');
-      R(18,40,60,40,'#C8D2C2'); R(20,42,56,36,'#A9B8A6');
+      R(18,40,60,40,'#C8D2C2'); R(20,42,56,36,'#A9B8A6'); R(47,42,2,36,'#C8D2C2'); R(20,59,56,2,'#C8D2C2');
+      R(96,96,8,24,'#5C4A2E'); R(88,78,24,22,'#4E7A45'); R(92,72,16,8,'#5E8A52');
       R(0,150,320,30,'#4E483F');
-      person(CHARS.client, 150, 40, st);
+      person(CLIENTS[client], 170, 40, st);
     }
   };
 
-  /* ---------------- evidence ---------------- */
-  var EVID = {
-    contract:{title:'عقد العمل', desc:'عقد غير محدد المدة بين سالم والشركة منذ عام 2020. الأجر الشهري 7,000 ريال.', icon:'#E9E3D3'},
-    letter:{title:'خطاب الإنهاء', desc:'صادر من الشركة في آخر يوم عمل: «نُنهي عقدك اعتباراً من اليوم». لا يذكر سبباً ولا مهلة إشعار.', icon:'#F5D9A6'},
-    attendance:{title:'سجل الحضور', desc:'سجل الحضور الرسمي للشركة للسنة الأخيرة: لا يوجد أي يوم غياب.', icon:'#BFE0C8'}
-  };
-  function drawIcon(canvas, color){
-    var g = canvas.getContext('2d'); g.imageSmoothingEnabled=false;
-    g.fillStyle='#0d0b09'; g.fillRect(0,0,11,11);
-    g.fillStyle=color; g.fillRect(2,1,7,9);
-    g.fillStyle='#5a4a3a'; g.fillRect(3,3,5,1); g.fillRect(3,5,5,1); g.fillRect(3,7,3,1);
-  }
+  /* ---------------- cases ---------------- */
+  var CASES = [
+    {id:'salem', client:'salem', title:'سالم ضد الشركة', sub:'إنهاء العقد دون سبب مشروع', arts:'م 76 · م 77 · م 80 · م 84',
+     intro:'موكلك سالم فقد عمله بعد ست سنوات، والشركة تقول إنه استقال.',
+     evid:{
+       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة بين سالم والشركة منذ عام 2020. الأجر الشهري 7,000 ريال.', icon:'#E9E3D3'},
+       letter:{title:'خطاب الإنهاء', desc:'صادر من الشركة في آخر يوم عمل: «نُنهي عقدك اعتباراً من اليوم». لا يذكر سبباً ولا مهلة إشعار.', icon:'#F5D9A6'},
+       attendance:{title:'سجل الحضور', desc:'سجل الحضور الرسمي للشركة للسنة الأخيرة: لا يوجد أي يوم غياب.', icon:'#BFE0C8'}},
+     script:[
+      {scene:'lobby', expr:'worried'},
+      {say:'client', text:'أستاذ فيصل، الحمد لله إنك جيت. الشركة أنهت عقدي بعد ست سنوات، والحين يقولون إني أنا اللي استقلت!'},
+      {say:'player', text:'اهدأ يا سالم. دعني أنظر في أوراقك أولاً.'},
+      {add:'contract'}, {add:'letter'}, {add:'attendance'},
+      {say:'player', text:'العقد غير محدد المدة، وخطاب الإنهاء صادر من الشركة دون سبب، وسجل الحضور نظيف. أوراقنا قوية.'},
+      {say:'client', text:'جربنا التسوية الودية في الوزارة وما وصلنا لحل، فانتقلت القضية للمحكمة العمالية.', expr:'normal'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'فُتحت الجلسة في الدعوى العمالية المقامة من سالم ضد الشركة. يتفضل محامي الشركة بإفادته.'},
+      {scene:'rival', expr:'normal'},
+      {say:'rival', text:'شكراً يا صاحب الفضيلة. موقفنا بسيط: المدعي استقال بإرادته، فلا يستحق إلا ما يقرره النظام للمستقيل.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'يا أستاذ فيصل، في الإفادة التالية عبارة واحدة يكذّبها أحد مستنداتك. تنقّل بين العبارات بزرّي السابق والتالي، ثم اعترض عليها بالمستند المناسب.'},
+      {cross:{lines:['المدعي عمل لدى الشركة منذ عام 2020 بعقد غير محدد المدة.','وكان أجره الشهري 7,000 ريال.','وفي آخر يوم عمل قدّم استقالته بنفسه، ولم يصدر من الشركة أي قرار بإنهاء عقده.'], line:2, ev:'letter'}},
+      {objection:true},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'هذا خطاب صادر من الشركة نفسها في آخر يوم عمل، ونصه: «نُنهي عقدك اعتباراً من اليوم». الشركة هي التي أنهت العقد، لا موكلي.'},
+      {scene:'rival', expr:'shock'},
+      {say:'rival', text:'هذا... حسناً. نعم، أنهينا العقد. لكن السبب أنه كثير الغياب، وهذه من حالات المادة 80 التي تجيز الفسخ دون مكافأة!', expr:'sweat'},
+      {scene:'judge', expr:'stern'},
+      {say:'judge', text:'إفادة جديدة. يا أستاذ فيصل، ابحث فيها عن العبارة التي يكذّبها مستند في يدك.'},
+      {cross:{lines:['نحن لا ننكر أن خطاب الإنهاء صدر من الشركة.','والمادة 80 تجيز فسخ العقد دون مكافأة في حالات محصورة.','والمدعي تغيّب مرات كثيرة خلال السنة الأخيرة دون عذر.'], line:2, ev:'attendance'}},
+      {objection:true},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'سجل الحضور الرسمي للشركة لا يُظهر يوم غياب واحداً في السنة الأخيرة. والمادة 80 لا تنطبق إلا في حالاتها المحصورة، وبعد إتاحة الفرصة للعامل لبيان اعتراضه، وهذا لم يحدث.'},
+      {scene:'rival', expr:'sweat'},
+      {say:'rival', text:'لا تعليق، يا صاحب الفضيلة.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'ثبت للمحكمة أن إنهاء العقد غير مشروع. يا أستاذ فيصل، حدد طلبات موكلك.'},
+      {choice:{prompt:'ما الذي يستحقه سالم؟', options:[
+        {label:'مكافأة نهاية الخدمة فقط', why:'المكافأة حق، لكن الإنهاء غير المشروع يضيف تعويض المادة 77، وعدم الإشعار يضيف تعويض المادة 76.'},
+        {label:'المكافأة، وتعويض المادة 77، وتعويض الإشعار وفق المادة 76', ok:true},
+        {label:'ثلثا المكافأة لأنه خدم ست سنوات', why:'نسب المادة 85 خاصة بالاستقالة، وسالم لم يستقل.'},
+        {label:'تعويض المادة 77 بدلاً من المكافأة', why:'المكافأة والتعويض مستحقان مستقلان، ولا يغني أحدهما عن الآخر.'}]}},
+      {say:'judge', text:'وكم المبلغ؟ أجره الأخير 7,000 ريال، وخدمته 6 سنوات، ولم يُمنح أي مهلة إشعار.'},
+      {choice:{prompt:'احسب المطالبة', options:[
+        {label:'59,500 ريال', ok:true},
+        {label:'45,500 ريال', why:'نسيت تعويض الإشعار: أجر 60 يوماً، أي 14,000 ريال.'},
+        {label:'24,500 ريال', why:'هذه المكافأة وحدها. أضف تعويض المادة 77 وتعويض الإشعار.'},
+        {label:'42,000 ريال', why:'المكافأة ليست أجر شهر عن كل سنة من البداية: أول 5 سنوات نصف أجر عن كل سنة.'}]}},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'المكافأة 24,500 ريال. وتعويض المادة 77 أجر 15 يوماً عن كل سنة: 21,000 ريال. وتعويض الإشعار أجر 60 يوماً: 14,000 ريال. المجموع 59,500 ريال.'},
+      {scene:'judge', expr:'normal'}, {gavel:true},
+      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 59,500 ريال. رُفعت الجلسة.'},
+      {scene:'lobby', expr:'happy'},
+      {say:'client', text:'الله يجزاك خير يا أستاذ فيصل. ما كنت أعرف إن لي كل هالحقوق.'},
+      {end:true}],
+     summary:['المكافأة (م 84): 5 × 3,500 + 1 × 7,000 = 24,500 ريال.','تعويض الإنهاء غير المشروع (م 77): 6 × أجر 15 يوماً = 21,000 ريال.','تعويض الإشعار (م 76): أجر 60 يوماً = 14,000 ريال.','الدرس: خطاب الإنهاء أسقط ادعاء الاستقالة، وسجل الحضور أسقط ادعاء الغياب.'],
+     total:'59,500'},
 
-  /* ---------------- script ---------------- */
-  var S = [
-    {scene:'lobby', expr:'worried'},
-    {say:'client', text:'أستاذ فيصل، الحمد لله إنك جيت. الشركة أنهت عقدي بعد ست سنوات، والحين يقولون إني أنا اللي استقلت!'},
-    {say:'player', text:'اهدأ يا سالم. خلني أشوف أوراقك أول.'},
-    {add:'contract'}, {add:'letter'}, {add:'attendance'},
-    {say:'player', text:'العقد غير محدد المدة، وخطاب الإنهاء من الشركة بدون سبب، وسجل الحضور نظيف. أوراقنا قوية.'},
-    {say:'client', text:'جربنا التسوية الودية في الوزارة وما وصلنا لحل، فانتقلت القضية للمحكمة العمالية.', expr:'normal'},
-    {say:'player', text:'نلتقي في الجلسة. وإذا احتجت أي ورقة، افتح «المستندات» من الأعلى.'},
-    {scene:'judge', expr:'normal'},
-    {say:'judge', text:'فُتحت الجلسة في الدعوى العمالية المقامة من سالم ضد الشركة. يتفضل محامي الشركة بإفادته.'},
-    {scene:'rival', expr:'normal'},
-    {say:'rival', text:'شكراً يا صاحب الفضيلة. موقفنا بسيط: المدعي استقال بإرادته، فلا يستحق إلا ما يقرره النظام للمستقيل.'},
-    {scene:'judge', expr:'normal'},
-    {say:'judge', text:'يا أستاذ فيصل، استمع لإفادة محامي الشركة. في الإفادة عبارة واحدة يكذّبها أحد مستنداتك؛ تنقّل بين العبارات بزرّي السابق والتالي، ثم اعترض عليها بالمستند المناسب.'},
-    {cross:{lines:['المدعي عمل لدى الشركة منذ عام 2020 بعقد غير محدد المدة.','وكان أجره الشهري 7,000 ريال.','وفي آخر يوم عمل قدّم استقالته بنفسه، ولم يصدر من الشركة أي قرار بإنهاء عقده.'], line:2, ev:'letter'}},
-    {objection:true},
-    {scene:'player', pose:'point', dir:1},
-    {say:'player', text:'هذا خطاب صادر من الشركة نفسها في آخر يوم عمل، ونصه: «نُنهي عقدك اعتباراً من اليوم». الشركة هي التي أنهت العقد، لا موكلي.'},
-    {scene:'rival', expr:'shock'},
-    {say:'rival', text:'هذا... حسناً. نعم، أنهينا العقد. لكن السبب أنه كثير الغياب، وهذه من حالات المادة 80 التي تجيز الفصل دون مكافأة!', expr:'sweat'},
-    {scene:'judge', expr:'stern'},
-    {say:'judge', text:'إفادة جديدة. يا أستاذ فيصل، ابحث فيها عن العبارة التي يكذّبها مستند في يدك.'},
-    {cross:{lines:['نحن لا ننكر أن خطاب الإنهاء صدر من الشركة.','والمادة 80 تجيز فسخ العقد دون مكافأة في حالات محصورة.','والمدعي تغيّب مرات كثيرة خلال السنة الأخيرة دون عذر.'], line:2, ev:'attendance'}},
-    {objection:true},
-    {scene:'player', pose:'point', dir:1},
-    {say:'player', text:'سجل الحضور الرسمي للشركة لا يُظهر يوم غياب واحداً في السنة الأخيرة. والمادة 80 لا تنطبق إلا في حالاتها المحصورة، وبعد إتاحة الفرصة للعامل لبيان اعتراضه، وهذا لم يحدث.'},
-    {scene:'rival', expr:'sweat'},
-    {say:'rival', text:'لا تعليق، يا صاحب الفضيلة.'},
-    {scene:'judge', expr:'normal'},
-    {say:'judge', text:'ثبت للمحكمة أن إنهاء العقد غير مشروع. يا أستاذ فيصل، حدد طلبات موكلك.'},
-    {choice:{prompt:'ما الذي يستحقه سالم؟', options:[
-      {label:'مكافأة نهاية الخدمة فقط', why:'المكافأة حق، لكن الإنهاء غير المشروع يضيف تعويض المادة 77، وعدم الإشعار يضيف تعويض المادة 76.'},
-      {label:'المكافأة، وتعويض المادة 77، وتعويض الإشعار وفق المادة 76', ok:true},
-      {label:'ثلثا المكافأة لأنه خدم ست سنوات', why:'نسب المادة 85 خاصة بالاستقالة، وسالم لم يستقل.'},
-      {label:'تعويض المادة 77 بدلاً من المكافأة', why:'المكافأة والتعويض مستحقان مستقلان، ولا يغني أحدهما عن الآخر.'}]}},
-    {say:'judge', text:'وكم المبلغ؟ أجره الأخير 7,000 ريال، وخدمته 6 سنوات، ولم يُمنح أي مهلة إشعار.'},
-    {choice:{prompt:'احسب المطالبة', options:[
-      {label:'59,500 ريال', ok:true},
-      {label:'45,500 ريال', why:'نسيت تعويض الإشعار: أجر 60 يوماً، أي 14,000 ريال.'},
-      {label:'24,500 ريال', why:'هذه المكافأة وحدها. أضف تعويض المادة 77 وتعويض الإشعار.'},
-      {label:'42,000 ريال', why:'المكافأة ليست راتب شهر عن كل سنة من البداية: أول 5 سنوات نصف راتب عن كل سنة.'}]}},
-    {scene:'player', pose:'point', dir:1},
-    {say:'player', text:'المكافأة 24,500 ريال. وتعويض المادة 77 أجر 15 يوماً عن كل سنة: 21,000 ريال. وتعويض الإشعار أجر 60 يوماً: 14,000 ريال. المجموع 59,500 ريال.'},
-    {scene:'judge', expr:'normal'},
-    {gavel:true},
-    {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 59,500 ريال. رُفعت الجلسة.'},
-    {end:true}
+    {id:'khalid', client:'khalid', title:'خالد ومهلة الإشعار', sub:'إنهاء العقد بإشعار ناقص', arts:'م 75 · م 76',
+     intro:'الشركة أنهت عقد خالد لإعادة هيكلة القسم، لكنها أبلغته قبل 20 يوماً فقط.',
+     evid:{
+       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة منذ ثلاث سنوات، والأجر الشهري 9,000 ريال يُصرف شهرياً.', icon:'#E9E3D3'},
+       letter:{title:'خطاب الإنهاء', desc:'مؤرخ في 1 مارس، ونصه: «يُنهى عقدك لإعادة هيكلة القسم، ويكون آخر يوم عمل لك 20 مارس».', icon:'#F5D9A6'},
+       release:{title:'المخالصة النهائية', desc:'صرفت الشركة لخالد مكافأة نهاية الخدمة كاملة 13,500 ريال، ولا يوجد أي مبلغ عن مهلة الإشعار.', icon:'#C9D6F0'}},
+     script:[
+      {scene:'lobby', expr:'worried'},
+      {say:'client', text:'يا أستاذ، أنا ما أعترض على سبب الإنهاء، القسم كله انقفل. بس عطوني عشرين يوم بس وقالوا مع السلامة!'},
+      {add:'contract'}, {add:'letter'}, {add:'release'},
+      {say:'player', text:'العقد غير محدد المدة وأجرك شهري، فمهلة إشعار صاحب العمل 60 يوماً على الأقل. والخطاب يثبت أنك أُبلغت قبل 20 يوماً فقط.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'فُتحت الجلسة في دعوى خالد ضد الشركة. المدعي لا ينازع في سبب الإنهاء، والخلاف في مهلة الإشعار. يتفضل محامي الشركة.'},
+      {scene:'rival', expr:'normal'},
+      {say:'rival', text:'يا صاحب الفضيلة، الشركة التزمت بكل ما يقرره النظام.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'يا أستاذ فيصل، عبارة واحدة في هذه الإفادة يكذّبها أحد مستنداتك. ابحث عنها.'},
+      {cross:{lines:['أنهت الشركة عقد المدعي بسبب إعادة هيكلة القسم.','وقد سلّمناه خطاب الإنهاء قبل ستين يوماً كاملة من آخر يوم عمل.','وصرفنا له مكافأة نهاية الخدمة كاملة.'], line:1, ev:'letter'}},
+      {objection:true},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'خطاب الإنهاء مؤرخ في 1 مارس، وآخر يوم عمل فيه 20 مارس. هذه 20 يوماً فقط، لا 60.'},
+      {scene:'rival', expr:'sweat'},
+      {say:'rival', text:'لكن... المكافأة صُرفت كاملة! ألا يكفي هذا؟'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'ثبت أن الشركة لم تلتزم بمهلة الإشعار. يا أستاذ فيصل، ما الذي يستحقه موكلك بعد ما صُرف له؟'},
+      {choice:{prompt:'ما الذي يستحقه خالد الآن؟', options:[
+        {label:'تعويض عن الأيام الباقية من مهلة الإشعار (م 76)', ok:true},
+        {label:'تعويض الإنهاء غير المشروع (م 77)', why:'خالد لا ينازع في سبب الإنهاء. الخلل هنا في مهلة الإشعار، وحكمه في المادة 76.'},
+        {label:'مكافأة نهاية الخدمة مرة أخرى', why:'المخالصة تثبت أن المكافأة صُرفت كاملة، فلا تُطلب مرتين.'},
+        {label:'لا شيء، لأن المكافأة صُرفت', why:'تعويض الإشعار حق مستقل عن المكافأة، ولا يسقط بصرفها.'}]}},
+      {say:'judge', text:'وكم المبلغ؟ أجره 9,000 ريال شهرياً، والمهلة النظامية 60 يوماً، وأُبلغ قبل 20 يوماً.'},
+      {choice:{prompt:'احسب تعويض الإشعار', options:[
+        {label:'12,000 ريال', ok:true},
+        {label:'18,000 ريال', why:'هذا أجر 60 يوماً كاملة. خالد مُنح 20 يوماً، فالتعويض عن المتبقي فقط: 40 يوماً.'},
+        {label:'6,000 ريال', why:'هذا أجر 20 يوماً، وهي المدة التي مُنحها فعلاً. التعويض عن الأيام الناقصة.'},
+        {label:'13,500 ريال', why:'هذه مكافأة نهاية الخدمة، وقد صُرفت له.'}]}},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'أجر اليوم 300 ريال، والأيام الناقصة من المهلة 40 يوماً. التعويض 12,000 ريال.'},
+      {scene:'judge', expr:'normal'}, {gavel:true},
+      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 12,000 ريال تعويضاً عن مهلة الإشعار. رُفعت الجلسة.'},
+      {scene:'lobby', expr:'happy'},
+      {say:'client', text:'كنت أحسب إن المكافأة هي كل شيء. مشكور يا أستاذ.'},
+      {end:true}],
+     summary:['مهلة إشعار صاحب العمل في العقد غير محدد المدة بأجر شهري: 60 يوماً (م 75).','الأيام الناقصة: 60 − 20 = 40 يوماً.','التعويض (م 76): 9,000 ÷ 30 × 40 = 12,000 ريال.','الدرس: تعويض الإشعار حق مستقل، ولا يسقط بصرف المكافأة.'],
+     total:'12,000'},
+
+    {id:'nasser', client:'nasser', title:'ناصر والعقد المنتهي', sub:'انتهاء العقد المحدد المدة', arts:'م 84 · م 85',
+     intro:'انتهى عقد ناصر المحدد المدة، فصرفت له الشركة ثلث المكافأة كأنه استقال.',
+     evid:{
+       contract:{title:'عقد العمل', desc:'عقد محدد المدة بثلاث سنوات ينتهي في 30 يونيو، والأجر الشهري 6,000 ريال.', icon:'#E9E3D3'},
+       email:{title:'رسالة الموارد البشرية', desc:'رسالة من الشركة قبل نهاية العقد بشهر: «نفيدكم بعدم رغبة الشركة في تجديد عقدكم».', icon:'#F5D9A6'},
+       release:{title:'المخالصة', desc:'صرفت الشركة لناصر 3,000 ريال فقط، وكُتب بجانبها: «ثلث المكافأة».', icon:'#C9D6F0'}},
+     script:[
+      {scene:'lobby', expr:'worried'},
+      {say:'client', text:'يا ولدي، عقدي خلص ثلاث سنوات، والشركة هي اللي ما جددت. وفي الأخير عطوني ثلث المكافأة كأني مستقيل!'},
+      {add:'contract'}, {add:'email'}, {add:'release'},
+      {say:'player', text:'نسب الثلث والثلثين في المادة 85 خاصة بالاستقالة. وعقدك انتهى بانتهاء مدته، فلنرَ ماذا تقول الشركة.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'فُتحت الجلسة في دعوى ناصر ضد الشركة. يتفضل محامي الشركة بإفادته.'},
+      {scene:'rival', expr:'normal'},
+      {say:'rival', text:'يا صاحب الفضيلة، صرفنا للمدعي ما يستحقه وفق المادة 85.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'يا أستاذ فيصل، استمع للإفادة، وابحث عن العبارة التي يكذّبها مستند في يدك.'},
+      {cross:{lines:['عقد المدعي محدد المدة بثلاث سنوات.','وانتهى العقد في موعده المحدد في 30 يونيو.','والمدعي هو الذي طلب عدم تجديد العقد، فخروجه بمنزلة الاستقالة.'], line:2, ev:'email'}},
+      {objection:true},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'هذه رسالة الشركة نفسها: «نفيدكم بعدم رغبة الشركة في تجديد عقدكم». الشركة هي التي لم تجدد، وموكلي لم يستقل.'},
+      {scene:'rival', expr:'shock'},
+      {say:'rival', text:'آه... هذه الرسالة... أُرسلت دون علمي.', expr:'sweat'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'ثبت أن العقد انتهى بانتهاء مدته، لا بالاستقالة. ما الحكم الصحيح للمكافأة؟'},
+      {choice:{prompt:'ما الذي يستحقه ناصر؟', options:[
+        {label:'المكافأة كاملة وفق المادة 84، ويُخصم ما صُرف له', ok:true},
+        {label:'ثلث المكافأة، لأن خدمته أقل من خمس سنوات', why:'نسبة الثلث في المادة 85 للمستقيل فقط، وناصر لم يستقل.'},
+        {label:'لا شيء، لأن العقد انتهى طبيعياً', why:'انتهاء العقد لا يسقط المكافأة، بل يستحقها العامل كاملة.'},
+        {label:'تعويض الإنهاء غير المشروع (م 77)', why:'العقد لم يُنهَ قبل وقته، بل انتهى بانتهاء مدته، فلا محل لتعويض المادة 77.'}]}},
+      {say:'judge', text:'وكم الفرق المستحق؟ أجره 6,000 ريال، وخدمته 3 سنوات، وصُرف له 3,000 ريال.'},
+      {choice:{prompt:'احسب الفرق', options:[
+        {label:'6,000 ريال', ok:true},
+        {label:'9,000 ريال', why:'هذه المكافأة كاملة، لكن الشركة صرفت 3,000 ريال، فالمطالبة بالفرق.'},
+        {label:'15,000 ريال', why:'المكافأة ليست أجر شهر عن كل سنة في أول 5 سنوات، بل نصف أجر.'},
+        {label:'3,000 ريال', why:'هذا ما صُرف له بالفعل. المكافأة الكاملة 9,000 ريال.'}]}},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'المكافأة الكاملة 3 × 3,000 = 9,000 ريال، صُرف منها 3,000، فالباقي 6,000 ريال.'},
+      {scene:'judge', expr:'normal'}, {gavel:true},
+      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 6,000 ريال فرق مكافأة نهاية الخدمة. رُفعت الجلسة.'},
+      {scene:'lobby', expr:'happy'},
+      {say:'client', text:'بارك الله فيك يا ولدي. الحق ما يضيع.'},
+      {end:true}],
+     summary:['المكافأة الكاملة (م 84): 3 × 3,000 = 9,000 ريال.','ما صُرف: 3,000 ريال، والفرق 6,000 ريال.','الدرس: نسب المادة 85 للاستقالة فقط، وانتهاء العقد المحدد المدة يستحق فيه العامل المكافأة كاملة.'],
+     total:'6,000'},
+
+    {id:'abdullah', client:'abdullah', title:'عبدالله والرواتب المتأخرة', sub:'ترك العمل لإخلال صاحب العمل', arts:'م 81 · م 84',
+     intro:'توقفت الشركة عن صرف رواتب عبدالله ثلاثة أشهر، فترك العمل. والشركة تقول إنه هرب.',
+     evid:{
+       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة منذ أربع سنوات، والأجر الشهري 5,000 ريال.', icon:'#E9E3D3'},
+       bank:{title:'كشف الحساب البنكي', desc:'لا توجد أي إيداعات رواتب من الشركة في مارس وأبريل ومايو.', icon:'#BFE0C8'},
+       notice:{title:'خطاب عبدالله للشركة', desc:'خطاب مستلَم بختم الشركة: «أترك العمل لعدم صرف رواتبي منذ ثلاثة أشهر».', icon:'#F5D9A6'}},
+     script:[
+      {scene:'lobby', expr:'worried'},
+      {say:'client', text:'ثلاث شهور وأنا أشتغل بدون راتب! تركت الشغل، والحين الشركة تقول إني مستقيل وما لي شيء.'},
+      {add:'contract'}, {add:'bank'}, {add:'notice'},
+      {say:'player', text:'المادة 81 تجيز للعامل ترك العمل دون إشعار مع احتفاظه بحقوقه كاملة، إذا أخلّ صاحب العمل بالتزاماته الجوهرية. وعدم صرف الأجر من أهمها.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'فُتحت الجلسة في دعوى عبدالله ضد الشركة. يتفضل محامي الشركة.'},
+      {scene:'rival', expr:'normal'},
+      {say:'rival', text:'يا صاحب الفضيلة، المدعي ترك عمله دون مبرر، فهو في حكم المستقيل.'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'يا أستاذ فيصل، عبارة واحدة هنا يكذّبها أحد مستنداتك.'},
+      {cross:{lines:['المدعي ترك العمل في نهاية شهر مايو.','ولم يقدّم إشعاراً مدته ثلاثون يوماً.','ورواتبه كانت تُصرف كاملة في موعدها حتى آخر يوم.'], line:2, ev:'bank'}},
+      {objection:true},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'كشف الحساب لا يُظهر أي راتب من الشركة في مارس وأبريل ومايو. وموكلي أبلغ الشركة كتابياً بسبب تركه العمل.'},
+      {scene:'rival', expr:'sweat'},
+      {say:'rival', text:'حتى لو تأخرت الرواتب، فقد ترك العمل دون إشعار، والمستقيل بعد أربع سنوات لا يستحق إلا ثلث المكافأة!'},
+      {scene:'judge', expr:'normal'},
+      {say:'judge', text:'ثبت للمحكمة أن الشركة لم تصرف الأجر ثلاثة أشهر. يا أستاذ فيصل، حدد طلبات موكلك.'},
+      {choice:{prompt:'ما الذي يستحقه عبدالله؟', options:[
+        {label:'الرواتب المتأخرة والمكافأة كاملة (م 81)', ok:true},
+        {label:'ثلث المكافأة، لأنه في حكم المستقيل', why:'المادة 81 تحفظ للعامل حقوقه كاملة إذا ترك العمل لإخلال صاحب العمل، فلا تُطبق نسب الاستقالة.'},
+        {label:'الرواتب المتأخرة فقط', why:'المادة 81 تحفظ حقوقه النظامية كلها، ومنها مكافأة نهاية الخدمة كاملة.'},
+        {label:'لا شيء، لأنه لم يقدّم إشعاراً', why:'المادة 81 تجيز ترك العمل دون إشعار في هذه الحالة.'}]}},
+      {say:'judge', text:'وكم المطالبة؟ أجره 5,000 ريال، وخدمته 4 سنوات، ولم يُصرف له ثلاثة أشهر.'},
+      {choice:{prompt:'احسب المطالبة', options:[
+        {label:'25,000 ريال', ok:true},
+        {label:'15,000 ريال', why:'هذه الرواتب المتأخرة وحدها. أضف المكافأة الكاملة: 10,000 ريال.'},
+        {label:'18,333 ريال', why:'أضفت ثلث المكافأة فقط، لكن المادة 81 تحفظ المكافأة كاملة.'},
+        {label:'35,000 ريال', why:'المكافأة في أول 5 سنوات نصف أجر عن كل سنة، لا أجر شهر كامل.'}]}},
+      {scene:'player', pose:'point', dir:1},
+      {say:'player', text:'الرواتب المتأخرة 3 × 5,000 = 15,000 ريال، والمكافأة 4 × 2,500 = 10,000 ريال. المجموع 25,000 ريال.'},
+      {scene:'judge', expr:'normal'}, {gavel:true},
+      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 25,000 ريال. رُفعت الجلسة.'},
+      {scene:'lobby', expr:'happy'},
+      {say:'client', text:'أخيراً! كنت خايف إن تركي للشغل ضيّع حقي كله.'},
+      {end:true}],
+     summary:['الرواتب المتأخرة: 3 × 5,000 = 15,000 ريال.','المكافأة كاملة (م 84): 4 × 2,500 = 10,000 ريال.','الدرس: المادة 81 تحفظ للعامل حقوقه كاملة إذا ترك العمل لإخلال صاحب العمل بالتزاماته الجوهرية.'],
+     total:'25,000'}
   ];
 
   /* ---------------- state ---------------- */
-  var view = 'lobby', st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false};
-  var i = 0, trust = 5, record = [], checkpoint = 0, mode = 'idle', speaker = null;
-  var typing = null, full = '', shown = 0, crossIdx = 0, crossStep = null, mistakes = 0;
+  var view = 'lobby', st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false, breath:false};
+  var cur = null, S = [], EVID = {};
+  var i = 0, trust = 5, record = [], mode = 'idle', speaker = null;
+  var typing = null, full = '', crossIdx = 0, crossStep = null, mistakes = 0;
+  var done = {};
+  try{ done = JSON.parse(localStorage.getItem('jali-court-done') || '{}') || {}; }catch(e){ done = {}; }
 
   /* ---------------- sound ---------------- */
   var audio = null, soundOn = true;
@@ -934,11 +1121,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   });
 
   /* ---------------- rendering ---------------- */
-  var visible = true, last = 0, blinkAt = 2000;
+  var visible = true, last = 0, blinkAt = 2000, raf = 0;
+  function charOf(who){ return who==='client' ? CLIENTS[client] : CHARS[who]; }
   function frame(now){
     if(!visible){ raf = 0; return; }
-    var talking = typing && speaker && CHARS[speaker] && CHARS[speaker].view === view;
+    var ch = speaker ? charOf(speaker) : null;
+    var talking = typing && ch && ch.view === view;
     st.mouth = !!talking && Math.floor(now/95)%2===0;
+    st.breath = !reduce && Math.floor(now/900)%2===0;
     if(now > blinkAt){ st.blink = true; if(now > blinkAt+120){ st.blink=false; blinkAt = now + 2200 + Math.random()*2400; } }
     if(gavelT>=0){ gavelT += (now-last)/1000; if(gavelT>0.7) gavelT=-1; }
     last = now;
@@ -949,7 +1139,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     C.restore();
     raf = requestAnimationFrame(frame);
   }
-  var raf = requestAnimationFrame(frame);
+  raf = requestAnimationFrame(frame);
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(es){ es.forEach(function(e){ visible = e.isIntersecting; if(visible && !raf) raf = requestAnimationFrame(frame); }); }).observe(cv);
   }
@@ -957,22 +1147,21 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   /* ---------------- dialogue ---------------- */
   var nameEl = $('c-name'), textEl = $('c-text'), moreEl = $('c-more'), crossCtrl = $('c-crossCtrl'), choicesEl = $('c-choices');
   function setName(who, override){
-    var ch = CHARS[who];
+    var ch = charOf(who);
     nameEl.className = 'name ' + (who==='note' ? 'n-note' : ch ? ch.tag : '');
     nameEl.textContent = override || (ch ? ch.name : '');
   }
   function type(who, text, done, cls){
-    speaker = who; full = text; shown = 0; textEl.textContent = ''; textEl.className = 'text' + (cls ? ' '+cls : '');
+    speaker = who; full = text; textEl.textContent = ''; textEl.className = 'text' + (cls ? ' '+cls : '');
     moreEl.hidden = true;
     clearInterval(typing);
-    var speed = reduce ? 0 : 26;
-    if(!speed){ textEl.textContent = full; typing = null; moreEl.hidden = !!done ? true : false; if(done) done(); return; }
+    if(reduce){ textEl.textContent = full; typing = null; if(done) done(); else moreEl.hidden = false; return; }
+    var shown = 0;
     typing = setInterval(function(){
       shown++; textEl.textContent = full.slice(0, shown);
-      var c = full.charAt(shown-1);
-      if(shown % 2 === 0 && c !== ' ') beep((VOICE[who]||500) + (shown%3)*20, 0.04, 'square', 0.035);
+      if(shown % 2 === 0 && full.charAt(shown-1) !== ' ') beep((VOICE[who]||500) + (shown%3)*20, 0.04, 'square', 0.035);
       if(shown >= full.length){ clearInterval(typing); typing = null; if(done) done(); else moreEl.hidden = false; }
-    }, speed);
+    }, 26);
   }
   function finishTyping(){ if(typing){ clearInterval(typing); typing = null; textEl.textContent = full; if(mode==='say') moreEl.hidden = false; return true; } return false; }
 
@@ -994,8 +1183,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
       if(s.scene){ view = s.scene; st.expr = s.expr||'normal'; st.pose = s.pose||null; st.dir = s.dir||1; i++; continue; }
       if(s.say){ if(s.expr) st.expr = s.expr; mode='say'; setName(s.say); type(s.say, s.text); i++; return; }
       if(s.add){ record.push(s.add); mode='say'; setName('note','أُضيف إلى المستندات'); type('note', EVID[s.add].title + ': ' + EVID[s.add].desc); beep(880,0.12,'triangle',0.06); i++; return; }
-      if(s.cross){ checkpoint = i; startCross(s.cross); return; }
-      if(s.choice){ checkpoint = i; startChoice(s.choice); return; }
+      if(s.cross){ startCross(s.cross); return; }
+      if(s.choice){ startChoice(s.choice); return; }
       if(s.objection){ i++; objection(); return; }
       if(s.gavel){ i++; gavel(); return; }
       if(s.end){ win(); return; }
@@ -1036,7 +1225,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     } else {
       mode = 'busy'; crossCtrl.hidden = true;
       view = 'judge'; st.expr = 'stern';
-      var msg = crossIdx !== crossStep.line ? 'هذه العبارة صحيحة، ولا يناقضها أي مستند في يدك. تنقّل بين العبارات وابحث عن العبارة الكاذبة.' : 'المستند صحيح الموضوع، لكنه لا يناقض هذه العبارة. اختر المستند الذي يثبت العكس.';
+      var msg = crossIdx !== crossStep.line ? 'هذه العبارة صحيحة، ولا يناقضها أي مستند في يدك. تنقّل بين العبارات وابحث عن العبارة الكاذبة.' : 'العبارة هي المقصودة، لكن هذا المستند لا يثبت عكسها. اختر المستند الذي يكذّبها.';
       setName('judge'); type('judge', msg, function(){
         if(hurt()) return;
         setTimeout(function(){ mode='cross'; crossCtrl.hidden=false; st.expr='normal'; showCrossLine(); }, 1400);
@@ -1048,7 +1237,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   function startChoice(c){
     mode = 'choice'; crossCtrl.hidden = true; moreEl.hidden = true;
     setName('note', c.prompt); textEl.textContent = ''; textEl.className='text';
-    var wrapp = document.createElement('p'); wrapp.className = 'prompt'; wrapp.textContent = c.prompt;
     choicesEl.textContent = ''; choicesEl.hidden = false;
     c.options.forEach(function(o){
       var b = document.createElement('button'); b.type='button'; b.className='choice'; b.textContent = o.label;
@@ -1088,6 +1276,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   }
 
   /* ---------------- record ---------------- */
+  function drawIcon(canvas, color){
+    var g = canvas.getContext('2d'); g.imageSmoothingEnabled=false;
+    g.fillStyle='#0d0b09'; g.fillRect(0,0,11,11);
+    g.fillStyle=color; g.fillRect(2,1,7,9);
+    g.fillStyle='#5a4a3a'; g.fillRect(3,3,5,1); g.fillRect(3,5,5,1); g.fillRect(3,7,3,1);
+  }
   var recModal = $('c-recModal'), recList = $('c-recList'), lastFocus = null;
   function openRecord(presenting){
     lastFocus = document.activeElement;
@@ -1109,41 +1303,69 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   recModal.addEventListener('click', function(e){ if(e.target===recModal) closeRecord(); });
   document.addEventListener('keydown', function(e){ if($('court').hidden || e.key!=='Escape') return; if(!recModal.hidden) closeRecord(); else closeCourt(); });
 
-  /* ---------------- start / end ---------------- */
-  function reset(){
-    i = 0; trust = 5; record = []; mistakes = 0; checkpoint = 0; view='lobby'; st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false};
+  /* ---------------- case select / start / end ---------------- */
+  var caseList = $('c-caseList');
+  function buildCaseList(){
+    caseList.textContent = '';
+    CASES.forEach(function(c, n){
+      var b = document.createElement('button'); b.type='button'; b.className='case';
+      var no = document.createElement('span'); no.className='no'; no.textContent = String(n+1);
+      var mid = document.createElement('span'); var t = document.createElement('b'); t.textContent = c.title;
+      var s1 = document.createElement('small'); s1.textContent = c.sub + ' · ' + c.arts;
+      var s2 = document.createElement('small'); s2.textContent = c.intro;
+      mid.appendChild(t); mid.appendChild(s1); mid.appendChild(s2);
+      var badge = document.createElement('span'); badge.className = 'badge ' + (done[c.id] ? 'done' : 'new'); badge.textContent = done[c.id] ? 'كسبتها' : 'جديدة';
+      b.appendChild(no); b.appendChild(mid); b.appendChild(badge);
+      b.addEventListener('click', function(){ ac(); startCase(n); });
+      caseList.appendChild(b);
+    });
+  }
+  function showCases(){ buildCaseList(); $('c-endModal').hidden = true; $('c-startModal').hidden = false; var f = caseList.querySelector('button'); if(f) f.focus(); }
+  var curIdx = 0;
+  function startCase(n){
+    curIdx = n; cur = CASES[n]; S = cur.script; EVID = cur.evid; client = cur.client;
+    i = 0; trust = 5; record = []; mistakes = 0; view='lobby'; st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false, breath:false};
     crossCtrl.hidden = true; choicesEl.hidden = true; renderTrust();
+    $('c-caseTitle').textContent = '· ' + cur.title;
+    $('c-startModal').hidden = true; $('c-endModal').hidden = true;
+    next(); $('c-box').focus({preventScroll:true});
   }
   function para(t, strong){ var p = document.createElement('p'); p.style.margin='0'; if(strong){ p.style.color='var(--gold)'; p.style.fontWeight='700'; } p.textContent = t; return p; }
   function win(){
-    mode='end'; var b = $('c-endBody'); b.textContent='';
+    mode='end'; done[cur.id] = true;
+    try{ localStorage.setItem('jali-court-done', JSON.stringify(done)); }catch(e){}
+    var b = $('c-endBody'); b.textContent='';
     $('c-endTitle').textContent = 'كسبت القضية';
-    b.appendChild(para('حصل سالم على 59,500 ريال' + (mistakes ? '، بعد ' + mistakes + ' أخطاء.' : ' دون أي خطأ.'), true));
-    b.appendChild(para('المكافأة (م 84): 5 × 3,500 + 1 × 7,000 = 24,500 ريال.'));
-    b.appendChild(para('تعويض الإنهاء غير المشروع (م 77): 6 × أجر 15 يوماً = 21,000 ريال.'));
-    b.appendChild(para('تعويض الإشعار (م 76): أجر 60 يوماً = 14,000 ريال.'));
-    b.appendChild(para('الدرس: خطاب الإنهاء أسقط ادعاء الاستقالة، وسجل الحضور أسقط ادعاء الغياب.'));
-    $('c-endModal').hidden = false; $('c-againBtn').focus();
+    b.appendChild(para('حصل ' + CLIENTS[cur.client].name + ' على ' + cur.total + ' ريال' + (mistakes ? '، بعد ' + mistakes + ' أخطاء.' : ' دون أي خطأ.'), true));
+    cur.summary.forEach(function(t){ b.appendChild(para(t)); });
+    var remaining = CASES.filter(function(c){ return !done[c.id]; }).length;
+    if(!remaining) b.appendChild(para('كسبت كل القضايا. أحسنت يا أستاذ فيصل!', true));
+    $('c-nextCaseBtn').hidden = curIdx >= CASES.length - 1;
+    $('c-endModal').hidden = false; ($('c-nextCaseBtn').hidden ? $('c-listBtn') : $('c-nextCaseBtn')).focus();
   }
   function lose(){
     mode='end'; var b = $('c-endBody'); b.textContent='';
     $('c-endTitle').textContent = 'فقدت ثقة المحكمة';
     b.appendChild(para('لا بأس، المحامي الجيد يتعلم من الجلسة. راجع موضوع «نهاية الخدمة» في جَلِيّ ثم حاول مرة أخرى.'));
+    $('c-nextCaseBtn').hidden = true;
     $('c-endModal').hidden = false; $('c-againBtn').focus();
   }
-  $('c-againBtn').addEventListener('click', function(){ $('c-endModal').hidden = true; reset(); next(); });
-  $('c-startBtn').addEventListener('click', function(){ ac(); $('c-startModal').hidden = true; reset(); next(); $('c-box').focus({preventScroll:true}); });
+  $('c-againBtn').addEventListener('click', function(){ startCase(curIdx); });
+  $('c-nextCaseBtn').addEventListener('click', function(){ startCase(curIdx + 1); });
+  $('c-listBtn').addEventListener('click', showCases);
+  $('c-casesBtn').addEventListener('click', function(){ if(typing){ clearInterval(typing); typing=null; } crossCtrl.hidden = true; choicesEl.hidden = true; mode = 'idle'; showCases(); });
+  buildCaseList();
   renderTrust();
   /* ---- open / close inside the site ---- */
   var opener = null;
   window.openCourt = function(btn){
     opener = btn || null;
     $('court').hidden = false; document.body.style.overflow = 'hidden';
-    if(!$('c-startModal').hidden) $('c-startBtn').focus(); else $('c-box').focus({preventScroll:true});
+    if(!$('c-startModal').hidden){ buildCaseList(); var f = caseList.querySelector('button'); if(f) f.focus(); } else $('c-box').focus({preventScroll:true});
   };
   function closeCourt(){
     $('court').hidden = true; document.body.style.overflow = '';
-    clearInterval(typing); typing = null; if(mode==='say') moreEl.hidden = false;
+    if(typing){ clearInterval(typing); typing = null; textEl.textContent = full; } if(mode==='say') moreEl.hidden = false;
     if(opener && opener.focus) opener.focus();
   }
   $('c-exit').addEventListener('click', closeCourt);

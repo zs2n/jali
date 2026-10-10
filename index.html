@@ -316,7 +316,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <div class="steps">
           <div class="panel step"><span class="n">1</span><h3>أفهم حقي</h3><p>شرح بلغة يومية مع مثال واقعي، ومتى تنطبق القاعدة ومتى لا تنطبق.</p></div>
           <div class="panel step"><span class="n">2</span><h3>أعرف وضعي</h3><p>مرشد يسألك عن حالتك، وحاسبة تعطيك نتيجة أولية مع افتراضاتها.</p></div>
-          <div class="panel step"><span class="n">3</span><h3>أعرف وش أسوي</h3><p>الخطوات العملية والمستندات المطلوبة والجهة الرسمية المناسبة لحالتك.</p></div>
+          <div class="panel step"><span class="n">3</span><h3>أعرف ماذا أفعل</h3><p>الخطوات العملية والمستندات المطلوبة والجهة الرسمية المناسبة لحالتك.</p></div>
         </div>
       </section>
 
@@ -453,7 +453,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <div class="sec-head">
           <span class="eyebrow">المرشد</span>
           <h2>كيف انتهى عملك؟</h2>
-          <p>اختر الحالة الأقرب لوضعك، ونقول لك وش تستحق والخطوة التالية. كل حالة لها أثر مالي مختلف.</p>
+          <p>اختر الحالة الأقرب لوضعك، لتعرف ما تستحقه وخطوتك التالية. كل حالة لها أثر مالي مختلف.</p>
         </div>
         <div class="guide">
           <div class="panel q">
@@ -876,16 +876,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     {scene:'rival', expr:'normal'},
     {say:'rival', text:'شكراً يا صاحب الفضيلة. موقفنا بسيط: المدعي استقال بإرادته، فلا يستحق إلا ما يقرره النظام للمستقيل.'},
     {scene:'judge', expr:'normal'},
-    {say:'judge', text:'يا أستاذ فيصل، استمع لإفادة محامي الشركة. إن وجدت عبارة تناقض مستنداتك فاعترض عليها بالمستند المناسب.'},
-    {cross:{lines:['المدعي قدّم استقالته شفهياً لمديره في نهاية الشهر.','وبما أنه خدم ست سنوات، فله ثلثا المكافأة فقط وفق المادة 85.','ولم يصدر من الشركة أي قرار بإنهاء عقده.'], line:2, ev:'letter'}},
+    {say:'judge', text:'يا أستاذ فيصل، استمع لإفادة محامي الشركة. في الإفادة عبارة واحدة يكذّبها أحد مستنداتك؛ تنقّل بين العبارات بزرّي السابق والتالي، ثم اعترض عليها بالمستند المناسب.'},
+    {cross:{lines:['المدعي عمل لدى الشركة منذ عام 2020 بعقد غير محدد المدة.','وكان أجره الشهري 7,000 ريال.','وفي آخر يوم عمل قدّم استقالته بنفسه، ولم يصدر من الشركة أي قرار بإنهاء عقده.'], line:2, ev:'letter'}},
     {objection:true},
     {scene:'player', pose:'point', dir:1},
     {say:'player', text:'هذا خطاب صادر من الشركة نفسها في آخر يوم عمل، ونصه: «نُنهي عقدك اعتباراً من اليوم». الشركة هي التي أنهت العقد، لا موكلي.'},
     {scene:'rival', expr:'shock'},
     {say:'rival', text:'هذا... حسناً. نعم، أنهينا العقد. لكن السبب أنه كثير الغياب، وهذه من حالات المادة 80 التي تجيز الفصل دون مكافأة!', expr:'sweat'},
     {scene:'judge', expr:'stern'},
-    {say:'judge', text:'إفادة جديدة. يا أستاذ فيصل، انظر فيها جيداً.'},
-    {cross:{lines:['المدعي تغيّب مرات كثيرة خلال السنة الأخيرة دون عذر.','والمادة 80 تجيز الفصل دون مكافأة ولا إشعار ولا تعويض.','لذلك لا يستحق المدعي شيئاً.'], line:0, ev:'attendance'}},
+    {say:'judge', text:'إفادة جديدة. يا أستاذ فيصل، ابحث فيها عن العبارة التي يكذّبها مستند في يدك.'},
+    {cross:{lines:['نحن لا ننكر أن خطاب الإنهاء صدر من الشركة.','والمادة 80 تجيز فسخ العقد دون مكافأة في حالات محصورة.','والمدعي تغيّب مرات كثيرة خلال السنة الأخيرة دون عذر.'], line:2, ev:'attendance'}},
     {objection:true},
     {scene:'player', pose:'point', dir:1},
     {say:'player', text:'سجل الحضور الرسمي للشركة لا يُظهر يوم غياب واحداً في السنة الأخيرة. والمادة 80 لا تنطبق إلا في حالاتها المحصورة، وبعد إتاحة الفرصة للعامل لبيان اعتراضه، وهذا لم يحدث.'},
@@ -1036,7 +1036,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     } else {
       mode = 'busy'; crossCtrl.hidden = true;
       view = 'judge'; st.expr = 'stern';
-      var msg = crossIdx !== crossStep.line ? 'هذه العبارة لا تتعارض مع المستند. ابحث عن العبارة التي يكذّبها مستند في يدك.' : 'المستند صحيح الموضوع، لكنه لا يناقض هذه العبارة. اختر المستند الذي يثبت العكس.';
+      var msg = crossIdx !== crossStep.line ? 'هذه العبارة صحيحة، ولا يناقضها أي مستند في يدك. تنقّل بين العبارات وابحث عن العبارة الكاذبة.' : 'المستند صحيح الموضوع، لكنه لا يناقض هذه العبارة. اختر المستند الذي يثبت العكس.';
       setName('judge'); type('judge', msg, function(){
         if(hurt()) return;
         setTimeout(function(){ mode='cross'; crossCtrl.hidden=false; st.expr='normal'; showCrossLine(); }, 1400);
@@ -1204,7 +1204,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     r.appendChild(el('span','tag',c.art));
     r.appendChild(el('h3',null,c.label));
     r.appendChild(el('p',null,c.get));
-    var h = el('h4',null,'وش أسوي؟'); h.style.cssText = 'font-family:var(--f-display);font-weight:600;margin:0'; r.appendChild(h);
+    var h = el('h4',null,'ماذا أفعل؟'); h.style.cssText = 'font-family:var(--f-display);font-weight:600;margin:0'; r.appendChild(h);
     var ol = el('ol'); c.steps.forEach(function(s){ ol.appendChild(el('li',null,s)); }); r.appendChild(ol);
     var go = el('button','btn btn-primary btn-small','احسب مستحقاتي لهذه الحالة'); go.type='button'; go.style.justifySelf='start';
     go.addEventListener('click', function(){ kindSel.value = c.id; update(); $('calc').scrollIntoView({behavior: reduce?'auto':'smooth'}); });

@@ -1,0 +1,350 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ميناء ١٩٦٠</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Kufi+Arabic:wght@400;600;700&display=swap">
+<style>
+/* Layout: one framed game screen, like a cartridge window set in a dark wooden cabinet; controls under it */
+:root{
+  --ink:#0e1a22;          /* night sea behind the cabinet */
+  --wood:#5b3a20;         /* dhow teak frame */
+  --wood-dark:#33200f;
+  --sand:#e6c890;         /* text on dark */
+  --pearl:#f4efe2;
+  --rope:#c9a24a;         /* brass accent */
+  --muted:#9fb0b8;
+  --display:"Lalezar","Noto Kufi Arabic",system-ui,sans-serif;
+  --body:"Noto Kufi Arabic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{background:var(--ink);color:var(--pearl)}
+body{font-family:var(--body);padding-inline:16px;padding-block:20px 32px;direction:rtl}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,6vw,40px);margin:0;color:var(--sand);letter-spacing:.5px}
+.tag{font-size:12px;color:var(--muted)}
+.cabinet{background:linear-gradient(180deg,var(--wood),var(--wood-dark));padding:10px;border-radius:6px;box-shadow:0 0 0 2px #1d1209,0 12px 40px rgba(0,0,0,.5)}
+.screen{position:relative;width:100%;aspect-ratio:240/160;max-width:100%;background:#000;overflow:hidden;border:2px solid #1d1209}
+canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
+.hud{position:absolute;top:6px;right:8px;left:8px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
+.goal{background:rgba(14,26,34,.78);border:1px solid var(--rope);color:var(--sand);font-size:clamp(10px,1.9vw,13px);padding:3px 8px;border-radius:3px;max-width:70%}
+.goal[hidden]{display:none}
+.sound{pointer-events:auto;background:rgba(14,26,34,.78);border:1px solid var(--rope);color:var(--sand);font:inherit;font-size:12px;padding:2px 8px;border-radius:3px;cursor:pointer}
+.box{position:absolute;right:4%;left:4%;bottom:5%;background:rgba(18,30,38,.94);border:2px solid var(--rope);outline:2px solid #1d1209;padding:clamp(6px,1.6vw,12px) clamp(10px,2vw,16px);border-radius:3px;min-height:26%}
+.box .who{font-family:var(--display);color:var(--rope);font-size:clamp(13px,2.6vw,19px);line-height:1.2;margin-bottom:2px}
+.box .txt{font-size:clamp(11px,2.3vw,16px);line-height:1.75;color:var(--pearl);min-height:2.4em}
+.box .more{position:absolute;left:10px;bottom:6px;color:var(--rope);font-size:12px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(8,16,22,.86);text-align:center;padding:16px}
+.overlay h2{font-family:var(--display);font-weight:400;color:var(--sand);font-size:clamp(30px,8vw,56px);margin:0;line-height:1}
+.overlay p{margin:0;color:var(--muted);font-size:clamp(11px,2.2vw,14px);max-width:44ch;line-height:1.8}
+.btn{font-family:var(--display);font-size:clamp(16px,3vw,22px);background:var(--rope);color:#2b1d14;border:0;padding:6px 26px 8px;border-radius:3px;cursor:pointer;box-shadow:0 3px 0 #7a5f22}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a5f22}
+.btn:focus-visible,.sound:focus-visible,.pad button:focus-visible{outline:2px solid var(--pearl);outline-offset:2px}
+.controls{display:none;justify-content:space-between;align-items:center;direction:ltr;padding-inline:6px;user-select:none;-webkit-user-select:none;touch-action:none}
+@media (pointer:coarse){.controls{display:flex}.keys{display:none}}
+.pad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:2px}
+.pad button,.abtn{background:var(--wood);border:2px solid #1d1209;color:var(--sand);font-size:20px;border-radius:6px;touch-action:none}
+.pad button:active,.abtn:active,.pad button.on{background:var(--rope);color:#2b1d14}
+.abtn{width:76px;height:76px;border-radius:50%;font-family:var(--display);font-size:26px}
+.keys{font-size:13px;color:var(--muted);line-height:1.9}
+kbd{font-family:var(--body);background:#1f2f38;border:1px solid #33464f;border-bottom-width:2px;padding:0 6px;border-radius:3px;color:var(--pearl);font-size:12px}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>ميناء ١٩٦٠</h1>
+    <span class="tag">مشهد تجريبي · الشريحة الأولى</span>
+  </header>
+
+  <div class="cabinet">
+    <div class="screen" id="screen">
+      <canvas id="c" width="240" height="160"></canvas>
+      <div class="hud">
+        <div class="goal" id="goal" hidden></div>
+        <button class="sound" id="snd" type="button">الصوت: يعمل</button>
+      </div>
+      <div class="box" id="box" hidden>
+        <div class="who" id="who"></div>
+        <div class="txt" id="txt"></div>
+        <div class="more" id="more">▼</div>
+      </div>
+      <div class="overlay" id="start">
+        <h2>ميناء ١٩٦٠</h2>
+        <p>صبي يدور على أبوه اللي ما رجع من البحر.</p>
+        <button class="btn" id="go" type="button">ابدأ</button>
+      </div>
+      <div class="overlay" id="end" hidden>
+        <h2>نهاية المشهد</h2>
+        <p>هنا تنتهي الشريحة التجريبية. في اللعبة الكاملة يبدأ سالم يلحق خيط «الميناء اللي ما كان المفروض ينزل فيه».</p>
+        <button class="btn" id="again" type="button">العب من جديد</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="pad">
+      <span></span><button type="button" data-k="up" aria-label="فوق">▲</button><span></span>
+      <button type="button" data-k="left" aria-label="يسار">◀</button><span></span><button type="button" data-k="right" aria-label="يمين">▶</button>
+      <span></span><button type="button" data-k="down" aria-label="تحت">▼</button><span></span>
+    </div>
+    <button class="abtn" id="abtn" type="button" aria-label="كلام وتفاعل">A</button>
+  </div>
+
+  <div class="keys">الحركة: <kbd>الأسهم</kbd> أو <kbd>W A S D</kbd> · الكلام والتفاعل: <kbd>Space</kbd> أو <kbd>Enter</kbd></div>
+</div>
+
+<script>
+(()=>{
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+ctx.imageSmoothingEnabled=false;
+const VW=240,VH=160,T=16,MW=36,MH=24;
+
+/* ---------- seeded noise ---------- */
+function rnd(a,b,s=0){let h=(a*374761393+b*668265263+s*982451653)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
+
+/* ---------- map ---------- */
+const map=[];
+for(let y=0;y<MH;y++){map.push([]);for(let x=0;x<MW;x++)map[y].push('.')}
+for(let x=0;x<MW;x++){map[0][x]='R';map[1][x]='#';map[2][x]='#';map[3][x]='#'}
+[17,18].forEach(x=>{for(let y=0;y<4;y++)map[y][x]='R'});
+[4,12,23,31].forEach(x=>map[3][x]='D');
+[2,7,10,14,21,26,29,33].forEach(x=>map[2][x]='O');
+for(let x=0;x<MW;x++){map[14][x]='w';for(let y=15;y<MH;y++)map[y][x]='~'}
+for(let y=13;y<MH;y++){map[y][15]='=';map[y][16]='='}
+[[3,6],[9,8],[27,6],[33,9],[20,8],[1,11]].forEach(([x,y])=>map[y][x]='P');
+[[11,12],[12,12],[11,11]].forEach(([x,y])=>map[y][x]='c');
+[[24,12],[25,12],[24,11]].forEach(([x,y])=>map[y][x]='n');
+const SOLID=new Set(['R','#','O','D','P','c','~']);
+const tileAt=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?'R':map[y][x];
+
+/* ---------- tile painting ---------- */
+function cnv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.imageSmoothingEnabled=false;return[c,g]}
+function px(g,x,y,col,w=1,h=1){g.fillStyle=col;g.fillRect(x,y,w,h)}
+function sand(g,tx,ty,base='#dfbf86',d='#c9a66c',l='#ecd4a2'){px(g,0,0,base,16,16);for(let i=0;i<7;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+20)*16)|0,d);for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i+40)*16)|0,(rnd(tx,ty,i+60)*16)|0,l)}
+function wall(g,tx,ty){px(g,0,0,'#c69c6a',16,16);g.fillStyle='#a67c4c';for(let r=0;r<4;r++){g.fillRect(0,r*4+3,16,1);const o=(r%2)*4+(tx%2)*2;for(let c=o;c<16;c+=8)g.fillRect(c,r*4,1,3)}for(let i=0;i<5;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+9)*16)|0,'#d8b07e')}
+const cache={};
+function tileImg(code,tx,ty,f){
+  const key=code+tx+','+ty+(code==='~'?f:'');if(cache[key])return cache[key];
+  const[c,g]=cnv(16,16);
+  if(code==='.'||code==='P'||code==='c'||code==='n'){sand(g,tx,ty);
+    if(code==='c'){px(g,2,3,'#3d2513',12,12);px(g,3,4,'#a8743e',10,10);px(g,3,7,'#7d5228',10,1);px(g,3,10,'#7d5228',10,1);px(g,3,4,'#c48c50',10,1);px(g,2,15,'rgba(0,0,0,.18)',13,1)}
+    if(code==='n'){g.fillStyle='#7a6a4a';for(let i=0;i<16;i+=3){g.fillRect(i,2,1,12);g.fillRect(0,i%14+1,16,1)}px(g,3,1,'#c8462e',2,2);px(g,11,13,'#c8462e',2,2)}
+  }else if(code==='w'){sand(g,tx,ty,'#c4a672','#a88c5a','#d6bc8a')}
+  else if(code==='~'){
+    px(g,0,0,'#2c6a86',16,16);
+    for(let i=0;i<3;i++){const y=(rnd(tx,ty,i)*14|0)+1,x=((rnd(tx,ty,i+5)*12|0)+f*2)%14;px(g,x,y,'#3f86a2',3,1)}
+    if(rnd(tx,ty,f+30)>.7)px(g,(rnd(tx,ty,f+31)*15)|0,(rnd(tx,ty,f+32)*15)|0,'#8cc4d4');
+    if(tileAt(tx,ty-1)==='w'){g.fillStyle='#e8f0ea';for(let x=0;x<16;x++){const h=1+((x+f*3+tx*5)%6<3?1:0);g.fillRect(x,0,1,h)}px(g,0,2,'#5ea2ba',16,1)}
+  }else if(code==='='){
+    const under=tileAt(tx,ty)==='='&&ty>=15;
+    px(g,0,0,'#8b5b33',16,16);for(let y=0;y<16;y+=4){px(g,0,y+3,'#5e3b20',16,1);px(g,0,y,'#a06a3c',16,1)}
+    px(g,3,1,'#3a2414');px(g,12,5,'#3a2414');px(g,3,9,'#3a2414');px(g,12,13,'#3a2414');
+    if(tileAt(tx-1,ty)!=='=')px(g,0,0,'#4a2e18',2,16);
+    if(tileAt(tx+1,ty)!=='=')px(g,14,0,'#4a2e18',2,16);
+    if(under&&ty===MH-1)px(g,0,14,'#4a2e18',16,2);
+  }else if(code==='R'){px(g,0,0,'#d8b47e',16,16);g.fillStyle='#a8834f';g.fillRect(0,14,16,2);for(let x=0;x<16;x+=8){px(g,x,0,'#e9cc98',4,3)}for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i)*16)|0,4+(rnd(tx,ty,i+3)*9|0),'#c4a06c')}
+  else if(code==='#'){wall(g,tx,ty)}
+  else if(code==='O'){wall(g,tx,ty);px(g,3,3,'#3d2513',10,10);px(g,4,4,'#6b4426',8,8);g.fillStyle='#3d2513';for(let i=4;i<12;i+=2){g.fillRect(i,4,1,8)}px(g,3,13,'#8a6440',10,1)}
+  else if(code==='D'){wall(g,tx,ty);px(g,3,2,'#3d2513',10,14);px(g,4,3,'#6b4426',8,13);px(g,8,3,'#3d2513',1,13);[[5,5],[10,5],[5,10],[10,10]].forEach(([x,y])=>px(g,x,y,'#c9a24a'))}
+  cache[key]=c;return c;
+}
+
+/* ---------- objects ---------- */
+const palm=(()=>{const[c,g]=cnv(34,44);
+  for(let y=14;y<44;y++){const x=15+Math.round(Math.sin(y/9)*1.5);px(g,x,y,'#7a5530',4,1);if(y%3===0)px(g,x,y,'#523619',4,1)}
+  const fr=[[-15,6],[-12,-2],[-6,-8],[2,-9],[9,-6],[15,0],[14,8],[-14,12],[6,12]];
+  fr.forEach(([dx,dy],i)=>{const n=14;for(let s=0;s<=n;s++){const t=s/n,x=17+dx*t,y=14+dy*t+ (t*t*6);px(g,x|0,y|0,i%2?'#3f7a3a':'#2f6430',2,1);if(s%3===1)px(g,(x|0),(y|0)+1,'#5c9a4a')}});
+  px(g,15,12,'#6a4a20',5,4);px(g,16,15,'#c9732e',2,2);px(g,18,14,'#c9732e',2,2);
+  return c})();
+const boat=(()=>{const[c,g]=cnv(132,92);
+  g.strokeStyle='#3a2a1a';g.lineWidth=1;g.beginPath();g.moveTo(71,4);g.lineTo(126,56);g.moveTo(71,4);g.lineTo(14,44);g.stroke();
+  px(g,70,2,'#4a3018',2,56);
+  for(let i=0;i<70;i++){const x=34+i,y=24-Math.round(i*0.3);px(g,x,y,'#e9dfc8',1,3);px(g,x,y+3,'#b8ab8e')}
+  px(g,10,40,'#8a5a30',24,16);px(g,10,40,'#5a3a1e',24,2);px(g,12,44,'#3d2513',4,4);px(g,20,44,'#3d2513',4,4);
+  for(let r=0;r<26;r++){const l=10+Math.floor(r/2.2),rt=128-Math.floor(r*r/14);
+    const col=r<2?'#5a3a1e':r<5?'#9a6a3a':r<7?'#e8e0cc':r<20?'#8a5a30':'#6a4424';px(g,l,56+r,col,rt-l,1)}
+  px(g,40,62,'#5a3a1e',2,2);px(g,70,62,'#5a3a1e',2,2);px(g,100,62,'#5a3a1e',2,2);
+  g.fillStyle='rgba(10,40,60,.35)';g.fillRect(14,82,110,4);
+  return c})();
+
+/* ---------- sprites ---------- */
+const BASE={k:'#2b1d14',s:'#c98a5a',S:'#9c623a',h:'#1a1410',w:'#f2ede0',W:'#bfb59c',e:'#1a1410',t:'#f2ede0',T:'#cfc6ae'};
+const DOWN=["................",".....kkkkkk.....","....kttttttk....","....kTttttTk....","....khsssshk....","....ksessesk....","....kssssssk....",".....kSssSk.....","....kwwwwwwk....","...kwwwwwwwwk...","...kWwwwwwwWk...","..ksWwwwwwwWsk..","...kWwwwwwwWk...","...kwWwwwwWwk...","....kSk..kSk....","....kk....kk...."];
+const UPR={4:"....khhhhhhk....",5:"....khhhhhhk....",6:"....kShhhhSk....",7:".....kSSSSk....."};
+const SIDE=["................","......kkkkk.....",".....ktttttk....",".....kTttttk....",".....khssssk....",".....khssesk....",".....kssssssk...","......kSssk.....",".....kwwwwwk....","....kwwwwwwk....","....kwWwwwwk....","....kwsWwwwk....","....kWwwwwwk....","....kwWwwwWk....",".....kSkkSk.....",".....kk..kk....."];
+function legs(rows,a,b){const r=rows.slice();r[14]=a;r[15]=b;return r}
+function withUp(rows){return rows.map((r,i)=>UPR[i]||r)}
+const FR={
+  down:[DOWN,legs(DOWN,"....kSk...kk....","....kk.........."),DOWN,legs(DOWN,"....kk...kSk....","..........kk....")],
+  side:[SIDE,legs(SIDE,"....kSk..kSk....","....kk....kk...."),SIDE,legs(SIDE,"....kSk..kSk....","....kk....kk....")]
+};
+FR.up=FR.down.map(withUp);
+function make(rows,pal,flip){const[c,g]=cnv(16,16);rows.forEach((r,y)=>{r.padEnd(16,'.').slice(0,16).split('').forEach((ch,x)=>{if(ch!=='.'){g.fillStyle=pal[ch]||'#f0f';g.fillRect(flip?15-x:x,y,1,1)}})});return c}
+function sheet(over){const pal={...BASE,...over},o={};for(const d of['down','up'])o[d]=FR[d].map(r=>make(r,pal));o.right=FR.side.map(r=>make(r,pal));o.left=FR.side.map(r=>make(r,pal,true));return o}
+const SH={
+  hero:sheet({}),
+  gran:sheet({t:'#2a2228',T:'#1a1418',w:'#2e2630',W:'#1c161e',h:'#2a2228',s:'#b07a4e',S:'#8a5a36'}),
+  cap:sheet({t:'#ece6d6',T:'#a8443a',w:'#e9e3d3',W:'#b9af97',s:'#b47a4a',S:'#8c5a34',h:'#ece6d6'}),
+  mar:sheet({t:'#4f7282',T:'#38525e',w:'#8e6a48',W:'#6a4c32',s:'#a86c42',S:'#7e4e2c',h:'#4f7282'})
+};
+
+/* ---------- story ---------- */
+const flags={gran:false,cap:false,mar:false};
+const NPCS=[
+ {id:'gran',name:'الجدة أم راشد',x:4*T,y:4*T+2,dir:'down',sh:SH.gran},
+ {id:'cap',name:'النوخذة بو ناصر',x:15*T+8,y:19*T,dir:'right',sh:SH.cap},
+ {id:'mar',name:'البحّار مرزوق',x:26*T+4,y:11*T,dir:'left',sh:SH.mar}
+];
+const hero={x:12*T,y:4*T+4,dir:'down',walk:0,moving:false};
+const N='';
+function talk(npc){
+  if(npc.id==='gran'){
+    if(!flags.gran){flags.gran=true;setGoal('روح للعم سعد عند الرصيف');return say([
+      ['جدتي','هلا سالم، تعال اجلس جنبي شوي.'],
+      ['جدتي','أبوك قال بيرجع قبل نهاية الصيف، وهذا الصيف خلص.'],
+      ['سالم','يمّه، كل المراكب رجعت. ليش مركب أبوي ما رجع؟'],
+      ['جدتي','الله أعلم يا ولدي. روح للعم سعد عند الرصيف، كانوا ماشين مع بعض. يمكن عنده علم.']])}
+    return say([['جدتي', flags.mar?'وش فيك؟ وجهك متغيّر… وش قال لك فهد؟':'العم سعد تلقاه عند الرصيف جنب المركب.']]);
+  }
+  if(npc.id==='cap'){
+    if(!flags.gran)return say([['العم سعد','مشغول الحين يا ولدي. روح شوف جدتك.']]);
+    if(!flags.cap){flags.cap=true;setGoal('دوّر على فهد عند الشباك');return say([
+      ['العم سعد','هلا بولد راشد. ما شاء الله كبرت.'],
+      ['سالم','يا عم، شفت أبوي؟ كنتوا ماشين مع بعض.'],
+      ['العم سعد','آخر مرة شفته كان في البحرين… لا، لا. في مسقط. كان بخير.'],
+      [N,'(يبعد عينه عنك، ويشد الحبل بدون سبب.)'],
+      ['العم سعد','البحر كبير يا ولدي. اصبر، وارجع لجدتك.']])}
+    return say([['العم سعد','قلت لك اللي أعرفه. خلني أكمل شغلي.']]);
+  }
+  if(npc.id==='mar'){
+    if(!flags.cap)return say([['فهد','هاه؟ … ما أدري عن شي. أنا أصلّح الشباك بس.']]);
+    if(!flags.mar){flags.mar=true;setGoal('');return say([
+      ['فهد','العم سعد قال لك مسقط؟'],
+      [N,'(يحط الإبرة، ويلتفت يمين ويسار.)'],
+      ['فهد','اسمعني يا سالم، ولا تقول لأحد إني قلت لك.'],
+      ['فهد','أبوك ما غرق. والمركب ما وصل مسقط أصلًا.'],
+      ['فهد','أبوك نزل في ميناء… ما كان المفروض ينزل فيه.']],()=>setTimeout(showEnd,500))}
+    return say([['فهد','روح يا سالم، لا أحد يشوفنا مع بعض.']]);
+  }
+}
+const INSPECT={
+  c:'صناديق تمر مختومة، جاهزة تنشحن للهند.',
+  n:'شبك صيد ناشف تحت الشمس، وفيه عوّامات حمرا.',
+  P:'نخلة. العذوق بدأت تصفرّ.',
+  boat:'مركب العم سعد. مركب أبوي كان أكبر من كذا.',
+  ownDoor:'بيتنا. الباب مفتوح شوي، وريحة البخور طالعة.',
+  door:'الباب مسكّر.'
+};
+
+/* ---------- dialogue ---------- */
+const box=document.getElementById('box'),who=document.getElementById('who'),txt=document.getElementById('txt'),more=document.getElementById('more'),goal=document.getElementById('goal');
+let dq=null,di=0,shown=0,full='',onDone=null,mode='title',tick=0;
+function say(lines,done){dq=lines;di=0;onDone=done||null;mode='talk';box.hidden=false;showLine()}
+function showLine(){const[n,t]=dq[di];who.textContent=n||'';who.hidden=!n;full=t;shown=0;txt.textContent='';more.hidden=true;txt.style.fontStyle=n?'normal':'italic';txt.style.color=n?'':'#c9d6dc'}
+function advance(){
+  if(shown<full.length){shown=full.length;txt.textContent=full;more.hidden=false;return}
+  di++;if(di<dq.length){showLine();return}
+  box.hidden=true;dq=null;mode='play';if(onDone){const f=onDone;onDone=null;f()}
+}
+function setGoal(s){goal.textContent=s?('المهمة: '+s):'';goal.hidden=!s}
+
+/* ---------- audio ---------- */
+let ac=null,soundOn=true;
+function blip(){if(!soundOn)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=380+Math.random()*90;g.gain.value=.025;o.connect(g);g.connect(ac.destination);const t=ac.currentTime;g.gain.exponentialRampToValueAtTime(.0001,t+.05);o.start(t);o.stop(t+.06)}catch(e){}}
+/* gentle looping melody (hijaz-flavoured) + soft drone */
+let musicT=null,mGain=null,step=0;
+const MEL=[62,null,63,66,67,null,66,63,62,null,null,null,67,69,70,69,67,66,63,null,62,null,null,null];
+const hz=n=>440*Math.pow(2,(n-69)/12);
+function note(f,t,d,type,v){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(mGain);o.start(t);o.stop(t+d+.05)}
+function startMusic(){
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return}
+  if(musicT)return;mGain=ac.createGain();mGain.gain.value=soundOn?1:0;mGain.connect(ac.destination);
+  musicT=setInterval(()=>{const t=ac.currentTime+.05,n=MEL[step%MEL.length];
+    if(n)note(hz(n),t,.55,'triangle',.05);
+    if(step%8===0)note(hz(50),t,2.6,'sine',.04);
+    if(step%4===2)note(hz(n?n-12:57),t,.3,'square',.012);
+    step++},330);
+}
+document.getElementById('snd').addEventListener('click',e=>{soundOn=!soundOn;if(mGain)mGain.gain.value=soundOn?1:0;e.target.textContent='الصوت: '+(soundOn?'يعمل':'مطفأ')});
+
+/* ---------- input ---------- */
+const keys={up:0,down:0,left:0,right:0};
+const KM={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right'};
+addEventListener('keydown',e=>{if(KM[e.code]){keys[KM[e.code]]=1;e.preventDefault()}if(e.code==='Space'||e.code==='Enter'||e.code==='KeyZ'){if(mode==='play'||mode==='talk'){e.preventDefault();action()}}});
+addEventListener('keyup',e=>{if(KM[e.code])keys[KM[e.code]]=0});
+document.querySelectorAll('.pad button').forEach(b=>{const k=b.dataset.k;
+  const on=e=>{e.preventDefault();keys[k]=1;b.classList.add('on')},off=e=>{keys[k]=0;b.classList.remove('on')};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off)});
+document.getElementById('abtn').addEventListener('pointerdown',e=>{e.preventDefault();action()});
+document.getElementById('screen').addEventListener('pointerdown',e=>{if(mode==='talk')action()});
+
+/* ---------- world logic ---------- */
+const DV={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+function feet(x,y){return[x+3,y+11,x+13,y+16]}
+function blocked(x,y){const[a,b,c,d]=feet(x,y);
+  for(const[px_,py_]of[[a,b],[c-1,b],[a,d-1],[c-1,d-1]]){if(SOLID.has(tileAt(Math.floor(px_/T),Math.floor(py_/T))))return true}
+  for(const n of NPCS){if(c>n.x+3&&a<n.x+13&&d>n.y+10&&b<n.y+16)return true}
+  return false}
+function action(){
+  if(mode==='talk'){advance();return}
+  if(mode!=='play')return;
+  const[dx,dy]=DV[hero.dir],fx=hero.x+8+dx*12,fy=hero.y+13+dy*12;
+  for(const n of NPCS){if(fx>=n.x&&fx<n.x+16&&fy>=n.y+2&&fy<n.y+18){n.dir={up:'down',down:'up',left:'right',right:'left'}[hero.dir];talk(n);return}}
+  const tx=Math.floor(fx/T),ty=Math.floor(fy/T),code=tileAt(tx,ty);
+  if(tx>=17&&tx<=25&&ty>=15&&ty<=19)return say([[N,INSPECT.boat]]);
+  if(code==='D')return say([[N,tx===12?INSPECT.ownDoor:INSPECT.door]]);
+  if(INSPECT[code])return say([[N,INSPECT[code]]]);
+}
+function update(dt){
+  tick+=dt;
+  if(mode==='talk'&&shown<full.length){const prev=shown;shown=Math.min(full.length,shown+dt*38);if((shown|0)!==(prev|0)){txt.textContent=full.slice(0,shown|0);if((shown|0)%2===0)blip()}if(shown>=full.length)more.hidden=false}
+  if(mode!=='play'){hero.moving=false;return}
+  let mx=keys.right-keys.left,my=keys.down-keys.up;
+  if(mx||my){
+    if(Math.abs(mx)>=Math.abs(my)&&mx)hero.dir=mx>0?'right':'left';else if(my)hero.dir=my>0?'down':'up';
+    const l=Math.hypot(mx,my),sp=82*dt;mx=mx/l*sp;my=my/l*sp;
+    if(!blocked(hero.x+mx,hero.y))hero.x+=mx;
+    if(!blocked(hero.x,hero.y+my))hero.y+=my;
+    hero.walk+=dt*8;hero.moving=true;
+  }else{hero.moving=false;hero.walk=0}
+}
+
+/* ---------- render ---------- */
+function render(){
+  const camX=Math.round(Math.max(0,Math.min(MW*T-VW,hero.x+8-VW/2))),camY=Math.round(Math.max(0,Math.min(MH*T-VH,hero.y+8-VH/2)));
+  const f=Math.floor(tick*2)%2;
+  const x0=Math.floor(camX/T),y0=Math.floor(camY/T);
+  for(let y=y0;y<=y0+Math.ceil(VH/T);y++)for(let x=x0;x<=x0+Math.ceil(VW/T);x++){if(x<MW&&y<MH)ctx.drawImage(tileImg(map[y][x],x,y,f),x*T-camX,y*T-camY)}
+  // dock posts in water
+  for(let y=15;y<MH;y++){ctx.fillStyle='rgba(20,40,50,.45)';ctx.fillRect(15*T-camX-1,y*T-camY+2,1,12);ctx.fillRect(17*T-camX,y*T-camY+2,1,12)}
+  const objs=[];
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y][x]==='P')objs.push({by:y*T+15,draw:()=>ctx.drawImage(palm,x*T-9-camX,y*T+16-44-camY)});
+  objs.push({by:19*T,draw:()=>{const bob=Math.round(Math.sin(tick*1.6));ctx.drawImage(boat,17*T+8-camX,16*T-44-camY+bob)}});
+  const shadow=(x,y)=>{ctx.fillStyle='rgba(40,25,10,.25)';ctx.fillRect(x+4-camX,y+15-camY,8,2)};
+  NPCS.forEach(n=>objs.push({by:n.y+15,draw:()=>{shadow(n.x,n.y);const idle=Math.floor(tick*1.2+n.x)%2;ctx.drawImage(n.sh[n.dir][0],Math.round(n.x)-camX,Math.round(n.y)-camY-(idle&&n.id!=='gran'?0:0))}}));
+  objs.push({by:hero.y+15,draw:()=>{const fi=hero.moving?(Math.floor(hero.walk)%4):0,bob=hero.moving&&fi%2?1:0;shadow(Math.round(hero.x),Math.round(hero.y));ctx.drawImage(SH.hero[hero.dir][fi],Math.round(hero.x)-camX,Math.round(hero.y)-camY-bob)}});
+  objs.sort((a,b)=>a.by-b.by).forEach(o=>o.draw());
+  // talk hint
+  if(mode==='play'){for(const n of NPCS){if(Math.hypot(n.x-hero.x,n.y-hero.y)<22){const bx=Math.round(n.x)+6-camX,by=Math.round(n.y)-8-camY+(Math.floor(tick*3)%2);ctx.fillStyle='#2b1d14';ctx.fillRect(bx-1,by-1,6,7);ctx.fillStyle='#f4efe2';ctx.fillRect(bx,by,4,5);ctx.fillStyle='#2b1d14';ctx.fillRect(bx+1,by+1,2,1);ctx.fillRect(bx+1,by+3,2,1)}}}
+  // warm late-summer tint
+  ctx.fillStyle='rgba(255,170,80,.06)';ctx.fillRect(0,0,VW,VH);
+}
+let last=performance.now();
+function loop(t){const dt=Math.min(.05,(t-last)/1000);last=t;update(dt);render();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+
+/* ---------- flow ---------- */
+const start=document.getElementById('start'),end=document.getElementById('end');
+function begin(){
+  Object.keys(flags).forEach(k=>flags[k]=false);
+  hero.x=12*T;hero.y=4*T+4;hero.dir='down';NPCS[0].dir='down';NPCS[1].dir='right';NPCS[2].dir='left';
+  start.hidden=true;end.hidden=true;setGoal('');
+  say([[N,'صيف ١٩٦٠. ميناء صغير على ساحل الشرقية.'],[N,'صار له أربعين يوم… كل المراكب رجعت من السفر، إلا مركب واحد.'],[N,'وكان فيه راشد، أبو سالم.']],()=>{setGoal('كلّم جدتك عند باب البيت');startMusic()});
+}
+function showEnd(){mode='end';end.hidden=false;document.getElementById('again').focus()}
+document.getElementById('go').addEventListener('click',()=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}begin()});
+document.getElementById('again').addEventListener('click',begin);
+})();
+</script>
+
+</body></html>

@@ -1,350 +1,2066 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="ميناء ١٩٦٠: لعبة بكسل آرت قصصية من استوديو قرطاس. صيف ١٩٦٠، كل المراكب رجعت إلا مركب واحد.">
+<meta name="theme-color" content="#0e1a22">
+<style>html,body{margin:0}body{font:14px system-ui,sans-serif}img{max-width:100%}</style>
 <title>ميناء ١٩٦٠</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Kufi+Arabic:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap">
 <style>
-/* Layout: one framed game screen, like a cartridge window set in a dark wooden cabinet; controls under it */
+/* Layout: one framed game screen set in a teak cabinet; toolbar and touch controls below it */
 :root{
-  --ink:#0e1a22;          /* night sea behind the cabinet */
-  --wood:#5b3a20;         /* dhow teak frame */
+  --ink:#0e1a22;
+  --wood:#5b3a20;
   --wood-dark:#33200f;
-  --sand:#e6c890;         /* text on dark */
+  --sand:#e6c890;
   --pearl:#f4efe2;
-  --rope:#c9a24a;         /* brass accent */
+  --rope:#c9a24a;
   --muted:#9fb0b8;
+  --danger:#c8402e;
   --display:"Lalezar","Noto Kufi Arabic",system-ui,sans-serif;
   --body:"Noto Kufi Arabic",system-ui,sans-serif;
   color-scheme:dark;
 }
+[hidden]{display:none!important}
 html,body{background:var(--ink);color:var(--pearl)}
-body{font-family:var(--body);padding-inline:16px;padding-block:20px 32px;direction:rtl}
-.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+body{font-family:var(--body);padding-inline:16px;padding-block:18px 28px;direction:rtl}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,6vw,40px);margin:0;color:var(--sand);letter-spacing:.5px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,6vw,40px);margin:0;color:var(--sand)}
 .tag{font-size:12px;color:var(--muted)}
 .cabinet{background:linear-gradient(180deg,var(--wood),var(--wood-dark));padding:10px;border-radius:6px;box-shadow:0 0 0 2px #1d1209,0 12px 40px rgba(0,0,0,.5)}
-.screen{position:relative;width:100%;aspect-ratio:240/160;max-width:100%;background:#000;overflow:hidden;border:2px solid #1d1209}
+.screen{position:relative;width:100%;aspect-ratio:320/180;max-width:100%;background:#000;overflow:hidden;border:2px solid #1d1209}
 canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
-.hud{position:absolute;top:6px;right:8px;left:8px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
-.goal{background:rgba(14,26,34,.78);border:1px solid var(--rope);color:var(--sand);font-size:clamp(10px,1.9vw,13px);padding:3px 8px;border-radius:3px;max-width:70%}
-.goal[hidden]{display:none}
-.sound{pointer-events:auto;background:rgba(14,26,34,.78);border:1px solid var(--rope);color:var(--sand);font:inherit;font-size:12px;padding:2px 8px;border-radius:3px;cursor:pointer}
-.box{position:absolute;right:4%;left:4%;bottom:5%;background:rgba(18,30,38,.94);border:2px solid var(--rope);outline:2px solid #1d1209;padding:clamp(6px,1.6vw,12px) clamp(10px,2vw,16px);border-radius:3px;min-height:26%}
-.box .who{font-family:var(--display);color:var(--rope);font-size:clamp(13px,2.6vw,19px);line-height:1.2;margin-bottom:2px}
-.box .txt{font-size:clamp(11px,2.3vw,16px);line-height:1.75;color:var(--pearl);min-height:2.4em}
-.box .more{position:absolute;left:10px;bottom:6px;color:var(--rope);font-size:12px;animation:blink 1s steps(2) infinite}
+.hud{position:absolute;top:5px;right:6px;left:6px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px}
+.hud .col{display:flex;flex-direction:column;gap:4px;max-width:58%;min-width:0}
+.hud .col.l{align-items:flex-end}
+.goal,.ban{font-size:clamp(9px,1.7vw,13px);padding:2px 8px;border-radius:3px;line-height:1.6}
+.goal{background:rgba(14,26,34,.8);border:1px solid var(--rope);color:var(--sand)}
+.ban{font-weight:700;white-space:pre-line}
+.ban.alert{background:rgba(120,20,12,.88);border:1px solid #ff8a6a;color:#fff2ea;animation:pulse 1s ease-in-out infinite}
+.ban.calm{background:rgba(14,26,34,.85);border:1px solid var(--muted);color:var(--pearl);animation:none}
+.ban.lie{background:rgba(201,162,74,.95);color:#2b1d14;border:1px solid #fff0c0;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{filter:brightness(1.25)}}
+@media (prefers-reduced-motion:reduce){.ban,.box .more{animation:none!important}}
+.toast{position:absolute;top:22%;left:50%;transform:translateX(-50%);background:rgba(14,26,34,.92);border:1px solid var(--rope);color:var(--sand);font-size:clamp(10px,1.9vw,14px);padding:4px 12px;border-radius:3px;pointer-events:none;white-space:nowrap}
+.mg{position:absolute;top:8%;left:50%;transform:translateX(-50%);background:rgba(14,26,34,.88);border:1px solid var(--rope);color:var(--pearl);font-size:clamp(9px,1.7vw,13px);padding:3px 10px;border-radius:3px;text-align:center;pointer-events:none;max-width:90%}
+.box{position:absolute;right:3%;left:3%;bottom:4%;background:rgba(18,30,38,.95);border:2px solid var(--rope);outline:2px solid #1d1209;padding:clamp(5px,1.4vw,11px) clamp(9px,2vw,15px);border-radius:3px;min-height:24%}
+.box .who{font-family:var(--display);color:var(--rope);font-size:clamp(12px,2.4vw,18px);line-height:1.2;margin-bottom:2px}
+.box .txt{font-size:clamp(10px,2.1vw,15px);line-height:1.75;color:var(--pearl)}
+.box .txt:empty{display:none}
+.box .more{position:absolute;left:10px;bottom:5px;color:var(--rope);font-size:12px;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
-.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(8,16,22,.86);text-align:center;padding:16px}
-.overlay h2{font-family:var(--display);font-weight:400;color:var(--sand);font-size:clamp(30px,8vw,56px);margin:0;line-height:1}
-.overlay p{margin:0;color:var(--muted);font-size:clamp(11px,2.2vw,14px);max-width:44ch;line-height:1.8}
-.btn{font-family:var(--display);font-size:clamp(16px,3vw,22px);background:var(--rope);color:#2b1d14;border:0;padding:6px 26px 8px;border-radius:3px;cursor:pointer;box-shadow:0 3px 0 #7a5f22}
+.choices{display:flex;flex-direction:column;gap:3px}
+.choices:empty{display:none}
+.ch{font:inherit;font-size:clamp(10px,2vw,14px);text-align:right;background:#1f3440;color:var(--pearl);border:1px solid #33505e;border-radius:3px;padding:3px 10px;cursor:pointer;line-height:1.5}
+.ch.sel,.ch:hover{background:var(--rope);color:#2b1d14;border-color:#fff0c0}
+.ch b{font-weight:700;margin-left:6px}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(8,16,22,.9);text-align:center;padding:12px 16px}
+.overlay h2{font-family:var(--display);font-weight:400;color:var(--sand);font-size:clamp(28px,7vw,52px);margin:0;line-height:1}
+.overlay h3{font-family:var(--display);font-weight:400;color:var(--sand);font-size:clamp(18px,4vw,28px);margin:0;line-height:1.1}
+.overlay p{margin:0;color:var(--muted);font-size:clamp(10px,2vw,14px);max-width:48ch;line-height:1.8;white-space:pre-line}
+.studioMark{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:4px}
+.studioMark span{font-family:var(--body);font-size:clamp(10px,1.8vw,13px);color:var(--muted)}
+.studioMark b{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:800;font-size:clamp(26px,6vw,44px);line-height:1.2;color:var(--sand)}
+.cine{background:#000;gap:6px;padding-inline:24px}
+.cine::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(0,0,0,.75) 100%)}
+@keyframes cineIn{from{opacity:0;transform:scale(1.14);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes cineUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes cineGrow{from{width:0;opacity:0}to{width:min(240px,50%);opacity:1}}
+.cineT{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:800;font-size:clamp(40px,10vw,86px);line-height:1.25;color:var(--sand);text-shadow:0 0 32px rgba(230,200,144,.28);opacity:0;animation:cineIn 3.4s cubic-bezier(.2,.7,.2,1) .9s forwards}
+.cineLine{height:1px;width:0;background:linear-gradient(90deg,transparent,var(--rope),transparent);opacity:0;animation:cineGrow 1.8s ease 2.8s forwards}
+.cineSub{font-size:clamp(11px,2vw,15px);color:var(--muted);opacity:0;animation:cineUp 1.4s ease 3.8s forwards}
+.cineS{gap:0;margin-top:clamp(10px,3vw,22px);}
+.cineS span{font-size:clamp(8px,1.4vw,11px);letter-spacing:0;opacity:.8}
+.cineS b{font-size:clamp(17px,3.4vw,27px)!important;font-weight:700!important;color:#d8bd8a!important;line-height:1.3!important}
+.cineS{opacity:0;animation:cineUp 1.8s ease 5.2s forwards}
+.cineTime{font-size:clamp(9px,1.6vw,12px);color:var(--muted);opacity:0;animation:cineUp 1s ease 6.6s forwards}
+.cineB{margin-top:12px;opacity:0;animation:cineUp 1s ease 7.2s forwards}
+.cineLines{display:flex;flex-direction:column;gap:2px;max-width:46ch;position:relative;z-index:1}
+.cineLines p{margin:0;color:var(--pearl);font-size:clamp(11px,2.1vw,16px);line-height:1.95;opacity:0;animation:cineUp 1.8s ease forwards}
+.cine>*{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.cine *{animation:none!important;opacity:1!important}.cineLine{width:min(240px,50%)}}
+.menu{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-start;padding-inline:clamp(16px,6%,56px);padding-block:10px;overflow-y:auto;background:linear-gradient(270deg,rgba(5,8,18,.86) 0%,rgba(5,8,18,.55) 42%,rgba(5,8,18,0) 72%)}
+.menu.paused{background:rgba(5,8,18,.8);justify-content:center}
+.mpanel{display:flex;flex-direction:column;gap:clamp(2px,1vw,8px);max-width:min(400px,94%);margin-block:auto;animation:mIn .45s ease both}
+@keyframes mIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.mtitle,.mhead{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:800;color:var(--sand);margin:0;line-height:1.25}
+.mtitle{font-size:clamp(26px,7vw,60px);text-shadow:0 0 28px rgba(230,200,144,.25)}
+.mhead{font-size:clamp(18px,4vw,30px);margin-bottom:2px}
+.msub{margin:0 0 4px;color:var(--muted);font-size:clamp(10px,1.9vw,14px);line-height:1.8}
+.mlist{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.mlist button{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:600;font-size:clamp(14px,2.9vw,22px);color:var(--pearl);background:none;border:0;padding:2px 14px 2px 0;cursor:pointer;position:relative;text-align:right;line-height:1.5;display:flex;flex-direction:column;align-items:flex-start;opacity:.75;transition:opacity .15s,transform .15s,color .15s}
+.mlist button::before{content:"";position:absolute;right:0;top:50%;width:3px;height:0;background:var(--rope);transform:translateY(-50%);transition:height .15s}
+.mlist button:hover,.mlist button:focus-visible{opacity:1;color:var(--sand);transform:translateX(-5px);outline:none}
+.mlist button:hover::before,.mlist button:focus-visible::before{height:72%}
+.mlist button small{font-family:var(--body);font-weight:400;font-size:clamp(9px,1.6vw,12px);color:var(--muted);line-height:1.6}
+.mlist button[disabled]{opacity:.35;cursor:not-allowed;transform:none}
+.mlist button[disabled]::before{display:none}
+.mback{margin-top:4px;font-size:clamp(12px,2.2vw,16px)!important}
+.mdanger{color:#ff9a86!important}
+.mrow{flex-direction:row;gap:18px;flex-wrap:wrap}
+.sets{display:flex;flex-direction:column;gap:5px;width:min(380px,86vw)}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:clamp(10px,1.9vw,14px);color:var(--pearl)}
+.srow input[type=range]{width:55%;accent-color:var(--rope)}
+.seg{display:flex;gap:2px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:clamp(9px,1.7vw,12px);background:#1a2a33;border:1px solid #33464f;color:var(--muted);padding:1px 8px;border-radius:3px;cursor:pointer}
+.seg button.on{background:var(--rope);color:#2b1d14;border-color:#fff0c0}
+.keysrow p{margin:0;color:var(--muted);font-size:clamp(9px,1.6vw,12px);text-align:left;line-height:1.6}
+.mpanel.wide{max-width:min(560px,96%);width:min(560px,96%)}
+.mscroll{max-height:min(62vh,300px);overflow-y:auto;padding-inline-end:6px;display:flex;flex-direction:column;gap:6px;scrollbar-color:var(--rope) transparent}
+.mscroll h4{margin:6px 0 0;font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;font-weight:700;color:var(--rope);font-size:clamp(11px,2vw,15px)}
+.mscroll p{margin:0;color:var(--pearl);font-size:clamp(10px,1.9vw,14px);line-height:1.85}
+.mscroll .lg{display:flex;flex-direction:column;font-size:clamp(10px,1.9vw,14px);line-height:1.75;border-right:2px solid #33464f;padding-right:8px}
+.mscroll .lg b{color:var(--sand);font-weight:700;font-size:.9em}
+.mscroll .lg span{color:var(--pearl)}
+.mscroll .lg.nar span{color:#a9bcc4;font-style:italic}
+.mscroll .lgEmpty{color:var(--muted)}
+.cineBtns{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px}
+.cineBtns .cineB{margin-top:0;font-size:clamp(12px,2.1vw,16px);padding:3px 18px 5px;min-width:11em}
+.cineBtns .cineB:last-child{animation-delay:7.6s}
+@media (max-width:560px){.menu{justify-content:center;background:rgba(5,8,18,.62)}}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{font-family:var(--display);font-size:clamp(15px,2.8vw,21px);background:var(--rope);color:#2b1d14;border:0;padding:5px 24px 7px;border-radius:3px;cursor:pointer;box-shadow:0 3px 0 #7a5f22}
+.btn.ghost{background:transparent;color:var(--sand);box-shadow:inset 0 0 0 2px var(--rope)}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a5f22}
-.btn:focus-visible,.sound:focus-visible,.pad button:focus-visible{outline:2px solid var(--pearl);outline-offset:2px}
-.controls{display:none;justify-content:space-between;align-items:center;direction:ltr;padding-inline:6px;user-select:none;-webkit-user-select:none;touch-action:none}
+button:focus-visible{outline:2px solid var(--pearl);outline-offset:2px}
+.book{justify-content:flex-start;overflow:auto}
+.book ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;width:min(560px,100%);text-align:right}
+.book li{background:#16252e;border:1px solid #2c4350;border-right:3px solid var(--rope);padding:5px 10px;border-radius:3px;font-size:clamp(10px,1.9vw,13px);line-height:1.7}
+.book li b{display:block;color:var(--sand);font-weight:700}
+.book .empty{color:var(--muted);font-size:13px}
+.pgrid{direction:ltr;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:min(330px,64%);aspect-ratio:3/2}
+.piece.sel{outline:3px solid var(--rope);outline-offset:-3px;z-index:1}
+.piece{border:0;padding:0;cursor:pointer;background-repeat:no-repeat;background-size:300% 200%;transition:transform .2s;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.pgrid.done .piece{cursor:default;box-shadow:0 0 0 1px var(--rope)}
+.wheels{direction:ltr;display:flex;gap:10px}
+.wheel{display:flex;flex-direction:column;align-items:center;gap:2px;background:#16252e;border:1px solid var(--rope);border-radius:4px;padding:4px 6px}
+.wheel span{font-family:var(--display);font-size:clamp(22px,5vw,34px);color:var(--sand);line-height:1.2;min-width:1.2em;text-align:center}
+.wheel button{font:inherit;background:#1f3440;color:var(--pearl);border:1px solid #33505e;border-radius:3px;width:38px;cursor:pointer}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar button{font:inherit;font-size:13px;background:#1a2a33;border:1px solid #33464f;color:var(--pearl);padding:4px 12px;border-radius:3px;cursor:pointer}
+.keys{font-size:12px;color:var(--muted);line-height:1.9;margin-inline-start:auto}
+kbd{font-family:var(--body);background:#1f2f38;border:1px solid #33464f;border-bottom-width:2px;padding:0 5px;border-radius:3px;color:var(--pearl);font-size:11px}
+.controls{display:none;justify-content:space-between;align-items:center;direction:ltr;padding-inline:4px;user-select:none;-webkit-user-select:none;touch-action:none}
 @media (pointer:coarse){.controls{display:flex}.keys{display:none}}
 .pad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:2px}
 .pad button,.abtn{background:var(--wood);border:2px solid #1d1209;color:var(--sand);font-size:20px;border-radius:6px;touch-action:none}
-.pad button:active,.abtn:active,.pad button.on{background:var(--rope);color:#2b1d14}
+.pad button.on,.abtn:active{background:var(--rope);color:#2b1d14}
+.btns{display:flex;gap:12px;align-items:flex-end}
 .abtn{width:76px;height:76px;border-radius:50%;font-family:var(--display);font-size:26px}
-.keys{font-size:13px;color:var(--muted);line-height:1.9}
-kbd{font-family:var(--body);background:#1f2f38;border:1px solid #33464f;border-bottom-width:2px;padding:0 6px;border-radius:3px;color:var(--pearl);font-size:12px}
+.abtn.small{width:54px;height:54px;font-size:14px;font-family:var(--body)}
 </style>
+</head>
+<body>
+
 
 <div class="wrap">
   <header>
     <h1>ميناء ١٩٦٠</h1>
-    <span class="tag">مشهد تجريبي · الشريحة الأولى</span>
+    <span class="tag" id="chTag">الفصل الأول · الشرايط الحمرا</span>
   </header>
 
   <div class="cabinet">
     <div class="screen" id="screen">
-      <canvas id="c" width="240" height="160"></canvas>
+      <canvas id="c" width="320" height="180"></canvas>
       <div class="hud">
-        <div class="goal" id="goal" hidden></div>
-        <button class="sound" id="snd" type="button">الصوت: يعمل</button>
+        <div class="col r"><div class="goal" id="goal" hidden></div><div class="ban lie" id="banR" hidden></div></div>
+        <div class="col l"><div class="ban alert" id="banL" hidden></div></div>
       </div>
+      <div class="toast" id="toast" hidden></div>
+      <div class="mg" id="mg" hidden></div>
       <div class="box" id="box" hidden>
         <div class="who" id="who"></div>
         <div class="txt" id="txt"></div>
+        <div class="choices" id="choices"></div>
         <div class="more" id="more">▼</div>
       </div>
-      <div class="overlay" id="start">
-        <h2>ميناء ١٩٦٠</h2>
-        <p>صبي يدور على أبوه اللي ما رجع من البحر.</p>
-        <button class="btn" id="go" type="button">ابدأ</button>
+      <div class="overlay" id="puz" hidden>
+        <h3>ورقة أبوي</h3>
+        <p id="puzP">اضغط على كل قطعة عشان تلفّها لين تنقرا الورقة.</p>
+        <div class="pgrid" id="pgrid"></div>
+        <button class="btn" id="puzDone" type="button" hidden>كمّل</button>
       </div>
-      <div class="overlay" id="end" hidden>
-        <h2>نهاية المشهد</h2>
-        <p>هنا تنتهي الشريحة التجريبية. في اللعبة الكاملة يبدأ سالم يلحق خيط «الميناء اللي ما كان المفروض ينزل فيه».</p>
-        <button class="btn" id="again" type="button">العب من جديد</button>
+      <div class="overlay" id="lock" hidden>
+        <h3>قفل الدرج</h3>
+        <p id="lockP">ثلاث أرقام. الترتيب: الساحة، المخزن، القاعة.</p>
+        <div class="wheels" id="wheels"></div>
+        <div class="row"><button class="btn" id="lockOpen" type="button">افتح</button><button class="btn ghost" id="lockBack" type="button">رجوع</button></div>
+      </div>
+      <div class="overlay book" id="book" hidden>
+        <h3>دفتر الأدلة</h3>
+        <ol id="clueList"></ol>
+        <button class="btn" id="bookClose" type="button">سكّر الدفتر</button>
+      </div>
+      <div class="overlay" id="card" hidden>
+        <h2 id="cardH"></h2>
+        <p id="cardP"></p>
+        <div class="studioMark" id="cardStudio" hidden><span>من استوديو</span><b>قرطاس</b></div>
+        <button class="btn" id="cardBtn" type="button">كمّل</button>
+      </div>
+      <div class="overlay cine" id="cine" hidden></div>
+      <div class="menu" id="menu">
+        <div class="mpanel" id="mMain">
+          <h2 class="mtitle">ميناء ١٩٦٠</h2>
+          <p class="msub">صيف ١٩٦٠. كل المراكب رجعت… إلا مركب واحد.</p>
+          <nav class="mlist" aria-label="القائمة الرئيسية">
+            <button type="button" data-act="cont" hidden>كمّل<small id="contInfo"></small></button>
+            <button type="button" data-act="new">ابدأ</button>
+            <button type="button" data-act="recap" hidden>الحكاية لين الحين<small>ملخص اللي صار في قصتك</small></button>
+            <button type="button" data-act="log" hidden>سجل الحوارات<small>ارجع لكل كلام قيل</small></button>
+            <button type="button" data-act="chapters">الفصول</button>
+            <button type="button" data-act="settings">الإعدادات</button>
+            <button type="button" data-act="exit">الخروج</button>
+          </nav>
+        </div>
+        <div class="mpanel" id="mDiff" hidden>
+          <h3 class="mhead">الصعوبة</h3>
+          <nav class="mlist" aria-label="الصعوبة">
+            <button type="button" data-diff="normal">عادية<small>للقصة. تحدي خفيف.</small></button>
+            <button type="button" data-diff="hard">صعبة<small>الحراس أذكى، والوقت أقصر.</small></button>
+            <button type="button" data-diff="nightmare">كابوس<small>ما تشوف نظرهم. غلطة وحدة تكفي.</small></button>
+            <button type="button" data-act="back" class="mback">رجوع</button>
+          </nav>
+        </div>
+        <div class="mpanel" id="mChap" hidden>
+          <h3 class="mhead">الفصول</h3>
+          <nav class="mlist" id="chapList" aria-label="الفصول"></nav>
+        </div>
+        <div class="mpanel" id="mSet" hidden>
+          <h3 class="mhead">الإعدادات</h3>
+          <div class="sets">
+            <label class="srow" for="setMusic"><span>الموسيقى</span><input type="range" id="setMusic" min="0" max="100" step="5"></label>
+            <label class="srow" for="setSfx"><span>المؤثرات</span><input type="range" id="setSfx" min="0" max="100" step="5"></label>
+            <div class="srow"><span>سرعة النص</span><div class="seg" id="setText"><button type="button" data-v="slow">بطيء</button><button type="button" data-v="normal">عادي</button><button type="button" data-v="fast">سريع</button><button type="button" data-v="instant">فوري</button></div></div>
+            <div class="srow"><span>اهتزاز الشاشة</span><div class="seg" id="setShake"><button type="button" data-v="1">تشغيل</button><button type="button" data-v="0">إيقاف</button></div></div>
+            <div class="srow keysrow"><span>التحكم</span><p>الحركة: الأسهم أو WASD · تفاعل: Space · الدفتر: N · سجل الحوارات: L · إيقاف مؤقت: Esc</p></div>
+          </div>
+          <nav class="mlist mrow">
+            <button type="button" data-act="back" class="mback">رجوع</button>
+            <button type="button" data-act="wipe" class="mback mdanger">مسح الحفظ</button>
+          </nav>
+        </div>
+        <div class="mpanel" id="mConfirm" hidden>
+          <h3 class="mhead">متأكد؟</h3>
+          <p class="msub">بينمسح تقدمك كله، وما تقدر ترجعه.</p>
+          <nav class="mlist"><button type="button" data-act="wipeYes" class="mdanger">ايه، امسح</button><button type="button" data-act="back" class="mback">لا، رجوع</button></nav>
+        </div>
+        <div class="mpanel" id="mExit" hidden>
+          <h3 class="mhead">مع السلامة</h3>
+          <p class="msub">البحر ما يطول… ارجع متى ما بغيت.</p>
+          <nav class="mlist"><button type="button" data-act="back" class="mback">رجوع للقائمة</button></nav>
+        </div>
+        <div class="mpanel wide" id="mRecap" hidden>
+          <h3 class="mhead">الحكاية لين الحين</h3>
+          <div class="mscroll" id="recapBox"></div>
+          <nav class="mlist"><button type="button" data-act="back" class="mback">رجوع</button></nav>
+        </div>
+        <div class="mpanel wide" id="mLog" hidden>
+          <h3 class="mhead">سجل الحوارات</h3>
+          <div class="mscroll" id="logBox" tabindex="0"></div>
+          <nav class="mlist"><button type="button" data-act="back" class="mback">رجوع</button></nav>
+        </div>
+        <div class="mpanel" id="mPause" hidden>
+          <h3 class="mhead">إيقاف مؤقت</h3>
+          <p class="msub" id="pauseInfo"></p>
+          <nav class="mlist" aria-label="إيقاف مؤقت">
+            <button type="button" data-act="resume">استئناف</button>
+            <button type="button" data-act="precap">الحكاية لين الحين</button>
+            <button type="button" data-act="plog">سجل الحوارات</button>
+            <button type="button" data-act="settings">الإعدادات</button>
+            <button type="button" data-act="toMenu">العودة للقائمة الرئيسية</button>
+          </nav>
+        </div>
+      </div>
       </div>
     </div>
   </div>
 
-  <div class="controls" id="controls">
+  <div class="toolbar">
+    <button id="bookBtn" type="button">دفتر الأدلة</button>
+    <button id="snd" type="button">الصوت: يعمل</button>
+    <button id="pauseBtn" type="button">إيقاف مؤقت</button>
+    <span class="keys">الحركة: <kbd>الأسهم</kbd> أو <kbd>WASD</kbd> · كلام وتفاعل وتخبّي: <kbd>Space</kbd> · الدفتر: <kbd>N</kbd> · سجل الحوارات: <kbd>L</kbd> · إيقاف: <kbd>Esc</kbd></span>
+  </div>
+
+  <div class="controls">
     <div class="pad">
       <span></span><button type="button" data-k="up" aria-label="فوق">▲</button><span></span>
       <button type="button" data-k="left" aria-label="يسار">◀</button><span></span><button type="button" data-k="right" aria-label="يمين">▶</button>
       <span></span><button type="button" data-k="down" aria-label="تحت">▼</button><span></span>
     </div>
-    <button class="abtn" id="abtn" type="button" aria-label="كلام وتفاعل">A</button>
+    <div class="btns">
+      <button class="abtn small" id="bbtn" type="button">الدفتر</button>
+      <button class="abtn" id="abtn" type="button" aria-label="تفاعل">A</button>
+    </div>
   </div>
-
-  <div class="keys">الحركة: <kbd>الأسهم</kbd> أو <kbd>W A S D</kbd> · الكلام والتفاعل: <kbd>Space</kbd> أو <kbd>Enter</kbd></div>
 </div>
 
 <script>
 (()=>{
+'use strict';
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 ctx.imageSmoothingEnabled=false;
-const VW=240,VH=160,T=16,MW=36,MH=24;
+const VW=320,VH=180,T=16,HSP=82,FOV=0.62;
+const $=id=>document.getElementById(id);
+const N='';
 
-/* ---------- seeded noise ---------- */
+/* ================= helpers ================= */
 function rnd(a,b,s=0){let h=(a*374761393+b*668265263+s*982451653)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
-
-/* ---------- map ---------- */
-const map=[];
-for(let y=0;y<MH;y++){map.push([]);for(let x=0;x<MW;x++)map[y].push('.')}
-for(let x=0;x<MW;x++){map[0][x]='R';map[1][x]='#';map[2][x]='#';map[3][x]='#'}
-[17,18].forEach(x=>{for(let y=0;y<4;y++)map[y][x]='R'});
-[4,12,23,31].forEach(x=>map[3][x]='D');
-[2,7,10,14,21,26,29,33].forEach(x=>map[2][x]='O');
-for(let x=0;x<MW;x++){map[14][x]='w';for(let y=15;y<MH;y++)map[y][x]='~'}
-for(let y=13;y<MH;y++){map[y][15]='=';map[y][16]='='}
-[[3,6],[9,8],[27,6],[33,9],[20,8],[1,11]].forEach(([x,y])=>map[y][x]='P');
-[[11,12],[12,12],[11,11]].forEach(([x,y])=>map[y][x]='c');
-[[24,12],[25,12],[24,11]].forEach(([x,y])=>map[y][x]='n');
-const SOLID=new Set(['R','#','O','D','P','c','~']);
-const tileAt=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?'R':map[y][x];
-
-/* ---------- tile painting ---------- */
 function cnv(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.imageSmoothingEnabled=false;return[c,g]}
 function px(g,x,y,col,w=1,h=1){g.fillStyle=col;g.fillRect(x,y,w,h)}
+function grid(w,h,ch){return Array.from({length:h},()=>new Array(w).fill(ch))}
+function fillR(m,x0,y0,x1,y1,ch){for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)m[y][x]=ch}
+function outline(m,x0,y0,x1,y1,ch){for(let x=x0;x<=x1;x++){m[y0][x]=ch;m[y1][x]=ch}for(let y=y0;y<=y1;y++){m[y][x0]=ch;m[y][x1]=ch}}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const tc=n=>n*T+8;
+const tileOf=v=>Math.floor(v/T);
+function turnTo(a,b,k){const d=Math.atan2(Math.sin(b-a),Math.cos(b-a));return a+clamp(d,-k,k)}
+function dirOf(a){const c=Math.cos(a),s=Math.sin(a);return Math.abs(c)>Math.abs(s)?(c>0?'right':'left'):(s>0?'down':'up')}
+
+/* ================= maps ================= */
+function makePort(){const W=36,H=24,m=grid(W,H,'.');
+  for(let x=0;x<W;x++){m[0][x]='R';m[1][x]='#';m[2][x]='#';m[3][x]='#'}
+  [17,18].forEach(x=>{for(let y=0;y<4;y++)m[y][x]='R'});
+  [4,12,23,31].forEach(x=>m[3][x]='D');
+  [2,7,10,14,21,26,29,33].forEach(x=>m[2][x]='O');
+  for(let x=0;x<W;x++){m[14][x]='w';for(let y=15;y<H;y++)m[y][x]='~'}
+  for(let y=13;y<H;y++){m[y][15]='=';m[y][16]='='}
+  for(let x=29;x<W;x++){m[7][x]='f';m[8][x]='f'}
+  [[3,6],[9,8],[27,6],[33,10],[20,8],[1,11]].forEach(([x,y])=>m[y][x]='P');
+  [[11,12],[12,12],[11,11]].forEach(([x,y])=>m[y][x]='c');
+  [[24,12],[25,12],[24,11]].forEach(([x,y])=>m[y][x]='n');
+  m[6][34]='S';
+  m[4][2]='b';m[4][3]='b';m[4][25]='b';m[4][26]='b';m[4][14]='b';
+  [[6,13],[7,13],[29,13]].forEach(([x,y])=>m[y][x]='q');m[13][14]='r';
+  return m}
+const STALLS=[{x:2,y:5,t:'dates'},{x:9,y:5,t:'spice'},{x:19,y:5,t:'cloth'},{x:25,y:5,t:'jars'},{x:3,y:12,t:'cloth2'},{x:10,y:12,t:'fish'},{x:20,y:12,t:'dates'},{x:25,y:12,t:'spice'}];
+function makeMarket(){const W=32,H=18,m=grid(W,H,'f');
+  for(let x=0;x<W;x++){m[0][x]='R';m[1][x]='#';m[2][x]='#';if(x%5===2)m[1][x]='O'}
+  [5,14,26].forEach(x=>m[2][x]='D');
+  for(let x=0;x<W;x++){m[8][x]='p';m[9][x]='p';m[17][x]='m'}
+  STALLS.forEach(s=>fillR(m,s.x,s.y,s.x+2,s.y+1,'X'));
+  [[7,4],[17,4],[30,4],[30,5]].forEach(([x,y])=>m[y][x]='k');
+  [[8,13],[16,14],[30,14]].forEach(([x,y])=>m[y][x]='j');
+  return m}
+function makeHome(){const W=14,H=10,m=grid(W,H,'f');
+  for(let x=0;x<W;x++){m[0][x]='R';m[1][x]='#';m[9][x]='#'}for(let y=0;y<H;y++){m[y][0]='#';m[y][W-1]='#'}
+  m[1][3]='v';m[1][6]='y';m[1][9]='O';m[1][11]='O';m[9][6]='e';
+  fillR(m,4,4,9,6,'a');m[2][1]='z';m[3][1]='z';m[2][11]='Q';m[2][12]='Q';m[2][7]='K';m[2][8]='K';m[7][12]='j';m[7][1]='k';
+  return m}
+function makeWare(){const W=34,H=24,m=grid(W,H,'.');
+  for(let x=0;x<W;x++){m[0][x]='~';m[1][x]='F';m[23][x]='F'}
+  for(let y=1;y<H;y++){m[y][0]='F';m[y][W-1]='F'}
+  m[23][16]='g';m[23][17]='g';
+  outline(m,6,3,27,11,'H');fillR(m,7,4,26,10,'I');
+  for(let y=4;y<=10;y++){m[y][12]='H';m[y][21]='H'}
+  m[8][12]='d';m[6][21]='d';m[11][16]='d';m[11][17]='d';
+  m[7][6]='Y';m[8][6]='Y';m[5][8]='T';m[5][10]='c';m[6][10]='c';m[10][7]='c';
+  m[5][24]='K';m[5][25]='K';m[10][22]='c';m[9][26]='L';
+  [[15,8],[16,8],[18,8]].forEach(([x,y])=>m[y][x]='c');
+  m[4][13]='B';m[4][20]='B';m[4][17]='L';
+  [[3,12],[4,12],[12,15],[12,16],[21,13],[30,13],[31,13],[7,21],[8,21],[26,22]].forEach(([x,y])=>m[y][x]='B');
+  [[14,17],[15,17],[19,15],[28,19],[5,17]].forEach(([x,y])=>m[y][x]='c');
+  [[15,13],[8,18],[27,16],[11,21]].forEach(([x,y])=>m[y][x]='L');
+  m[5][18]='M';m[19][31]='M';m[10][9]='M';m[17][31]='r';m[21][5]='r';m[19][25]='V';m[16][0]='h';m[17][0]='h';
+  return m}
+
+const SOLID=new Set(['i','t','x','N','M','Q','v','y','z','C','W','E','u','b','q','r','R','#','O','D','P','c','~','F','H','X','B','K','L','V','T','Y','Z','h','m','k','j','S','G']);
+const LOSB=new Set([...SOLID].filter(c=>c!=='L'&&c!=='V'&&c!=='S'&&c!=='i'));
+const TALL=new Set(['P','L','V']);
+
+/* ================= tile art ================= */
 function sand(g,tx,ty,base='#dfbf86',d='#c9a66c',l='#ecd4a2'){px(g,0,0,base,16,16);for(let i=0;i<7;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+20)*16)|0,d);for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i+40)*16)|0,(rnd(tx,ty,i+60)*16)|0,l)}
-function wall(g,tx,ty){px(g,0,0,'#c69c6a',16,16);g.fillStyle='#a67c4c';for(let r=0;r<4;r++){g.fillRect(0,r*4+3,16,1);const o=(r%2)*4+(tx%2)*2;for(let c=o;c<16;c+=8)g.fillRect(c,r*4,1,3)}for(let i=0;i<5;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+9)*16)|0,'#d8b07e')}
-const cache={};
+function earth(g,tx,ty){px(g,0,0,'#d2ad78',16,16);for(let i=0;i<9;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+20)*16)|0,'#b99460');for(let i=0;i<3;i++)px(g,(rnd(tx,ty,i+40)*15)|0,(rnd(tx,ty,i+60)*15)|0,'#e5c796',2,1);if(rnd(tx,ty,77)>.8)px(g,(rnd(tx,ty,78)*13)|0,(rnd(tx,ty,79)*13)|0,'#9c7b4c',2,2)}
+function pavers(g,tx,ty){px(g,0,0,'#b69c76',16,16);g.fillStyle='#8c7354';const o=(ty%2)*4;g.fillRect(0,7,16,1);g.fillRect(0,15,16,1);for(let x=o;x<16;x+=8)g.fillRect(x,0,1,7);for(let x=(o+4)%8;x<16;x+=8)g.fillRect(x,8,1,7);px(g,o+1,1,'#cbb18b',5,1);px(g,(o+5)%16,9,'#cbb18b',5,1)}
+function floorW(g,tx,ty){px(g,0,0,'#6e4c2e',16,16);for(let r=0;r<4;r++){px(g,0,r*4+3,'#4a311c',16,1);px(g,0,r*4,'#83603e',16,1);px(g,((r*7+tx*5)%13)+1,r*4,'#4a311c',1,3)}if(rnd(tx,ty,3)>.6)px(g,(rnd(tx,ty,1)*13)|0,(rnd(tx,ty,2)*13)|0,'#57391f',2,1)}
+function wallS(g,tx,ty){px(g,0,0,'#c69c6a',16,16);g.fillStyle='#a67c4c';for(let r=0;r<4;r++){g.fillRect(0,r*4+3,16,1);const o=(r%2)*4+(tx%2)*2;for(let c=o;c<16;c+=8)g.fillRect(c,r*4,1,3)}for(let i=0;i<5;i++)px(g,(rnd(tx,ty,i)*16)|0,(rnd(tx,ty,i+9)*16)|0,'#d8b07e')}
+function plank(g,c1='#4b3a2a',c2='#5d4834'){px(g,0,0,c1,16,16);for(let x=0;x<16;x+=4){px(g,x,0,'#2a1f16',1,16);px(g,x+1,0,c2,1,16)}px(g,0,0,'#7a6248',16,2);px(g,0,14,'#241a12',16,2)}
+function fenceT(g,tx,ty){sand(g,tx,ty);for(let x=0;x<16;x+=4){px(g,x,0,'#33241a',4,16);px(g,x+1,0,'#6b4a2a',2,16);px(g,x+1,0,'#8f6744',2,1)}px(g,0,5,'#241a10',16,2);px(g,0,11,'#241a10',16,2)}
+function under(m,tx,ty){const n=[[1,0],[-1,0],[0,-1],[0,1]];for(const[dx,dy]of n){const c=(m[ty+dy]||[])[tx+dx];if(c==='I'||c==='d')return 'I'}return '.'}
+const cache=new Map();
 function tileImg(code,tx,ty,f){
-  const key=code+tx+','+ty+(code==='~'?f:'');if(cache[key])return cache[key];
-  const[c,g]=cnv(16,16);
-  if(code==='.'||code==='P'||code==='c'||code==='n'){sand(g,tx,ty);
-    if(code==='c'){px(g,2,3,'#3d2513',12,12);px(g,3,4,'#a8743e',10,10);px(g,3,7,'#7d5228',10,1);px(g,3,10,'#7d5228',10,1);px(g,3,4,'#c48c50',10,1);px(g,2,15,'rgba(0,0,0,.18)',13,1)}
-    if(code==='n'){g.fillStyle='#7a6a4a';for(let i=0;i<16;i+=3){g.fillRect(i,2,1,12);g.fillRect(0,i%14+1,16,1)}px(g,3,1,'#c8462e',2,2);px(g,11,13,'#c8462e',2,2)}
-  }else if(code==='w'){sand(g,tx,ty,'#c4a672','#a88c5a','#d6bc8a')}
-  else if(code==='~'){
-    px(g,0,0,'#2c6a86',16,16);
-    for(let i=0;i<3;i++){const y=(rnd(tx,ty,i)*14|0)+1,x=((rnd(tx,ty,i+5)*12|0)+f*2)%14;px(g,x,y,'#3f86a2',3,1)}
+  const sid=cur.id;
+  const key=sid+code+tx+','+ty+(code==='~'?f:'');
+  let c=cache.get(key);if(c)return c;
+  let g;[c,g]=cnv(16,16);
+  const m=cur.map;
+  if(code==='X'||TALL.has(code)){const b=code==='L'&&under(m,tx,ty)==='I'?'I':cur.ground;code=b==='f'?'f':b==='I'?'I':'.';}
+  const shade=()=>{const a=(m[ty-1]||[])[tx];if(a&&'R#ODHmGFCWE'.includes(a)&&!(a==='F'&&ty===2)){px(g,0,0,'rgba(50,25,10,.28)',16,3);px(g,0,3,'rgba(50,25,10,.12)',16,2)}};
+  switch(code){
+  case '.':sand(g,tx,ty);shade();break;
+  case 'f':earth(g,tx,ty);shade();break;
+  case 'p':pavers(g,tx,ty);shade();break;
+  case 'b':sand(g,tx,ty);shade();px(g,0,5,'#3a2414',16,10);px(g,1,6,'#8a5a30',14,8);px(g,1,6,'#a8743e',14,1);px(g,2,7,'#a8322a',12,5);px(g,2,7,'#c8483a',12,1);for(let x=3;x<14;x+=3)px(g,x,9,'#e0b040');px(g,1,14,'#3a2414',2,2);px(g,13,14,'#3a2414',2,2);break;
+  case 'q':sand(g,tx,ty);px(g,2,14,'rgba(0,0,0,.2)',12,2);px(g,3,4,'#5a4a30',10,11);px(g,2,6,'#5a4a30',12,7);px(g,4,5,'#cbb68a',8,9);px(g,3,7,'#cbb68a',10,5);g.fillStyle='#7a6440';for(let i=3;i<13;i+=2)g.fillRect(i,5,1,9);for(let j=6;j<14;j+=2)g.fillRect(3,j,10,1);px(g,6,4,'#5a4a30',4,1);break;
+  case 'r':{const b=cur.ground==='f'?'f':'.';if(b==='f')earth(g,tx,ty);else sand(g,tx,ty);px(g,3,13,'rgba(0,0,0,.2)',11,2);px(g,2,4,'#5a4220',12,10);px(g,3,5,'#b8995a',10,8);px(g,5,7,'#5a4220',6,4);px(g,6,8,'#8a7040',4,2);px(g,4,6,'#d4b878',3,1);px(g,12,10,'#b8995a',3,2);break}
+  case 'I':floorW(g,tx,ty);break;
+  case 'd':floorW(g,tx,ty);px(g,0,0,'#3a2616',16,2);px(g,0,14,'#3a2616',16,2);break;
+  case 'n':sand(g,tx,ty);g.fillStyle='#7a6a4a';for(let i=0;i<16;i+=3){g.fillRect(i,2,1,12);g.fillRect(0,i%14+1,16,1)}px(g,3,1,'#c8462e',2,2);px(g,11,13,'#c8462e',2,2);break;
+  case 'M':case 'c':{const b=under(m,tx,ty);if(b==='I')floorW(g,tx,ty);else if(cur.ground==='f')earth(g,tx,ty);else sand(g,tx,ty);
+    px(g,2,3,'#3d2513',12,12);px(g,3,4,'#a8743e',10,10);px(g,3,7,'#7d5228',10,1);px(g,3,10,'#7d5228',10,1);px(g,3,4,'#c48c50',10,1);px(g,7,3,'#b8322a',2,12);px(g,7,3,'#e0584a',1,12);px(g,2,15,'rgba(0,0,0,.2)',13,1);if(code==='M'){px(g,3,5,'#f4f2ea',3,1);px(g,4,5,'#f4f2ea',1,4);px(g,10,5,'#f4f2ea',3,3);px(g,10,9,'#f4f2ea',3,1);px(g,4,11,'#f4f2ea',8,1)}break}
+  case 'w':sand(g,tx,ty,'#c4a672','#a88c5a','#d6bc8a');break;
+  case '~':{px(g,0,0,'#2c6a86',16,16);for(let i=0;i<3;i++){const y=(rnd(tx,ty,i)*14|0)+1,x=((rnd(tx,ty,i+5)*12|0)+f*2)%14;px(g,x,y,'#3f86a2',3,1)}
     if(rnd(tx,ty,f+30)>.7)px(g,(rnd(tx,ty,f+31)*15)|0,(rnd(tx,ty,f+32)*15)|0,'#8cc4d4');
-    if(tileAt(tx,ty-1)==='w'){g.fillStyle='#e8f0ea';for(let x=0;x<16;x++){const h=1+((x+f*3+tx*5)%6<3?1:0);g.fillRect(x,0,1,h)}px(g,0,2,'#5ea2ba',16,1)}
-  }else if(code==='='){
-    const under=tileAt(tx,ty)==='='&&ty>=15;
-    px(g,0,0,'#8b5b33',16,16);for(let y=0;y<16;y+=4){px(g,0,y+3,'#5e3b20',16,1);px(g,0,y,'#a06a3c',16,1)}
-    px(g,3,1,'#3a2414');px(g,12,5,'#3a2414');px(g,3,9,'#3a2414');px(g,12,13,'#3a2414');
-    if(tileAt(tx-1,ty)!=='=')px(g,0,0,'#4a2e18',2,16);
-    if(tileAt(tx+1,ty)!=='=')px(g,14,0,'#4a2e18',2,16);
-    if(under&&ty===MH-1)px(g,0,14,'#4a2e18',16,2);
-  }else if(code==='R'){px(g,0,0,'#d8b47e',16,16);g.fillStyle='#a8834f';g.fillRect(0,14,16,2);for(let x=0;x<16;x+=8){px(g,x,0,'#e9cc98',4,3)}for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i)*16)|0,4+(rnd(tx,ty,i+3)*9|0),'#c4a06c')}
-  else if(code==='#'){wall(g,tx,ty)}
-  else if(code==='O'){wall(g,tx,ty);px(g,3,3,'#3d2513',10,10);px(g,4,4,'#6b4426',8,8);g.fillStyle='#3d2513';for(let i=4;i<12;i+=2){g.fillRect(i,4,1,8)}px(g,3,13,'#8a6440',10,1)}
-  else if(code==='D'){wall(g,tx,ty);px(g,3,2,'#3d2513',10,14);px(g,4,3,'#6b4426',8,13);px(g,8,3,'#3d2513',1,13);[[5,5],[10,5],[5,10],[10,10]].forEach(([x,y])=>px(g,x,y,'#c9a24a'))}
-  cache[key]=c;return c;
+    const up=(m[ty-1]||[])[tx];if(up==='w'){g.fillStyle='#e8f0ea';for(let x=0;x<16;x++){const h=1+((x+f*3+tx*5)%6<3?1:0);g.fillRect(x,0,1,h)}px(g,0,2,'#5ea2ba',16,1)}break}
+  case '=':{px(g,0,0,'#8b5b33',16,16);for(let y=0;y<16;y+=4){px(g,0,y+3,'#5e3b20',16,1);px(g,0,y,'#a06a3c',16,1)}px(g,3,1,'#3a2414');px(g,12,5,'#3a2414');px(g,3,9,'#3a2414');px(g,12,13,'#3a2414');
+    if(!'=l'.includes((m[ty]||[])[tx-1]||'#'))px(g,0,0,'#4a2e18',2,16);if(!'=l'.includes((m[ty]||[])[tx+1]||'#'))px(g,14,0,'#4a2e18',2,16);break}
+  case 'R':{px(g,0,0,'#d8b47e',16,16);px(g,0,14,'#a8834f',16,2);for(let x=0;x<16;x+=8)px(g,x,0,'#e9cc98',4,3);for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i)*16)|0,4+(rnd(tx,ty,i+3)*9|0),'#c4a06c');break}
+  case '#':wallS(g,tx,ty);break;
+  case 'O':wallS(g,tx,ty);px(g,3,3,'#3d2513',10,10);px(g,4,4,'#6b4426',8,8);g.fillStyle='#3d2513';for(let i=4;i<12;i+=2)g.fillRect(i,4,1,8);px(g,3,13,'#8a6440',10,1);break;
+  case 'D':wallS(g,tx,ty);px(g,3,2,'#3d2513',10,14);px(g,4,3,'#6b4426',8,13);px(g,8,3,'#3d2513',1,13);[[5,5],[10,5],[5,10],[10,10]].forEach(([x,y])=>px(g,x,y,'#c9a24a'));break;
+  case 'S':sand(g,tx,ty);px(g,7,8,'#5a3a1e',2,8);px(g,2,2,'#3d2513',12,7);px(g,3,3,'#a8743e',10,5);px(g,5,5,'#2b1d14',6,1);px(g,9,4,'#2b1d14',1,3);px(g,10,5,'#2b1d14',1,1);break;
+  case 'F':fenceT(g,tx,ty);break;
+  case 'a':{earth(g,tx,ty);px(g,0,0,'#8a2f24',16,16);const L=(m[ty]||[])[tx-1]!=='a',Rr=(m[ty]||[])[tx+1]!=='a',U=(m[ty-1]||[])[tx]!=='a',Dd=(m[ty+1]||[])[tx]!=='a';
+    if(U)px(g,0,0,'#d8a840',16,2);if(Dd)px(g,0,14,'#d8a840',16,2);if(L)px(g,0,0,'#d8a840',2,16);if(Rr)px(g,14,0,'#d8a840',2,16);
+    px(g,6,6,'#e8c870',4,4);px(g,7,5,'#e8c870',2,6);px(g,5,7,'#e8c870',6,2);px(g,7,7,'#2a3a6a',2,2);if((tx+ty)%2)px(g,1,8,'#2a3a6a',2,1);break}
+  case 'Q':earth(g,tx,ty);px(g,0,4,'#2a1a10',16,11);px(g,1,5,'#7a4a24',14,9);px(g,1,5,'#94603a',14,1);px(g,1,9,'#c9a24a',14,1);if(m[ty][tx-1]!=='Q')px(g,2,5,'#c9a24a',1,9);if(m[ty][tx+1]!=='Q')px(g,13,5,'#c9a24a',1,9);break;
+  case 'z':earth(g,tx,ty);px(g,1,0,'#2a1a10',14,16);px(g,2,0,'#d8ccb4',12,16);if(m[ty-1][tx]!=='z'){px(g,3,1,'#f0ebe0',10,4);px(g,2,6,'#a8322a',12,10);}else{px(g,2,0,'#a8322a',12,14);for(let x=3;x<14;x+=3)px(g,x,4,'#e0b040');}break;
+  case 'v':wallS(g,tx,ty);px(g,2,2,'#5a3a1e',12,11);px(g,3,3,'#22282a',10,9);px(g,4,5,'#d8d8d0',6,1);px(g,5,7,'#d8d8d0',4,1);px(g,4,9,'#a8a8a0',5,1);break;
+  case 'y':wallS(g,tx,ty);px(g,4,3,'#5a3a1e',8,9);px(g,5,4,'#c8b898',6,7);px(g,7,6,'#5a4a3a',2,3);px(g,6,9,'#7a8aa0',4,1);break;
+  case 'e':earth(g,tx,ty);px(g,0,0,'#7a5a3a',16,2);px(g,0,0,'#5a3a1e',2,16);px(g,14,0,'#5a3a1e',2,16);break;
+  case 'C':{px(g,0,0,'#d9d2bf',16,16);px(g,0,0,'#e8e2d2',16,2);for(let r=0;r<3;r++)px(g,0,5+r*5,'#c2b9a2',16,1);for(let i=0;i<9;i++)px(g,(rnd(tx,ty,i)*15)|0,2+(rnd(tx,ty,i+9)*13|0),'#aea48c',1+(i%2),1);px(g,0,15,'#a89e86',16,1);break}
+  case 'W':{px(g,0,0,'#8a7862',16,16);g.fillStyle='#5c4c3a';for(let r=0;r<3;r++){g.fillRect(0,r*5+4,16,1);const o=((r+ty)%2)*4;for(let c=o;c<16;c+=8)g.fillRect(c,r*5,1,4)}px(g,1,1,'#a08c72',5,1);px(g,9,6,'#a08c72',5,1);for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i)*15)|0,(rnd(tx,ty,i+4)*15)|0,'#6e5e4a');if(ty===0){px(g,0,0,'#5c4c3a',16,1);if(tx%2)px(g,0,0,'#2a2018',16,3)}break}
+  case 'i':floorW(g,tx,ty);for(let x=1;x<16;x+=4){px(g,x,0,'#2a2a2e',2,16);px(g,x,0,'#6a6a72',1,16)}px(g,0,2,'#3a3a40',16,2);px(g,0,13,'#3a3a40',16,2);break;
+  case 't':{px(g,0,0,'#6e5e4c',16,16);g.fillStyle='#4a3c2e';for(let r=0;r<3;r++)g.fillRect(0,r*5+4,16,1);px(g,7,8,'#2a2a2a',2,6);px(g,5,7,'#2a2a2a',6,2);px(g,6,2,'#ff8a20',4,5);px(g,7,1,'#ffd27a',2,4);px(g,7,4,'#fff2c0',1,2);break}
+  case '>':case '<':floorW(g,tx,ty);for(let i=0;i<4;i++){px(g,0,i*4,'#3a2616',16,1);px(g,0,i*4+1,'rgba(0,0,0,'+(.1+i*.12)+')',16,3)}break;
+  case 'x':{px(g,0,0,'#6e5e4c',16,16);for(let i=0;i<8;i++)px(g,1+i*2,2,'#c8b898',1,4);px(g,1,7,'#c8b898',14,1);px(g,4,11,'#c8b898',8,1);px(g,5,12,'#c8b898',6,1);px(g,8,8,'#c8b898',1,3);px(g,9,8,'#c8b898',2,2);break}
+  case 'N':{px(g,0,0,'#8a7862',16,16);g.fillStyle='#5c4c3a';for(let r=0;r<3;r++)g.fillRect(0,r*5+4,16,1);px(g,4,1,'#2a2018',8,8);px(g,5,2,'#0e0a08',6,6);px(g,7,2,'#3a3028',1,6);px(g,5,4,'#3a3028',6,1);for(let i=0;i<7;i++)px(g,2+i*2,11,'#c8b898',1,3);px(g,3,13,'#c8b898',10,1);break}
+  case 'E':{px(g,0,0,'#5c4c3a',16,16);px(g,1,0,'#2a1a10',14,16);px(g,2,1,'#5a3a20',12,15);for(let x=2;x<14;x+=3)px(g,x,1,'#3a2414',1,15);for(let y=3;y<16;y+=5)for(let x=3;x<14;x+=4)px(g,x,y,'#1a1a1a',1,1);break}
+  case 'u':{earth(g,tx,ty);px(g,2,3,'#5a5248',12,11);px(g,3,4,'#9c9484',10,9);px(g,5,6,'#1a3a4a',6,5);px(g,6,6,'#2a5a6a',2,1);px(g,3,4,'#b8b0a0',10,1);px(g,7,1,'#5a3a1e',1,6);break}
+  case 'l':{px(g,0,0,'#8b5b33',16,16);for(let y=0;y<16;y+=4){px(g,0,y+3,'#5e3b20',16,1);px(g,0,y,'#a06a3c',16,1)}px(g,14,0,'#4a2e18',2,16);px(g,3,6,'#e8e0c8',8,6);px(g,4,7,'#9a8f78',6,1);px(g,4,9,'#9a8f78',4,1);px(g,8,4,'#7a7a7a',4,3);px(g,8,4,'#9a9a9a',3,1);break}
+  case 'h':fenceT(g,tx,ty);px(g,1,3,'#a8804f',14,2);px(g,2,9,'#a8804f',12,2);px(g,6,6,'#120c08',4,2);break;
+  case 'o':sand(g,tx,ty);px(g,0,2,'#5d4834',3,2);px(g,13,11,'#5d4834',3,2);px(g,1,12,'#4b3a2a',2,1);break;
+  case 'H':plank(g);break;
+  case 'Y':plank(g);px(g,5,1,'#8a7050',3,13);px(g,5,7,'#241a12',3,1);px(g,6,3,'#a08460',1,4);break;
+  case 'Z':floorW(g,tx,ty);px(g,1,0,'#241a12',14,16);px(g,2,1,'#6a4426',12,14);px(g,2,7,'#3a2616',12,1);px(g,9,6,'#c9a24a',3,4);px(g,10,8,'#241a12',1,1);break;
+  case 'G':px(g,0,0,'#2e2016',16,16);for(let y=0;y<16;y+=4){px(g,0,y,'#6b4a2a',16,3);px(g,0,y,'#8a6240',16,1)}px(g,0,6,'#55575a',16,2);px(g,0,6,'#7a7d80',16,1);break;
+  case 'g':sand(g,tx,ty);px(g,3,0,'#c4a26c',2,16);px(g,11,0,'#c4a26c',2,16);break;
+  case 'B':{if(under(m,tx,ty)==='I')floorW(g,tx,ty);else sand(g,tx,ty);
+    px(g,2,15,'rgba(0,0,0,.25)',12,1);px(g,2,2,'#241408',12,13);px(g,3,3,'#7a4e2a',10,11);px(g,4,3,'#9a6a3a',2,11);px(g,3,5,'#3a3a3a',10,1);px(g,3,11,'#3a3a3a',10,1);px(g,4,1,'#241408',8,2);px(g,5,1,'#5a3a1e',6,2);px(g,6,1,'#6a4a2a',2,1);break}
+  case 'T':floorW(g,tx,ty);px(g,2,5,'#241408',12,10);px(g,3,6,'#8a5a30',10,8);px(g,3,9,'#5a3a1e',10,1);px(g,5,2,'#9a9a9a',1,4);px(g,9,3,'#7a7a7a',2,3);px(g,7,7,'#c9a24a',2,1);break;
+  case 'K':floorW(g,tx,ty);px(g,0,3,'#241408',16,12);px(g,0,4,'#7a4a24',16,9);px(g,0,4,'#94603a',16,1);px(g,3,5,'#e8e0c8',6,5);px(g,4,6,'#9a8f78',4,1);px(g,4,8,'#9a8f78',3,1);px(g,11,6,'#1a1a2a',2,2);px(g,12,4,'#e8e0c8',1,2);break;
+  case 'k':earth(g,tx,ty);px(g,1,5,'#5a4528',7,10);px(g,2,6,'#b89a6a',5,8);px(g,8,4,'#5a4528',7,11);px(g,9,5,'#c9ab7a',5,9);px(g,3,6,'#d8bc8a',2,2);px(g,10,5,'#e2c896',2,2);break;
+  case 'j':earth(g,tx,ty);px(g,4,4,'#5a2a14',8,11);px(g,5,5,'#b0603a',6,9);px(g,6,3,'#5a2a14',4,2);px(g,6,6,'#d07a4a',2,4);px(g,4,15,'rgba(0,0,0,.2)',8,1);break;
+  case 'm':px(g,0,0,'#b08a5a',16,16);px(g,0,0,'#cfa874',16,5);px(g,0,5,'#9c7848',16,1);px(g,0,15,'#8a6a40',16,1);for(let i=0;i<4;i++)px(g,(rnd(tx,ty,i)*15)|0,7+(rnd(tx,ty,i+5)*7|0),'#a07c4c',2,1);break;
+  default:sand(g,tx,ty);
+  }
+  cache.set(key,c);return c;
 }
 
-/* ---------- objects ---------- */
+/* ================= big objects ================= */
 const palm=(()=>{const[c,g]=cnv(34,44);
   for(let y=14;y<44;y++){const x=15+Math.round(Math.sin(y/9)*1.5);px(g,x,y,'#7a5530',4,1);if(y%3===0)px(g,x,y,'#523619',4,1)}
-  const fr=[[-15,6],[-12,-2],[-6,-8],[2,-9],[9,-6],[15,0],[14,8],[-14,12],[6,12]];
-  fr.forEach(([dx,dy],i)=>{const n=14;for(let s=0;s<=n;s++){const t=s/n,x=17+dx*t,y=14+dy*t+ (t*t*6);px(g,x|0,y|0,i%2?'#3f7a3a':'#2f6430',2,1);if(s%3===1)px(g,(x|0),(y|0)+1,'#5c9a4a')}});
-  px(g,15,12,'#6a4a20',5,4);px(g,16,15,'#c9732e',2,2);px(g,18,14,'#c9732e',2,2);
-  return c})();
+  [[-15,6],[-12,-2],[-6,-8],[2,-9],[9,-6],[15,0],[14,8],[-14,12],[6,12]].forEach(([dx,dy],i)=>{for(let s=0;s<=14;s++){const t=s/14,x=17+dx*t,y=14+dy*t+t*t*6;px(g,x|0,y|0,i%2?'#3f7a3a':'#2f6430',2,1);if(s%3===1)px(g,x|0,(y|0)+1,'#5c9a4a')}});
+  px(g,15,12,'#6a4a20',5,4);px(g,16,15,'#c9732e',2,2);px(g,18,14,'#c9732e',2,2);return c})();
+const lampS=(()=>{const[c,g]=cnv(12,30);px(g,5,10,'#2a1e14',2,20);px(g,4,28,'#2a1e14',4,2);px(g,2,1,'#2a1e14',8,10);px(g,3,3,'#ffd27a',6,6);px(g,4,4,'#fff2c0',2,3);px(g,2,1,'#3a2a1a',8,2);px(g,5,0,'#3a2a1a',2,1);return c})();
+const bellS=(()=>{const[c,g]=cnv(16,30);px(g,2,4,'#2a1e14',2,26);px(g,12,4,'#2a1e14',2,26);px(g,1,3,'#3a2a1a',14,2);px(g,5,6,'#8a6a20',6,7);px(g,6,6,'#c9a24a',4,6);px(g,4,12,'#8a6a20',8,2);px(g,7,14,'#5a4a1a',2,2);px(g,6,7,'#f0d27a',1,3);return c})();
 const boat=(()=>{const[c,g]=cnv(132,92);
   g.strokeStyle='#3a2a1a';g.lineWidth=1;g.beginPath();g.moveTo(71,4);g.lineTo(126,56);g.moveTo(71,4);g.lineTo(14,44);g.stroke();
   px(g,70,2,'#4a3018',2,56);
-  for(let i=0;i<70;i++){const x=34+i,y=24-Math.round(i*0.3);px(g,x,y,'#e9dfc8',1,3);px(g,x,y+3,'#b8ab8e')}
+  for(let i=0;i<70;i++){const x=34+i,y=24-Math.round(i*.3);px(g,x,y,'#e9dfc8',1,3);px(g,x,y+3,'#b8ab8e')}
   px(g,10,40,'#8a5a30',24,16);px(g,10,40,'#5a3a1e',24,2);px(g,12,44,'#3d2513',4,4);px(g,20,44,'#3d2513',4,4);
-  for(let r=0;r<26;r++){const l=10+Math.floor(r/2.2),rt=128-Math.floor(r*r/14);
-    const col=r<2?'#5a3a1e':r<5?'#9a6a3a':r<7?'#e8e0cc':r<20?'#8a5a30':'#6a4424';px(g,l,56+r,col,rt-l,1)}
+  for(let r=0;r<26;r++){const l=10+Math.floor(r/2.2),rt=128-Math.floor(r*r/14);const col=r<2?'#5a3a1e':r<5?'#9a6a3a':r<7?'#e8e0cc':r<20?'#8a5a30':'#6a4424';px(g,l,56+r,col,rt-l,1)}
   px(g,40,62,'#5a3a1e',2,2);px(g,70,62,'#5a3a1e',2,2);px(g,100,62,'#5a3a1e',2,2);
-  g.fillStyle='rgba(10,40,60,.35)';g.fillRect(14,82,110,4);
-  return c})();
+  g.fillStyle='rgba(10,40,60,.35)';g.fillRect(14,82,110,4);return c})();
+const STALLPAL={dates:['#8a2f24','#e8dcc0'],spice:['#2f5a6a','#e8dcc0'],cloth:['#6a3a6a','#e8c870'],cloth2:['#2f6a44','#e8dcc0'],fish:['#2f4a7a','#d8e0e0'],jars:['#8a5a20','#e8dcc0']};
+function makeStall(t){const[c,g]=cnv(48,40);const[a,b]=STALLPAL[t];
+  px(g,3,10,'#3a2616',2,28);px(g,43,10,'#3a2616',2,28);
+  for(let x=0;x<48;x+=6){px(g,x,0,a,3,10);px(g,x+3,0,b,3,10)}px(g,0,0,'rgba(0,0,0,.25)',48,1);
+  for(let x=0;x<48;x+=6){px(g,x+1,10,(x/6)%2?b:a,4,2)}px(g,0,9,'rgba(0,0,0,.2)',48,1);
+  px(g,2,24,'#3d2513',44,16);px(g,3,25,'#8a5a30',42,14);px(g,3,25,'#a8743e',42,2);px(g,3,31,'#6b4426',42,1);
+  const goods=(cols,h)=>{for(let i=0;i<6;i++){const x=5+i*7,col=cols[i%cols.length];px(g,x,24-h,'#2a1a10',6,h);px(g,x+1,25-h,col,4,h-1);px(g,x+1,25-h,'rgba(255,255,255,.25)',2,1)}};
+  if(t==='dates')goods(['#6a3416','#8a4a1e','#5a2a12'],5);
+  if(t==='spice')goods(['#c84a1e','#e0b030','#6a8a2a','#a8742a'],5);
+  if(t==='cloth'||t==='cloth2')goods(['#b83a4a','#3a6ab8','#e8c050','#4a9a6a','#9a4ab0'],7);
+  if(t==='fish'){for(let i=0;i<5;i++){const x=5+i*8;px(g,x,20,'#2a3a44',7,3);px(g,x+1,20,'#c0ccd4',5,2);px(g,x+6,19,'#8a9aa4',2,4)}}
+  if(t==='jars'){for(let i=0;i<5;i++){const x=5+i*8;px(g,x,13,'#4a2010',6,11);px(g,x+1,14,'#b0603a',4,9);px(g,x+2,12,'#4a2010',2,2)}}
+  return c}
+const STALLIMG={};Object.keys(STALLPAL).forEach(k=>STALLIMG[k]=makeStall(k));
 
-/* ---------- sprites ---------- */
-const BASE={k:'#2b1d14',s:'#c98a5a',S:'#9c623a',h:'#1a1410',w:'#f2ede0',W:'#bfb59c',e:'#1a1410',t:'#f2ede0',T:'#cfc6ae'};
-const DOWN=["................",".....kkkkkk.....","....kttttttk....","....kTttttTk....","....khsssshk....","....ksessesk....","....kssssssk....",".....kSssSk.....","....kwwwwwwk....","...kwwwwwwwwk...","...kWwwwwwwWk...","..ksWwwwwwwWsk..","...kWwwwwwwWk...","...kwWwwwwWwk...","....kSk..kSk....","....kk....kk...."];
-const UPR={4:"....khhhhhhk....",5:"....khhhhhhk....",6:"....kShhhhSk....",7:".....kSSSSk....."};
-const SIDE=["................","......kkkkk.....",".....ktttttk....",".....kTttttk....",".....khssssk....",".....khssesk....",".....kssssssk...","......kSssk.....",".....kwwwwwk....","....kwwwwwwk....","....kwWwwwwk....","....kwsWwwwk....","....kWwwwwwk....","....kwWwwwWk....",".....kSkkSk.....",".....kk..kk....."];
-function legs(rows,a,b){const r=rows.slice();r[14]=a;r[15]=b;return r}
-function withUp(rows){return rows.map((r,i)=>UPR[i]||r)}
-const FR={
-  down:[DOWN,legs(DOWN,"....kSk...kk....","....kk.........."),DOWN,legs(DOWN,"....kk...kSk....","..........kk....")],
-  side:[SIDE,legs(SIDE,"....kSk..kSk....","....kk....kk...."),SIDE,legs(SIDE,"....kSk..kSk....","....kk....kk....")]
-};
-FR.up=FR.down.map(withUp);
-function make(rows,pal,flip){const[c,g]=cnv(16,16);rows.forEach((r,y)=>{r.padEnd(16,'.').slice(0,16).split('').forEach((ch,x)=>{if(ch!=='.'){g.fillStyle=pal[ch]||'#f0f';g.fillRect(flip?15-x:x,y,1,1)}})});return c}
-function sheet(over){const pal={...BASE,...over},o={};for(const d of['down','up'])o[d]=FR[d].map(r=>make(r,pal));o.right=FR.side.map(r=>make(r,pal));o.left=FR.side.map(r=>make(r,pal,true));return o}
+/* ================= sprites (16x24, procedural, auto-outlined) ================= */
+const OUTL='#21150d';
+function charFrame(o,dir,f){
+  const[c,g]=cnv(16,24);
+  const P=(x,y,col,w=1,h=1)=>{if(col){g.fillStyle=col;g.fillRect(x,y,w,h)}};
+  const side=dir==='right';const up=dir==='up';
+  const sw=[0,1,0,-1][f];
+  const sk=o.skin,skS=o.skinS,cl=o.cloth,clS=o.clothS,clH=o.clothH||cl;
+  // feet
+  if(!side){const lf=f===1?1:0,rf=f===3?1:0;P(5,22-lf,o.shoe,2,2-0);P(9,22-rf,o.shoe,2,2)}
+  else{const a=f===1?2:f===3?-2:0;P(6-a,22,o.shoeS||o.shoe,3,2);P(7+a,22,o.shoe,3,2)}
+  // body
+  if(o.head==='abaya'){
+    if(!side){P(3,10,cl,10,13);P(2,18,cl,12,5);P(11,10,clS,2,13);P(4,11,clH,1,10)}
+    else{P(4,10,cl,8,13);P(3,18,cl,10,5);P(4,10,clS,2,13);P(7+sw,12,clS,2,6)}
+  }else if(!side){
+    P(3,11,cl,10,2);P(4,11,cl,8,11);P(3,19,cl,10,3);
+    P(11,11,clS,1,11);P(12,19,clS,1,3);P(4,12,clH,1,8);
+    if(!up)P(7,15,clS,1,6);else P(7,13,clS,1,8);
+    if(o.vest){if(up)P(4,11,o.vest,8,9);else{P(4,11,o.vest,2,9);P(10,11,o.vest,2,9)}}
+    if(o.bisht){P(3,11,o.bisht,2,11);P(11,11,o.bisht,2,11);if(!up){P(5,11,'#c9a24a',1,9);P(10,11,'#c9a24a',1,9)}}
+    if(o.belt){P(4,16,o.belt,8,1);if(!up)P(7,16,'#c9a24a',2,3)}
+    // arms
+    const lh=18+(sw>0?-1:sw<0?1:0),rh=18+(sw>0?1:sw<0?-1:0);
+    P(2,12,o.bisht||cl,2,lh-12);P(12,12,o.bisht||clS,2,rh-12);
+    if(o.roll){P(2,15,sk,2,lh-15);P(12,15,skS,2,rh-15)}
+    P(2,lh,sk,2,1);P(12,rh,skS,2,1);
+  }else{
+    P(5,11,cl,6,11);P(4,19,cl,8,3);P(5,11,clS,1,11);P(10,12,clH,1,8);
+    if(o.vest)P(5,11,o.vest,3,9);
+    if(o.bisht)P(4,11,o.bisht,3,11);
+    if(o.belt)P(5,16,o.belt,6,1);
+    const ax=7+sw;P(ax,12,o.bisht||clS,2,5);P(ax,17,sk,2,1);if(o.roll)P(ax,15,sk,2,2);
+  }
+  // head
+  const hd=o.head,hc=o.hc,hcS=o.hcS||o.hc;
+  const pat=(x,y)=>o.patt&&((x+y*2)%4===0)?o.patt:(x>=11?hcS:hc);
+  const cloth=(x,y,w,h)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)P(x+i,y+j,pat(x+i,y+j))};
+  if(!side&&!up){
+    P(5,4,sk,6,6);P(10,4,skS,1,6);P(4,6,sk,1,2);P(11,6,skS,1,2);
+    P(6,6,o.eye||'#1a1410');P(9,6,o.eye||'#1a1410');
+    if(o.beard){P(5,8,o.beard,6,2);P(7,8,'#6a3a24',2,1)}else{P(7,8,skS,2,1);P(5,9,skS,6,1)}
+    if(hd==='ghutra'||hd==='shemagh'){cloth(5,1,6,1);cloth(4,2,8,1);cloth(3,3,10,1);cloth(3,4,2,7);cloth(11,4,2,7);cloth(3,11,2,3);cloth(11,11,2,3);cloth(5,3,6,1)}
+    if(o.iqal){P(5,2,o.iqal,6,1);P(4,3,o.iqal,8,1)}
+    if(hd==='cap'){P(4,2,hc,8,3);P(5,1,hc,6,1);P(5,3,hcS,1,1);P(8,3,hcS,1,1);P(10,2,hcS,1,1);P(4,5,o.hair,1,2);P(11,5,o.hair,1,2)}
+    if(hd==='wrap'){P(4,1,hc,8,4);P(3,3,hc,1,2);P(12,3,hc,1,2);P(4,3,hcS,8,1);P(11,5,hc,2,5);P(12,5,hcS,1,5)}
+    if(hd==='hair'){P(4,2,o.hair,8,3);P(5,1,o.hair,6,1);P(4,5,o.hair,1,2);P(11,5,o.hair,1,2)}
+    if(hd==='abaya'){P(4,1,hc,8,2);P(3,3,hc,10,8);P(5,5,sk,6,4);P(10,5,skS,1,4);P(6,6,'#1a1410');P(9,6,'#1a1410');P(4,1,hcS,1,1)}
+  }else if(up){
+    if(hd==='ghutra'||hd==='shemagh'){cloth(5,1,6,1);cloth(4,2,8,1);cloth(3,3,10,8);cloth(4,11,8,3);cloth(5,14,6,1)}
+    if(o.iqal){P(5,2,o.iqal,6,1);P(4,3,o.iqal,8,1)}
+    if(hd==='cap'){P(4,4,o.hair,8,6);P(4,2,hc,8,3);P(5,1,hc,6,1);P(6,3,hcS,1,1);P(9,3,hcS,1,1);P(4,9,skS,8,1)}
+    if(hd==='wrap'){P(4,4,o.hair,8,6);P(4,1,hc,8,4);P(3,3,hc,10,2);P(4,3,hcS,8,1);P(7,5,hc,3,6)}
+    if(hd==='hair'){P(4,1,o.hair,8,9);P(5,1,o.hair,6,1);P(4,9,skS,8,1)}
+    if(hd==='abaya'){P(4,1,hc,8,2);P(3,3,hc,10,9);P(11,3,hcS,2,9)}
+  }else{
+    P(7,4,sk,5,6);P(12,7,sk,1,1);P(10,6,o.eye||'#1a1410');P(7,4,skS,1,6);
+    if(o.beard){P(8,8,o.beard,4,2);P(11,8,'#6a3a24',1,1)}else{P(11,8,skS,1,1);P(8,9,skS,4,1)}
+    if(hd==='ghutra'||hd==='shemagh'){cloth(5,1,6,1);cloth(4,2,8,1);cloth(3,3,9,1);cloth(3,4,5,7);cloth(3,11,4,3);cloth(4,14,2,1)}
+    if(o.iqal){P(5,2,o.iqal,6,1);P(4,3,o.iqal,8,1)}
+    if(hd==='cap'){P(4,4,o.hair,3,5);P(4,2,hc,8,3);P(5,1,hc,6,1);P(6,3,hcS,1,1);P(9,3,hcS,1,1)}
+    if(hd==='wrap'){P(4,4,o.hair,3,5);P(4,1,hc,8,4);P(3,3,hc,1,6);P(4,3,hcS,8,1);P(3,9,hcS,2,3)}
+    if(hd==='hair'){P(4,1,o.hair,8,4);P(4,4,o.hair,3,5)}
+    if(hd==='abaya'){P(4,1,hc,8,2);P(3,3,hc,9,8);P(8,5,sk,4,4);P(10,6,'#1a1410');P(3,3,hcS,2,8)}
+  }
+  // outline
+  const id=g.getImageData(0,0,16,24),d=id.data,out=new Uint8ClampedArray(d);
+  const op=(x,y)=>x>=0&&y>=0&&x<16&&y<24&&d[(y*16+x)*4+3]>0;
+  const oc=[0x21,0x15,0x0d];
+  for(let y=0;y<24;y++)for(let x=0;x<16;x++){if(op(x,y))continue;if(op(x+1,y)||op(x-1,y)||op(x,y+1)||op(x,y-1)){const i=(y*16+x)*4;out[i]=oc[0];out[i+1]=oc[1];out[i+2]=oc[2];out[i+3]=255}}
+  g.putImageData(new ImageData(out,16,24),0,0);
+  return c;
+}
+function flipC(src){const[c,g]=cnv(16,24);g.translate(16,0);g.scale(-1,1);g.drawImage(src,0,0);return c}
+function sheet(o){o={skin:'#c98a5a',skinS:'#a06a40',shoe:'#5a3a1e',...o};const s={};
+  for(const d of['down','up','right'])s[d]=[0,1,2,3].map(f=>charFrame(o,d,f));s.left=s.right.map(flipC);return s}
 const SH={
-  hero:sheet({}),
-  gran:sheet({t:'#2a2228',T:'#1a1418',w:'#2e2630',W:'#1c161e',h:'#2a2228',s:'#b07a4e',S:'#8a5a36'}),
-  cap:sheet({t:'#ece6d6',T:'#a8443a',w:'#e9e3d3',W:'#b9af97',s:'#b47a4a',S:'#8c5a34',h:'#ece6d6'}),
-  mar:sheet({t:'#4f7282',T:'#38525e',w:'#8e6a48',W:'#6a4c32',s:'#a86c42',S:'#7e4e2c',h:'#4f7282'})
+  hero:sheet({head:'cap',hc:'#f4f0e6',hcS:'#cfc6ae',hair:'#1a1410',cloth:'#efe9da',clothS:'#c4baa2',clothH:'#fffaf0'}),
+  gran:sheet({head:'abaya',hc:'#24202a',hcS:'#151218',cloth:'#2a2430',clothS:'#18141c',clothH:'#3a3440',skin:'#b07a4e',skinS:'#8a5a36'}),
+  saad:sheet({head:'shemagh',hc:'#f2eee4',hcS:'#cfc8b6',patt:'#b8322a',iqal:'#141414',beard:'#2a1e16',cloth:'#e9e3d3',clothS:'#bdb39b',skin:'#b47a4a',skinS:'#8a5a34'}),
+  fahd:sheet({head:'wrap',hc:'#5d7f8e',hcS:'#3f5a66',hair:'#1a1410',vest:'#7a5534',cloth:'#cfc2a4',clothS:'#a49678',roll:1,skin:'#a86c42',skinS:'#7e4e2c',beard:'#2a1e16'}),
+  abu:sheet({head:'ghutra',hc:'#f6f3ea',hcS:'#d2ccbc',iqal:'#141414',beard:'#cfcac0',cloth:'#ece5d2',clothS:'#c2b89e',bisht:'#6a4a2a',skin:'#c08a5e',skinS:'#946440'}),
+  coffee:sheet({head:'wrap',hc:'#f0ebe0',hcS:'#cfc6ae',hair:'#1a1410',vest:'#7a3a2a',cloth:'#e6dfcc',clothS:'#bdb39b',beard:'#2a1e16',skin:'#b8804e',skinS:'#8a5a34'}),
+  hamad:sheet({head:'wrap',hc:'#e8e2d0',hcS:'#c4bca4',hair:'#1a1410',cloth:'#9fb8c0',clothS:'#7a96a0',roll:1,skin:'#a86c42',skinS:'#7e4e2c'}),
+  guard:sheet({head:'shemagh',hc:'#e8e2d4',hcS:'#c4bca8',patt:'#b03a30',iqal:'#141414',beard:'#1a1410',cloth:'#4f4840',clothS:'#36302a',clothH:'#625a50',belt:'#5a3a1e',skin:'#a87048',skinS:'#7a4e30'}),
+  chief:sheet({head:'shemagh',hc:'#e0dace',hcS:'#bdb6a6',patt:'#2a2a2a',iqal:'#141414',beard:'#1a1410',cloth:'#3e3228',clothS:'#2a2018',bisht:'#1a1612',belt:'#5a3a1e',skin:'#9c6640',skinS:'#6e4428'}),
+  man:sheet({head:'ghutra',hc:'#f2eee4',hcS:'#cfc8b6',iqal:'#141414',beard:'#2a1e16',cloth:'#d8d0bc',clothS:'#b4aa94',skin:'#b07a4e',skinS:'#8a5a36'}),
+  oldman:sheet({head:'ghutra',hc:'#f6f3ea',hcS:'#d2ccbc',beard:'#e8e4dc',cloth:'#cfc4a8',clothS:'#a89c80',skin:'#b8845a',skinS:'#8c5e3c'}),
+  boy:sheet({head:'hair',hair:'#1a1410',cloth:'#e8e0cc',clothS:'#c4baa4',skin:'#c08a5a',skinS:'#9a6a40'})
 };
 
-/* ---------- story ---------- */
-const flags={gran:false,cap:false,mar:false};
-const NPCS=[
- {id:'gran',name:'الجدة أم راشد',x:4*T,y:4*T+2,dir:'down',sh:SH.gran},
- {id:'cap',name:'النوخذة بو ناصر',x:15*T+8,y:19*T,dir:'right',sh:SH.cap},
- {id:'mar',name:'البحّار مرزوق',x:26*T+4,y:11*T,dir:'left',sh:SH.mar}
-];
-const hero={x:12*T,y:4*T+4,dir:'down',walk:0,moving:false};
-const N='';
-function talk(npc){
-  if(npc.id==='gran'){
-    if(!flags.gran){flags.gran=true;setGoal('روح للعم سعد عند الرصيف');return say([
+/* ================= story data ================= */
+const CLUES={
+  saad:['كلام العم سعد متلخبط','قال البحرين، وبعدين غيّرها لمسقط. وكان يتهرّب من عيوني.'],
+  muscat:['المركب ما وصل مسقط','فهد يقول إن أبوي نزل في ميناء ما كان المفروض ينزل فيه.'],
+  band:['شريطة حمرا','على يد فهد شريطة حمرا، نفس الشرايط المربوطة على صناديق العم سعد.'],
+  note:['رسالة أبوي','«سعد يحمّل صناديق في مستودعه كل ليلة خميس. مو تمر. لو ما رجعت، الدليل في مكتبه.»'],
+  thursday:['ليلة الخميس','حمد: رجال العم سعد يشيلون صناديق ثقيلة للمستودع كل خميس بعد العشا، ويطلعونها الفجر بمركب صغير.'],
+  rich:['العم سعد صار غني','أبو فيصل: قبل سنة ما كان عنده شي، والحين يدفع بالريال الفضة.'],
+  crates:['صناديق ثقيلة','صناديق المستودع مربوطة بشرايط حمرا، وثقيلة. اللي فيها مو تمر.'],
+  word:['أول كلمة','على لوح أبوي في غرفته، بخط كبير: «سالم». أول كلمة علمني أكتبها كانت اسمي.'],
+  map:['خريطة أبوي','على خريطة أبوي علامة صغيرة عند جزيرة بعيدة، ومكتوب جنبها: «بندر الغار».'],
+  lock:['قفل الدرج','درج مكتب سعد مقفول بقفل أرقام. الورقة تقول: «الصناديق المعلّمة: الساحة، المخزن، القاعة».'],
+  dY:['رقم الساحة','صندوق معلّم بالطباشير في الساحة الشرقية. الرقم: ٤'],
+  dS:['رقم المخزن','صندوق معلّم بالطباشير في المخزن. الرقم: ٧'],
+  dH:['رقم القاعة','صندوق معلّم بالطباشير في القاعة الكبيرة. الرقم: ٢'],
+  north:['المركب لف شمال','ولد الجيران شاف مركب أبوي يوم طلع: لف ناحية الشمال. ومسقط من الجنوب.'],
+  fahdcry:['فهد ما ينام','جارتنا تسمع فهد بالليل يصيح ويكلم نفسه من يوم رجع.'],
+  route:['طريق رجّال سعد','لحقت رجّال بشريطة حمرا من السوق لين مستودع العم سعد ورا الرصيف الشمالي.'],
+  ledger:['دفتر العم سعد','«راشد — سُلِّم في بندر الغار». وتحتها: «فهد — نصيبه ٢٠٠ ريال».']
+};
+let F={},clues=[],goalText='';
+
+/* ================= state ================= */
+let cur=null,hero={x:0,y:0,dir:'down',walk:0,moving:false,hidden:false};
+let mode='title',view='world',tick=0,fadeA=0,fadeDir=0,fadeCb=null;
+let guards=[],alarm=null,chaseWas=false,camX=0,camY=0;
+
+const SC={
+  port:{w:36,h:24,make:makePort,ground:'.',light:'day',music:'day',
+    npcs:()=>F.ch===3?[
+      {id:'gran3',name:'جدتي',x:4*T,y:4*T+2,dir:'down',sh:SH.gran},
+      {id:'abu3',name:'أبو خليل',x:8*T,y:6*T,dir:'down',sh:SH.abu},
+      ...(F.freed?[{id:'fahd3',name:'فهد',x:26*T+4,y:11*T,dir:'left',sh:SH.fahd}]:[])]:F.ch===2?[
+      {id:'gran2',name:'جدتي',x:4*T,y:4*T+2,dir:'down',sh:SH.gran},
+      {id:'saad2',name:'العم سعد',x:19*T,y:10*T,dir:'left',sh:SH.saad},
+      {id:'fahd2',name:'فهد',x:26*T+4,y:11*T,dir:'left',sh:SH.fahd}]:[
+      {id:'gran',name:'جدتي',x:4*T,y:4*T+2,dir:'down',sh:SH.gran},
+      {id:'saad',name:'العم سعد',x:15*T+8,y:19*T,dir:'right',sh:SH.saad},
+      {id:'fahd',name:'فهد',x:26*T+4,y:11*T,dir:'left',sh:SH.fahd}],
+    walkers:()=>[
+      {name:'جارتنا',sh:SH.gran,a:[5,7],b:[14,7],line:'الله يرد أبوك بالسلامة يا سالم.',talk(){
+        if(F.saad&&!F.ch&&!clues.includes('fahdcry'))return say([['جارتنا','الله يرد أبوك بالسلامة يا سالم.'],['جارتنا','وفهد المسكين… من يوم رجع ما ينام. أسمعه بالليل يصيح ويكلم نفسه.']],()=>clue('fahdcry'));
+        say([['جارتنا','الله يرد أبوك بالسلامة يا سالم.']])}},
+      {name:'ولد الجيران',sh:SH.boy,a:[22,10],b:[30,10],line:'سالم! تعال نلعب… ما تبي؟ طيب.',talk(){
+        if(F.saad&&!F.ch&&!clues.includes('north'))return say([['ولد الجيران','مركب أبوك؟ ايه شفته يوم طلعوا!'],['ولد الجيران','كنت فوق السطح. لف ناحية الشمال… مو ناحية مسقط.'],['سالم','متأكد؟'],['ولد الجيران','والله. أبوي يقول مسقط من جهة الجنوب.']],()=>{clue('north');if(!F.fahd)setGoal('واجه فهد بالدليل اللي يكشف كذب سعد')});
+        say([['ولد الجيران','سالم! تعال نلعب… ما تبي؟ طيب.']])}}],
+    objs:()=>[{img:boat,x:17*T+8,y:16*T-44,by:19*T,bob:1}],
+    exits(){
+      if(F.ch===3){if(hero.x>35*T-2){hero.x-=8;say([[N,'(جدتي تنتظرني.)']])}return}
+      if(F.ch===2){
+        if(F.g2&&!F.s2){const n=npcs.find(n=>n.id==='saad2');if(n&&Math.hypot(n.x-hero.x,n.y-hero.y)<44){n.dir=hero.x<n.x?'left':'right';TALK.saad2();return}}
+        if(hero.x>35*T-2){hero.x-=8;say([[N,'(مو وقت السوق الحين.)']])}
+        return}
+      if(hero.x>35*T-2&&hero.y>3*T&&hero.y<14*T){
+        if(!F.fahd){hero.x-=8;say([[N,'(ما عندي شي أسويه في السوق الحين.)']]);return}
+        goScene('market',1*T,8*T-4)}
+    },
+    onEnter(){}
+  },
+  market:{w:32,h:18,make:makeMarket,ground:'f',light:'sunset',music:'day',
+    npcs:()=>[
+      {id:'abu',name:'أبو خليل',x:5*T,y:3*T,dir:'down',sh:SH.abu},
+      {id:'coffee',name:'أبو فيصل',x:14*T,y:3*T,dir:'down',sh:SH.coffee},
+      {id:'hamad',name:'حمد',x:11*T,y:14*T,dir:'up',sh:SH.hamad}],
+    walkers:()=>[
+      {name:'رجّال',sh:SH.man,a:[2,9],b:[29,9],line:'الحر اليوم ما ينطاق.'},
+      {name:'حرمة',sh:SH.gran,a:[4,7],b:[22,7],line:'سالم ولد راشد؟ الله يصبّركم.'},
+      {name:'شيبة',sh:SH.oldman,a:[2,15],b:[28,15],line:'ايه… أيام الغوص كانت أصعب من كذا بكثير.'}],
+    objs:()=>STALLS.map(s=>({img:STALLIMG[s.t],x:s.x*T,y:(s.y+2)*T-40,by:(s.y+2)*T-1})),
+    exits(){if(F.tailing){if(hero.x<2)hero.x=2;return}if(hero.x<0&&hero.y>6*T&&hero.y<10*T)goScene('port',34*T,8*T-4)},
+    onEnter(){if(!F.abu)setGoal('دوّر على أبو خليل في السوق')}
+  },
+  home:{w:14,h:10,make:makeHome,ground:'f',light:'indoor',music:'day',npcs:()=>[],walkers:()=>[],objs:()=>[],
+    exits(){if(hero.y>8*T+2&&hero.x>4*T&&hero.x<8*T)goScene('port',12*T,4*T+6)},
+    onEnter(){if(!F.homeSeen){F.homeSeen=1;say([[N,'(البيت هادي. جدتي برا عند الباب.)'],[N,'(غرفة أبوي على حالها من يوم سافر.)']])}}},
+  ware:{w:34,h:24,make:makeWare,ground:'.',light:'night',music:'night',stealth:true,
+    npcs:()=>[],walkers:()=>[],objs:()=>[],
+    exits(){
+      const hx=hero.x+8,hy=hero.y+12;
+      if(hy>23*T-2&&hx>16*T&&hx<18*T){
+        if(!F.ledger){hero.y-=8;say([[N,'(مو قبل ما ألقى شي يثبت كلام أبوي.)']]);return}
+        endChapter();return}
+      if(hero.x<0&&(tileOf(hy)===16||tileOf(hy)===17)){
+        if(F.ledger){endChapter();return}
+        failNight('هربت من فتحة السياج… بس بدون الدليل.\nلازم ترجع وتحاول مرة ثانية.','هربت');}
+    },
+    onEnter(){resetWare(true)}
+  }
+};
+
+/* ================= scenes ================= */
+let npcs=[],walkers=[],objs=[],talls=[],lamps=[];
+function enterScene(id,x,y){
+  const s=SC[id];cur={...s,id};
+  if(!s.map||id==='ware')s.map=s.make();
+  cur.map=s.map;
+  npcs=s.npcs();walkers=s.walkers().map(w=>({...w,x:w.a[0]*T,y:w.a[1]*T-4,to:1,p:0,dir:'right',walk:0}));objs=s.objs();
+  talls=[];lamps=[];
+  for(let ty=0;ty<s.h;ty++)for(let tx=0;tx<s.w;tx++){const c=cur.map[ty][tx];
+    if(c==='P')talls.push({img:palm,x:tx*T-9,y:ty*T+16-44,by:ty*T+15});
+    if(c==='L'){talls.push({img:lampS,x:tx*T+2,y:ty*T+16-30,by:ty*T+15});lamps.push({x:tc(tx),y:ty*T-4})}
+    if(c==='t')lamps.push({x:tc(tx),y:ty*T+6});
+    if(c==='V')talls.push({img:bellS,x:tx*T,y:ty*T+16-30,by:ty*T+15})}
+  if(x!=null){hero.x=x;hero.y=y}
+  hero.hidden=false;guards=[];alarm=null;view='world';mgEl.hidden=true;
+  if(id==='port'&&F.ch===3){cur.light='sunset';cur.music='sad'}
+  setMusic(cur.music);
+  if(id==='port'&&F.ch===3)setGoal('روح لجدتك عند باب البيت');
+  s.onEnter&&s.onEnter();
+  save();
+}
+function goScene(id,x,y,after){
+  mode='cut';fadeDir=1;fadeCb=()=>{mode='play';enterScene(id,x,y);fadeDir=-1;after&&after()};
+}
+
+/* ================= HUD ================= */
+const boxEl=$('box'),who=$('who'),txt=$('txt'),more=$('more'),choicesEl=$('choices'),goalEl=$('goal'),banL=$('banL'),banR=$('banR'),toastEl=$('toast'),mgEl=$('mg');
+function setGoal(s){goalText=s||'';goalEl.textContent=s?('المهمة: '+s):'';goalEl.hidden=!s}
+let toastT=0;
+function toast(s){toastEl.textContent=s;toastEl.hidden=false;toastT=2.8}
+function clue(id){if(clues.includes(id))return;clues.push(id);toast('دليل جديد في الدفتر: '+CLUES[id][0]);sfx('ok');save()}
+function setBan(el,text,cls){if(!text){el.hidden=true;return}el.textContent=text;el.hidden=false;if(cls)el.className='ban '+cls}
+
+/* ================= dialogue ================= */
+let dq=null,di=0,shown=0,full='',onDone=null,sel=0;
+function say(lines,done){dq=lines.slice();di=0;onDone=done||null;mode='talk';boxEl.hidden=false;showLine()}
+function showLine(){
+  while(di<dq.length&&dq[di].fn){const r=dq[di].fn();if(Array.isArray(r))dq.splice(di+1,0,...r);di++}
+  if(di>=dq.length){endTalk();return}
+  const L=dq[di];choicesEl.innerHTML='';
+  if(L.ch){who.textContent=L.who||'سالم';who.hidden=false;txt.textContent='';full='';shown=0;more.hidden=true;
+    L.ch.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='ch';
+      if(c[2]){const t=document.createElement('b');t.textContent=c[2];b.appendChild(t)}
+      b.appendChild(document.createTextNode(c[0]));
+      b.addEventListener('click',e=>{e.stopPropagation();choose(i)});choicesEl.appendChild(b)});
+    sel=0;hl();return}
+  const[n,t]=L;logLine(n,t);who.textContent=n||'';who.hidden=!n;full=t;shown=0;txt.textContent='';more.hidden=true;
+  txt.style.fontStyle=n?'normal':'italic';txt.style.color=n?'':'#c9d6dc';
+}
+function hl(){[...choicesEl.children].forEach((b,i)=>b.classList.toggle('sel',i===sel))}
+function choose(i){const L=dq[di];if(!L||!L.ch)return;logLine(L.who||'سالم','«'+L.ch[i][0]+'»');const r=L.ch[i][1]&&L.ch[i][1]();choicesEl.innerHTML='';if(Array.isArray(r))dq.splice(di+1,0,...r);di++;showLine()}
+function advance(){const L=dq[di];if(L&&L.ch){choose(sel);return}
+  if(shown<full.length){shown=full.length;txt.textContent=full;more.hidden=false;return}
+  di++;showLine()}
+function endTalk(){boxEl.hidden=true;dq=null;mode='play';if(onDone){const f=onDone;onDone=null;f()}}
+
+/* ================= audio ================= */
+let ac=null,soundOn=true,mGain=null,sfxG=null,song=null,nextT=0,step=0;
+function ensureAudio(){if(ac)return true;try{ac=new (window.AudioContext||window.webkitAudioContext)();mGain=ac.createGain();mGain.connect(ac.destination);sfxG=ac.createGain();sfxG.connect(ac.destination);applyAudio();setInterval(tickMusic,40);return true}catch(e){return false}}
+const hz=n=>440*Math.pow(2,(n-69)/12);
+function note(f,t,d,type,v,dest){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(dest||mGain);o.start(t);o.stop(t+d+.05)}
+const SONGS={
+  day:{mel:[62,0,63,66,67,0,66,63,62,0,0,0,67,69,70,69,67,66,63,0,62,0,0,0],tempo:.33,drone:50,type:'triangle',v:.05},
+  night:{mel:[50,0,0,53,0,0,55,0,53,0,51,0,0,0,50,0,0,0,0,0,46,0,48,0],tempo:.42,drone:38,type:'sine',v:.06},
+  alarm:{mel:[74,0,70,0,74,0,70,0,73,0,69,0,73,0,69,0],tempo:.15,drone:45,type:'square',v:.02},
+  dive:{mel:[62,0,0,65,0,0,69,0,67,0,65,0,62,0,0,0,60,0,62,0,65,0,0,0],tempo:.42,drone:50,type:'sine',v:.05},
+  sad:{mel:[57,0,0,60,0,0,62,0,60,0,57,0,0,0,55,0,57,0,0,0,0,0,0,0],tempo:.55,drone:45,type:'sine',v:.05},
+  menu:{mel:[57,0,0,0,60,0,62,0,0,0,64,0,62,0,60,0,57,0,0,0,55,0,57,0],tempo:.5,drone:45,type:'triangle',v:.04},
+  interrog:{mel:[45,0,0,0,46,0,0,0,45,0,0,0,44,0,0,0],tempo:.5,drone:33,type:'sine',v:.05}
+};
+function setMusic(k){song=SONGS[k]||null;step=0;if(ac)nextT=ac.currentTime+.1}
+function tickMusic(){if(!ac||!song)return;while(nextT<ac.currentTime+.12){const n=song.mel[step%song.mel.length];
+  if(n)note(hz(n),nextT,song.tempo*1.6,song.type,song.v);
+  if(step%8===0)note(hz(song.drone),nextT,song.tempo*8,'sine',.035);
+  step++;nextT+=song.tempo}}
+function blip(){if(!soundOn||!ac)return;note(380+Math.random()*90,ac.currentTime,.05,'square',.02,sfxG)}
+function sfx(k){if(!soundOn||!ensureAudio())return;const t=ac.currentTime,d=sfxG;
+  if(k==='ok'){note(hz(72),t,.12,'square',.03,d);note(hz(76),t+.08,.12,'square',.03,d);note(hz(79),t+.16,.2,'square',.03,d)}
+  if(k==='bad'){note(hz(55),t,.25,'square',.04,d);note(hz(50),t+.15,.35,'square',.04,d)}
+  if(k==='alert'){note(hz(84),t,.1,'square',.05,d);note(hz(88),t+.08,.18,'square',.05,d)}
+  if(k==='bell'){for(let i=0;i<5;i++){note(hz(88),t+i*.35,.6,'sine',.08,d);note(hz(95),t+i*.35,.4,'triangle',.03,d)}}
+  if(k==='crash'){note(90,t,.3,'sawtooth',.06,d);note(60,t+.05,.4,'square',.05,d)}
+  if(k==='rot'){note(hz(67),t,.06,'square',.03,d)}
+}
+$('snd').addEventListener('click',e=>{soundOn=!soundOn;applyAudio();e.target.textContent='الصوت: '+(soundOn?'يعمل':'مطفأ')});
+
+/* ================= save ================= */
+const KEY='mina1960-ch1';
+function save(){try{localStorage.setItem(KEY,JSON.stringify({s:cur.id,x:hero.x,y:hero.y,F,clues,goal:goalText,diff:diffK,log:LOG.slice(-300)}))}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}}
+function clearSave(){try{localStorage.removeItem(KEY)}catch(e){}}
+
+/* ================= input ================= */
+const keys={up:0,down:0,left:0,right:0};
+const KM={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right'};
+addEventListener('keydown',e=>{
+  if(e.code==='Escape'||e.code==='KeyP'){if(mode==='pause'){resumeGame();e.preventDefault();return}if(['play','talk','sea','dive','stars','fish'].includes(mode)){pauseGame();e.preventDefault();return}}
+  if(mode==='menu'||mode==='pause'){if((e.code==='ArrowUp'||e.code==='ArrowDown')&&(curPanel()==='mLog'||curPanel()==='mRecap')){const bx=document.querySelector('#'+curPanel()+' .mscroll');bx.scrollTop+=e.code==='ArrowUp'?-36:36;e.preventDefault();return}
+    if(e.code==='ArrowUp'||e.code==='ArrowDown'){const id=curPanel();const L=[...document.querySelectorAll('#'+id+' .mlist button:not([hidden]):not([disabled])')];if(L.length){let i=L.indexOf(document.activeElement);i=(i+(e.code==='ArrowUp'?-1:1)+L.length)%L.length;L[i].focus()}e.preventDefault()}
+    if(e.code==='Escape'&&mode==='menu'&&menuBack.length)backPanel();return}
+  if(mode==='talk'&&dq&&dq[di]&&dq[di].ch&&(e.code==='ArrowUp'||e.code==='ArrowDown'||e.code==='KeyW'||e.code==='KeyS')){
+    const n=dq[di].ch.length;sel=(sel+(e.code==='ArrowUp'||e.code==='KeyW'?-1:1)+n)%n;hl();e.preventDefault();return}
+  if(KM[e.code]){keys[KM[e.code]]=1;e.preventDefault()}
+  if(e.code==='Space'||e.code==='Enter'||e.code==='KeyZ'){if(['play','talk','fish','dive','stars'].includes(mode)){e.preventDefault();action()}}
+  if(e.code==='KeyN'||e.code==='KeyB'){toggleBook()}
+  if(e.code==='KeyL'&&mode==='play'){openLogInGame();return}
+  if(mode==='puzzle'&&/^Digit[1-6]$/.test(e.code))rotPiece(+e.code.slice(5)-1);
+});
+addEventListener('keyup',e=>{if(KM[e.code])keys[KM[e.code]]=0});
+document.querySelectorAll('.pad button').forEach(b=>{const k=b.dataset.k;
+  const on=e=>{e.preventDefault();keys[k]=1;b.classList.add('on')},off=()=>{keys[k]=0;b.classList.remove('on')};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off)});
+$('abtn').addEventListener('pointerdown',e=>{e.preventDefault();ensureAudio();action()});
+$('bbtn').addEventListener('click',toggleBook);
+$('bookBtn').addEventListener('click',toggleBook);
+$('screen').addEventListener('pointerdown',e=>{if(mode==='talk'&&!(dq&&dq[di]&&dq[di].ch))action();else if(mode==='fish'||mode==='dive')action();else if(mode==='stars'&&stars){const r=cv.getBoundingClientRect();stars.cx=(e.clientX-r.left)/r.width*VW;stars.cy=(e.clientY-r.top)/r.height*VH;starPick()}});
+
+/* ================= notebook ================= */
+let bookPrev='play';
+function toggleBook(){
+  const b=$('book');
+  if(!b.hidden){b.hidden=true;mode=bookPrev;return}
+  if(mode!=='play')return;
+  const ol=$('clueList');ol.innerHTML='';
+  if(!clues.length){const li=document.createElement('li');li.className='empty';li.textContent='لسه ما لقيت شي. كلّم الناس وطالع حولك.';ol.appendChild(li)}
+  clues.forEach(id=>{const li=document.createElement('li'),b2=document.createElement('b');b2.textContent=CLUES[id][0];li.appendChild(b2);li.appendChild(document.createTextNode(CLUES[id][1]));ol.appendChild(li)});
+  bookPrev=mode;mode='book';b.hidden=false;$('bookClose').focus()}
+$('bookClose').addEventListener('click',toggleBook);
+
+/* ================= cards ================= */
+function card(h,p,btn,cb){mode='card';$('cardStudio').hidden=h!=='النهاية';$('cardH').textContent=h;$('cardP').textContent=p;const b=$('cardBtn');b.textContent=btn||'كمّل';$('card').hidden=false;
+  b.onclick=()=>{$('card').hidden=true;mode='play';cb&&cb()};setTimeout(()=>b.focus(),50)}
+
+/* ================= puzzle ================= */
+let puzRot=[],puzCb=null,noteURL=null;
+async function makeNote(){
+  try{await document.fonts.load('600 22px "Noto Kufi Arabic"')}catch(e){}
+  const[c,g]=cnv(360,240);g.imageSmoothingEnabled=true;
+  g.fillStyle='#e6d6b4';g.fillRect(0,0,360,240);
+  for(let i=0;i<900;i++){g.fillStyle=`rgba(120,90,40,${Math.random()*.08})`;g.fillRect(Math.random()*360,Math.random()*240,2,2)}
+  g.fillStyle='rgba(140,100,40,.18)';g.beginPath();g.arc(300,190,34,0,7);g.fill();
+  g.strokeStyle='rgba(90,70,40,.25)';for(let y=60;y<230;y+=38){g.beginPath();g.moveTo(20,y);g.lineTo(340,y);g.stroke()}
+  g.fillStyle='#2a1c10';g.direction='rtl';g.textAlign='right';g.font='600 21px "Noto Kufi Arabic", sans-serif';
+  ['سعد يحمّل صناديق في مستودعه','كل ليلة خميس. مو تمر.','لو ما رجعت، الدليل في مكتبه.'].forEach((l,i)=>g.fillText(l,335,50+i*38));
+  g.font='600 19px "Noto Kufi Arabic", sans-serif';g.fillText('— راشد',335,200);
+  g.strokeStyle='rgba(60,40,20,.5)';g.lineWidth=2;g.beginPath();g.moveTo(120,0);g.lineTo(116,70);g.lineTo(124,160);g.lineTo(119,240);g.moveTo(240,0);g.lineTo(244,80);g.lineTo(236,170);g.lineTo(241,240);g.moveTo(0,120);g.lineTo(90,116);g.lineTo(200,124);g.lineTo(360,119);g.stroke();
+  noteURL=c.toDataURL();
+}
+let puzPos=[],puzSel=-1;
+async function startPuzzle(cb){
+  mode='puzzle';puzCb=cb;if(!noteURL)await makeNote();
+  $('pgrid').classList.remove('done');$('puzDone').hidden=true;
+  $('puzP').textContent='اختر قطعة، وبعدها اختر قطعة ثانية عشان تبدّلهم. اضغط نفس القطعة مرتين عشان تلفّها.';
+  puzPos=[4,2,5,0,3,1];puzRot=[90,0,270,180,90,0];puzSel=-1;drawPuz();$('puz').hidden=false;
+}
+function drawPuz(){const gEl=$('pgrid');gEl.innerHTML='';
+  puzPos.forEach((pc,slot)=>{const b=document.createElement('button');b.type='button';b.className='piece'+(slot===puzSel?' sel':'');b.setAttribute('aria-label','قطعة '+(slot+1));
+    b.style.backgroundImage=`url(${noteURL})`;b.style.backgroundPosition=`${(pc%3)*50}% ${Math.floor(pc/3)*100}%`;b.style.transform=`rotate(${puzRot[pc]}deg)`;
+    b.addEventListener('click',()=>rotPiece(slot));gEl.appendChild(b)})}
+function rotPiece(slot){if(mode!=='puzzle'||$('pgrid').classList.contains('done')||slot>=puzPos.length)return;
+  if(puzSel===-1)puzSel=slot;
+  else if(puzSel===slot){puzRot[puzPos[slot]]+=90;puzSel=-1}
+  else{const t=puzPos[puzSel];puzPos[puzSel]=puzPos[slot];puzPos[slot]=t;puzSel=-1}
+  sfx('rot');drawPuz();
+  if(puzPos.every((pc,i)=>pc===i)&&puzRot.every(r=>r%360===0)){$('pgrid').classList.add('done');$('puzP').textContent='انقرت الورقة.';sfx('ok');const d=$('puzDone');d.hidden=false;setTimeout(()=>d.focus(),50)}}
+$('puzDone').addEventListener('click',()=>{$('puz').hidden=true;mode='play';const f=puzCb;puzCb=null;f&&f()});
+
+/* ================= combination lock ================= */
+let lockD=[0,0,0];const AD='٠١٢٣٤٥٦٧٨٩';
+function openLock(){mode='lock';lockD=[0,0,0];drawLock();$('lock').hidden=false;setTimeout(()=>$('lockOpen').focus(),50)}
+function drawLock(){const w=$('wheels');w.innerHTML='';lockD.forEach((d,i)=>{const col=document.createElement('div');col.className='wheel';
+  const up=document.createElement('button');up.type='button';up.textContent='▲';up.setAttribute('aria-label','زِد الرقم '+(i+1));up.onclick=()=>{lockD[i]=(lockD[i]+1)%10;sfx('rot');drawLock()};
+  const v=document.createElement('span');v.textContent=AD[d];
+  const dn=document.createElement('button');dn.type='button';dn.textContent='▼';dn.setAttribute('aria-label','نقّص الرقم '+(i+1));dn.onclick=()=>{lockD[i]=(lockD[i]+9)%10;sfx('rot');drawLock()};
+  col.append(up,v,dn);w.appendChild(col)})}
+$('lockOpen').addEventListener('click',()=>{if(lockD.join('')==='472'){$('lock').hidden=true;mode='play';sfx('ok');readLedger()}else{sfx('bad');$('lockP').textContent='ما انفتح. راجع الأرقام وترتيبها في الدفتر.'}});
+$('lockBack').addEventListener('click',()=>{$('lock').hidden=true;mode='play'});
+
+/* ================= fishing ================= */
+let fish=null;
+function startFish(cb){fish={c:0,m:0,p:0,dir:1,sp:.85,zx:.5,zw:DF().fishZone,flash:0,fc:'',cb,t:0,done:0};mode='fish';view='fish';mgEl.hidden=false;updFishLabel()}
+function updFishLabel(){mgEl.textContent=`اضغط A أو Space لما يكون المؤشر فوق الأخضر · صدت ${fish.c}/5 · راحت ${fish.m}/3`}
+function fishPress(){if(!fish||fish.done)return;
+  if(Math.abs(fish.p-fish.zx)<fish.zw/2){fish.c++;fish.zw*=.84;fish.sp*=1.15;fish.flash=.4;fish.fc='#5cbf5a';sfx('ok')}
+  else{fish.m++;fish.flash=.4;fish.fc='#c8402e';sfx('bad')}
+  updFishLabel();
+  if(fish.c>=5||fish.m>=3){fish.done=1;const win=fish.c>=5;setTimeout(()=>{mgEl.hidden=true;view='world';mode='play';const cb=fish.cb;fish=null;cb(win)},700)}}
+function updFish(dt){fish.t+=dt;fish.p+=fish.dir*fish.sp*dt;if(fish.p>1){fish.p=1;fish.dir=-1}if(fish.p<0){fish.p=0;fish.dir=1}
+  fish.zx=clamp(.5+Math.sin(fish.t*.9)*.32,fish.zw/2,1-fish.zw/2);fish.flash=Math.max(0,fish.flash-dt)}
+function renderFish(){
+  renderWorld();ctx.fillStyle='rgba(6,12,20,.6)';ctx.fillRect(0,0,VW,VH);
+  const x0=50,y0=40,w=220;
+  ctx.fillStyle='#1d1209';ctx.fillRect(x0-3,y0-3,w+6,96);ctx.fillStyle='#2c6a86';ctx.fillRect(x0,y0,w,70);
+  for(let i=0;i<14;i++){ctx.fillStyle='#3f86a2';ctx.fillRect(x0+((i*37+tick*14)%w|0),y0+8+(i*13)%56,6,1)}
+  const fx=x0+fish.zx*w,fy=y0+40+Math.sin(tick*4)*3;
+  ctx.fillStyle='#1a2a30';ctx.fillRect(fx-7,fy-3,14,7);ctx.fillStyle='#c0ccd4';ctx.fillRect(fx-6,fy-2,11,5);ctx.fillStyle='#8a9aa4';ctx.fillRect(fx+5,fy-3,3,7);ctx.fillStyle='#1a1410';ctx.fillRect(fx-4,fy-1,1,1);
+  ctx.fillStyle='#e8e0cc';ctx.fillRect(x0+fish.p*w,y0,1,40);
+  const by=y0+78;ctx.fillStyle='#0e1a22';ctx.fillRect(x0,by,w,10);
+  ctx.fillStyle='#3e8a3c';ctx.fillRect(x0+(fish.zx-fish.zw/2)*w,by+1,fish.zw*w,8);ctx.fillStyle='#5cbf5a';ctx.fillRect(x0+(fish.zx-fish.zw/2)*w,by+1,fish.zw*w,2);
+  ctx.fillStyle='#f4efe2';ctx.fillRect(x0+fish.p*w-1,by-3,3,16);
+  if(fish.flash>0){ctx.globalAlpha=fish.flash;ctx.fillStyle=fish.fc;ctx.fillRect(x0,y0,w,70);ctx.globalAlpha=1}
+  for(let i=0;i<5;i++){ctx.fillStyle=i<fish.c?'#e6c890':'#33464f';ctx.fillRect(x0+4+i*12,y0+4,9,5)}for(let i=0;i<3;i++){ctx.fillStyle=i<fish.m?'#c8402e':'#33464f';ctx.fillRect(x0+w-13-i*12,y0+4,9,5)}
+}
+
+/* ================= world logic ================= */
+const DV={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+function tileAt(x,y){return(x<0||y<0||x>=cur.w||y>=cur.h)?'R':cur.map[y][x]}
+const tileAtPx=(x,y)=>tileAt(Math.floor(x/T),Math.floor(y/T));
+function blocked(x,y){const a=x+3,b=y+11,c=x+13,d=y+16;
+  for(const[p,q]of[[a,b],[c-1,b],[a,d-1],[c-1,d-1]])if(SOLID.has(tileAtPx(p,q)))return true;
+  for(const n of npcs)if(c>n.x+3&&a<n.x+13&&d>n.y+10&&b<n.y+16)return true;
+  return false}
+function slide(ax,m,sp){for(let k=1;k<=7;k++)for(const s of[-1,1]){const ox=ax==='x'?s*k:0,oy=ax==='y'?s*k:0;
+  if(!blocked(hero.x+ox+(ax==='y'?m:0),hero.y+oy+(ax==='x'?m:0))&&!blocked(hero.x+Math.sign(ox)*Math.min(k,sp),hero.y+Math.sign(oy)*Math.min(k,sp))){hero.x+=Math.sign(ox)*Math.min(k,sp);hero.y+=Math.sign(oy)*Math.min(k,sp);return}}}
+const heroC=()=>({x:hero.x+8,y:hero.y+12});
+
+const INSPECT={
+  port:{b:'دكّة خشب. هنا يجلسون الشيبان بعد العصر.',q:'قراقير صيد. أبوي علّمني كيف أسويها.',r:'حبال مركب ملفوفة.',c:'صناديق العم سعد. مربوطة بشرايط حمرا.',n:'شبك صيد ناشف تحت الشمس.',P:'نخلة. العذوق بدأت تصفرّ.',S:'طريق السوق ←',
+    D:(tx)=>{if(tx===12){goScene('home',6*T,8*T-2);return null}return 'الباب مسكّر.'},w:null},
+  home:{z:'فراشي. ما نمت زين من يوم سافر أبوي.',y:'صورة أبوي واقف على مركبه، يضحك.',O:'شباك. يطل على الميناء.',k:'كيس رز.',j:'جرة ماي.',a:null,
+    Q:'صندوق أبوي. ثياب البحر، وريحته باقية فيها.',
+    K:()=>{clue('map');return 'طاولة أبوي. فوقها خريطة البحر، وعلى جزيرة بعيدة علامة صغيرة: «بندر الغار».'},
+    v:()=>{if(!F.abu)return 'لوح أبوي الأسود اللي علمني عليه الكتابة.';F.word=1;clue('word');setGoal('ارجع لأبو خليل في السوق، وقل له الكلمة');return 'لوح أبوي الأسود. مكتوب عليه بخط كبير، وتحته خطي أنا وأنا صغير: «سالم».\nأول كلمة علمني أكتبها… اسمي.'}},
+  market:{k:'أكياس رز.',j:'جرة فخار.',m:'سور قصير. ورا السور البحر.',
+    D:(tx)=>tx===5?'دكان أبو خليل للأقمشة.':tx===14?'قهوة أبو فيصل. ريحة الهيل طالعة.':'الباب مسكّر.',
+    X:(tx,ty)=>{const s=STALLS.find(s=>tx>=s.x&&tx<=s.x+2&&ty>=s.y&&ty<=s.y+1);return s?{dates:'تمر خلاص ورزيز. ريحته تفتح النفس.',spice:'بهارات: كمون وهيل وكركم.',cloth:'أقمشة ملونة جاية من الهند.',cloth2:'أقمشة وشمغ وطواقي.',fish:'بسطة حمد. هامور وصافي وشعري.',jars:'جِرار فخار للماي.'}[s.t]:null}},
+  ware:{r:'حبال غليظة.',c:()=>{clue('crates');return 'صناديق مربوطة بشرايط حمرا. حاولت أحركها… ثقيلة. ما أظنها تمر.'},
+    L:'فانوس. لو وقفت جنب الضوء بيشوفوني من بعيد.',V:'الجرس. لو أحد دقه، المستودع كله بيصحى.',F:'السياج عالي، ما أقدر أنطّه.',H:'جدار خشب.',
+    G:'البوابة انقفلت.',
+    Y:()=>{if(!F.locked)return 'لوح مرتخي في الجدار. لو كسرته الحين بيسمعوني.';
+      if(!F.crowbar)return 'اللوح مرتخي… لو عندي شي أفكه فيه.';
+      cur.map[7][6]='o';cur.map[8][6]='o';cache.clear();sfx('crash');F.locked=0;startAlarm(F.lockT||55,'طاح اللوح بصوت عالي!');return null},
+    T:()=>{if(F.crowbar)return 'صندوق عدّة. خذيت منه العتلة.';F.crowbar=1;sfx('ok');toast('لقيت: عتلة');return 'صندوق عدّة قديم… فيه عتلة. ممكن تنفع.'},
+    M:(tx,ty)=>{const k=ty===19?'dY':ty===10?'dS':'dH',d={dY:'٤',dS:'٧',dH:'٢'}[k],w={dY:'الساحة',dS:'المخزن',dH:'القاعة'}[k];
+      if(!F.knowLock)return 'صندوق عليه علامة طباشير ورقم: '+d+'. وش يعني؟';clue(k);return 'صندوق '+w+'. علامة طباشير، والرقم: '+d+'.'},
+    K:()=>{if(F.ledger)return 'المكتب. خذيت الدفتر.';
+      if(!F.knowLock){F.knowLock=1;clue('lock');setGoal('دوّر الصناديق المعلّمة بالطباشير: الساحة، المخزن، القاعة');return 'الدرج مقفول بقفل أرقام.\nوفوق الطاولة ورقة بخط سعد: «الرقم على الصناديق المعلّمة: الساحة، المخزن، القاعة».'}
+      openLock();return null},
+    h:()=>{if(!F.crowbar)return 'ألواح السياج هنا مكسورة ومسمّرة على عجل… لو عندي شي أفكها فيه.';
+      cur.map[16][0]='o';cur.map[17][0]='o';cache.clear();sfx('crash');setGoal(F.ledger?'اطلع من الفتحة':'لقيت طريق ثاني. بس لازم ألقى الدليل أول');return 'فكّيت الألواح بالعتلة. صار فيه فتحة تكفيني.'},
+    Z:'الباب مقفول من برا.'}
+};
+
+function action(){
+  if(mode==='talk'){advance();return}
+  if(mode==='fish'){fishPress();return}
+  if(mode==='dive'){divePress();return}
+  if(mode==='stars'){starPick();return}
+  if(mode!=='play')return;
+  if(hero.hidden){hero.hidden=false;return}
+  const[dx,dy]=DV[hero.dir],fx=hero.x+8+dx*12,fy=hero.y+13+dy*12;
+  for(const n of npcs){if(fx>=n.x&&fx<n.x+16&&fy>=n.y+2&&fy<n.y+18){n.dir={up:'down',down:'up',left:'right',right:'left'}[hero.dir];talk(n);return}}
+  for(const w of walkers){if(Math.hypot(w.x-hero.x,w.y-hero.y)<18){w.p=1.5;w.dir={up:'down',down:'up',left:'right',right:'left'}[hero.dir];if(w.talk)w.talk();else say([[w.name,w.line]]);return}}
+  if(cur.stealth){const ht=[tileOf(hero.x+8),tileOf(hero.y+12)];
+    const near=[[0,0],[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>tileAt(ht[0]+a,ht[1]+b)==='B');
+    if(near&&tileAtPx(fx,fy)!=='K'){tryHide();return}}
+  if(cur.id==='port'){const tx=tileOf(fx),ty=tileOf(fy);if(tx>=17&&tx<=25&&ty>=15&&ty<=19){if(F.oarsM&&!F.oars){F.oars=1;sfx('ok');toast('أخذت المجاديف');setGoal('رجّع المجاديف لفهد عند الشباك');return say([[N,'(مجاديف الهوري مربوطة على جنب المركب. تفكها بهدوء.)']])}return say([[N,'مركب العم سعد. مركب أبوي كان أكبر من كذا.']])}}
+  const tx=tileOf(fx),ty=tileOf(fy),code=tileAt(tx,ty),I=INSPECT[cur.id][code];
+  if(I==null)return;
+  const r=typeof I==='function'?I(tx,ty):I;
+  if(r)say([[N,r]]);
+}
+
+/* ================= talk scripts ================= */
+function talk(n){(TALK[n.id]||(()=>{}))()}
+const TALK={
+  gran(){
+    if(!F.gran){F.gran=1;setGoal('روح للعم سعد عند الرصيف');return say([
       ['جدتي','هلا سالم، تعال اجلس جنبي شوي.'],
       ['جدتي','أبوك قال بيرجع قبل نهاية الصيف، وهذا الصيف خلص.'],
       ['سالم','يمّه، كل المراكب رجعت. ليش مركب أبوي ما رجع؟'],
       ['جدتي','الله أعلم يا ولدي. روح للعم سعد عند الرصيف، كانوا ماشين مع بعض. يمكن عنده علم.']])}
-    return say([['جدتي', flags.mar?'وش فيك؟ وجهك متغيّر… وش قال لك فهد؟':'العم سعد تلقاه عند الرصيف جنب المركب.']]);
-  }
-  if(npc.id==='cap'){
-    if(!flags.gran)return say([['العم سعد','مشغول الحين يا ولدي. روح شوف جدتك.']]);
-    if(!flags.cap){flags.cap=true;setGoal('دوّر على فهد عند الشباك');return say([
+    if(F.abu&&!F.word&&!F.note)return say([['سالم','يمّه، وش أول كلمة علمني أبوي أكتبها؟'],['جدتي','أول كلمة؟ … الله يرحم أيام اللوح.'],['جدتي','أبوك كان يكتب لك على لوحه الأسود. تلقاه معلّق في غرفته.']]);
+    if(F.fahd&&!F.note)return say([['جدتي','وش فيك؟ وجهك متغيّر… وش قال لك فهد؟'],['سالم','ولا شي يمّه. بروح السوق شوي.'],['جدتي','لا تتأخر. ما بقى لي غيرك.']]);
+    if(F.note)return say([['جدتي','وين كنت؟ … الله يحفظك يا ولدي.']]);
+    return say([['جدتي','العم سعد تلقاه عند الرصيف جنب المركب.']]);
+  },
+  saad(){
+    if(!F.gran)return say([['العم سعد','مشغول الحين يا ولدي. روح شوف جدتك.']]);
+    if(!F.saad){F.saad=1;return say([
       ['العم سعد','هلا بولد راشد. ما شاء الله كبرت.'],
       ['سالم','يا عم، شفت أبوي؟ كنتوا ماشين مع بعض.'],
       ['العم سعد','آخر مرة شفته كان في البحرين… لا، لا. في مسقط. كان بخير.'],
       [N,'(يبعد عينه عنك، ويشد الحبل بدون سبب.)'],
-      ['العم سعد','البحر كبير يا ولدي. اصبر، وارجع لجدتك.']])}
+      ['العم سعد','البحر كبير يا ولدي. اصبر، وارجع لجدتك.']],()=>{clue('saad');setGoal('اسأل أهل الحارة: أحد شاف المركب يوم طلع؟ وبعدها واجه فهد')})}
+    if(F.fahd)return say([['العم سعد','شفتك تكلم فهد.'],['العم سعد','فهد يخرّف من يوم رجعنا. لا تصدق كل اللي يقوله.']]);
     return say([['العم سعد','قلت لك اللي أعرفه. خلني أكمل شغلي.']]);
-  }
-  if(npc.id==='mar'){
-    if(!flags.cap)return say([['فهد','هاه؟ … ما أدري عن شي. أنا أصلّح الشباك بس.']]);
-    if(!flags.mar){flags.mar=true;setGoal('');return say([
-      ['فهد','العم سعد قال لك مسقط؟'],
-      [N,'(يحط الإبرة، ويلتفت يمين ويسار.)'],
+  },
+  fahd(){
+    if(!F.saad)return say([['فهد','هاه؟ … ما أدري عن شي. أنا أصلّح الشباك بس.']]);
+    if(F.fahd)return say([['فهد','روح يا سالم، لا أحد يشوفنا مع بعض.']]);
+    const reveal=[
+      ['سالم','ولد الجيران شاف المركب يلف ناحية الشمال. ومسقط من الجنوب. ليش سعد يكذب؟'],
+      [N,'(تطيح الإبرة من يد فهد. يلتفت يمين ويسار.)'],
       ['فهد','اسمعني يا سالم، ولا تقول لأحد إني قلت لك.'],
-      ['فهد','أبوك ما غرق. والمركب ما وصل مسقط أصلًا.'],
-      ['فهد','أبوك نزل في ميناء… ما كان المفروض ينزل فيه.']],()=>setTimeout(showEnd,500))}
-    return say([['فهد','روح يا سالم، لا أحد يشوفنا مع بعض.']]);
+      ['فهد','المركب ما وصل مسقط أصلًا. أبوك نزل في ميناء… ما كان المفروض ينزل فيه.'],
+      ['سالم','أي ميناء؟ وأنت وش يدريك؟'],
+      [N,'(يسكت شوي، ويحك الشريطة الحمرا اللي على يده.)'],
+      ['فهد','روح السوق، لأبو خليل. أبوك كان يخلي أغراضه عنده.'],
+      ['فهد','ولا تقول له إني أرسلتك.'],
+      {fn:()=>{F.fahd=1;clue('muscat');clue('band');setGoal('روح السوق. الطريق من شرق الميناء')}}];
+    const fail=id=>()=>[...(id==='fahdcry'?[[N,'(يرتجف صوت فهد.)'],['فهد','… كل واحد عنده همّه يا ولد. هذا ما يثبت شي.']]:[['فهد','وش دخل هذا في شي؟ روح يا ولد.']]),
+      {fn:()=>clues.includes('north')?null:[[N,'(لازم ألقى شي يثبت إن سعد يكذب… يمكن أحد من الحارة شاف المركب يوم طلع.)']]}];
+    const opts=clues.filter(c=>!['band','map','word'].includes(c)).map(id=>[CLUES[id][0],id==='north'?()=>reveal:fail(id),'دليل:']);
+    opts.push(['(ولا شي. أرجع له بعدين)',()=>[],'']);
+    say([['فهد','العم سعد قال لك وش صار؟ خلاص، هذا هو اللي صار.'],[N,'(لازم أواجهه بدليل يكشف الكذب.)'],{ch:opts}]);
+  },
+  abu(){
+    const give=()=>startPuzzle(()=>{F.note=1;clue('note');say([
+        [N,'(خط أبوي.)'],
+        ['سالم','«سعد يحمّل صناديق في مستودعه كل ليلة خميس. مو تمر. لو ما رجعت، الدليل في مكتبه.»'],
+        ['أبو خليل','مستودع العم سعد؟ … يا ولدي، هذا مو لعب. حراسه ما يرحمون.'],
+        ['أبو خليل','إذا ناوي تروح، روح بالليل، وخلك بعيد عن الفوانيس. وتخبّى ورا البراميل لو احتجت.']],afterMarket)});
+    if(!F.abu){F.abu=1;return say([
+      ['أبو خليل','سالم؟ ولد راشد؟ تعال، تعال للظل.'],
+      ['سالم','يا عم، يقولون إن أبوي كان يخلي أغراضه عندك.'],
+      [N,'(يطالع يمين ويسار، ويحط يده على جيبه.)'],
+      ['أبو خليل','أبوك قبل يسافر خلّى عندي ورقة. وقال: لا تعطيها إلا سالم.'],
+      ['أبو خليل','وقال: «عشان تتأكد إنه هو، اسأله: وش أول كلمة علمتك تكتبها؟»'],
+      ['أبو خليل','السوق مليان عيون يا ولدي. ما أعطيها لأحد قبل أتأكد.']],()=>setGoal('تذكّر أول كلمة علمك أبوك تكتبها. يمكن تلقى شي في بيتكم'))}
+    if(!F.note)return say([
+      ['أبو خليل','ها يا سالم؟ وش أول كلمة علمك أبوك تكتبها؟'],
+      {ch:[['البحر',()=>[['أبو خليل','لا يا ولدي… فكّر زين، وارجع لي.']]],
+           ['سالم',()=>{F.abuOk=1;return[['أبو خليل','(يبتسم) اسمك. كان يقول: أول شي يكتبه الرجّال اسمه.'],[N,'(يطلّع ظرف من جيبه.)'],['أبو خليل','بس أبوك قطّعها بنفسه. قال محد يقراها إلا اللي يعرف يركّبها.']]}],
+           ['راشد',()=>[['أبو خليل','لا… هذا اسم أبوك. فكّر زين.']]],
+           ['ما أدري',()=>[['أبو خليل','روح دوّر في أغراض أبوك. يمكن تتذكر.']]]]}],()=>{if(F.abuOk&&!F.note)give()});
+    return say([['أبو خليل',F.hamad?'الله يستر عليك يا سالم.':'اسأل حمد بياع السمك. يشوف كل شي يصير عند الرصيف بالليل.']]);
+  },
+  coffee(){
+    if(!F.coffee){F.coffee=1;return say([
+      ['أبو فيصل','ولد راشد… تعال. تبي تعرف شي؟'],
+      ['أبو فيصل','العم سعد صار يجلس هنا كل يوم، ويدفع بالريال الفضة.'],
+      ['أبو فيصل','قبل سنة كان يستلف مني ثمن القهوة. من وين جته الفلوس؟ الله أعلم.']],()=>clue('rich'))}
+    return say([['أبو فيصل','تبي فنجال؟ … لا، أنت صغير على القهوة.']]);
+  },
+  hamad(){
+    if(F.hamad)return say([['حمد','الليلة خميس. انتبه لنفسك.']]);
+    if(!F.note)return say([['حمد','تبي سمك؟ اليوم الصيد قليل.']]);
+    return say([
+      ['سالم','يا حمد، تشوف رجال العم سعد بالليل؟'],
+      [N,'(يوقف عن تنظيف السمك.)'],
+      ['حمد','ما أتكلم ببلاش. ساعدني، صِد لي خمس سمكات وأعلمك.']],()=>startFish(win=>{
+        if(!win)return say([['حمد','راحت عليك. كلمني لما تبي تجرب مرة ثانية.']]);
+        F.hamad=1;clue('thursday');say([
+          ['حمد','الله يعطيك العافية.'],
+          ['حمد','الليلة خميس. كل خميس بعد العشا يشيلون صناديق لمستودع العم سعد، ويطلعونها الفجر بمركب صغير.'],
+          ['حمد','والصناديق ثقيلة… التمر ما يثقل كذا.'],
+          ['سالم','وين المستودع؟'],
+          ['حمد','شوف ذاك الرجّال اللي على يده شريطة حمرا، عند آخر السوق؟ من رجال سعد.'],
+          ['حمد','الحقه. بس لا يحس فيك. إذا التفت، تخبّى ورا البسطات.']],()=>startTail())}));
   }
-}
-const INSPECT={
-  c:'صناديق تمر مختومة، جاهزة تنشحن للهند.',
-  n:'شبك صيد ناشف تحت الشمس، وفيه عوّامات حمرا.',
-  P:'نخلة. العذوق بدأت تصفرّ.',
-  boat:'مركب العم سعد. مركب أبوي كان أكبر من كذا.',
-  ownDoor:'بيتنا. الباب مفتوح شوي، وريحة البخور طالعة.',
-  door:'الباب مسكّر.'
 };
-
-/* ---------- dialogue ---------- */
-const box=document.getElementById('box'),who=document.getElementById('who'),txt=document.getElementById('txt'),more=document.getElementById('more'),goal=document.getElementById('goal');
-let dq=null,di=0,shown=0,full='',onDone=null,mode='title',tick=0;
-function say(lines,done){dq=lines;di=0;onDone=done||null;mode='talk';box.hidden=false;showLine()}
-function showLine(){const[n,t]=dq[di];who.textContent=n||'';who.hidden=!n;full=t;shown=0;txt.textContent='';more.hidden=true;txt.style.fontStyle=n?'normal':'italic';txt.style.color=n?'':'#c9d6dc'}
-function advance(){
-  if(shown<full.length){shown=full.length;txt.textContent=full;more.hidden=false;return}
-  di++;if(di<dq.length){showLine();return}
-  box.hidden=true;dq=null;mode='play';if(onDone){const f=onDone;onDone=null;f()}
+function afterMarket(){
+  if(F.note&&F.hamad&&!F.tail){setGoal('اسأل حمد بياع السمك عن الصناديق');return}
+  if(F.note&&F.hamad&&F.tail){setGoal('');return card('الليل','قرر سالم يروح الليلة.\nمحد يدري… ولا حتى جدته.','روح للمستودع',()=>{F.night=1;goScene('ware')})}
+  setGoal(F.note?'اسأل حمد بياع السمك عن الصناديق':'روح لأبو خليل عند دكانه');
 }
-function setGoal(s){goal.textContent=s?('المهمة: '+s):'';goal.hidden=!s}
 
-/* ---------- audio ---------- */
-let ac=null,soundOn=true;
-function blip(){if(!soundOn)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=380+Math.random()*90;g.gain.value=.025;o.connect(g);g.connect(ac.destination);const t=ac.currentTime;g.gain.exponentialRampToValueAtTime(.0001,t+.05);o.start(t);o.stop(t+.06)}catch(e){}}
-/* gentle looping melody (hijaz-flavoured) + soft drone */
-let musicT=null,mGain=null,step=0;
-const MEL=[62,null,63,66,67,null,66,63,62,null,null,null,67,69,70,69,67,66,63,null,62,null,null,null];
-const hz=n=>440*Math.pow(2,(n-69)/12);
-function note(f,t,d,type,v){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(mGain);o.start(t);o.stop(t+d+.05)}
-function startMusic(){
-  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();}catch(e){return}
-  if(musicT)return;mGain=ac.createGain();mGain.gain.value=soundOn?1:0;mGain.connect(ac.destination);
-  musicT=setInterval(()=>{const t=ac.currentTime+.05,n=MEL[step%MEL.length];
-    if(n)note(hz(n),t,.55,'triangle',.05);
-    if(step%8===0)note(hz(50),t,2.6,'sine',.04);
-    if(step%4===2)note(hz(n?n-12:57),t,.3,'square',.012);
-    step++},330);
+/* ================= tail mission (market) ================= */
+const TAILWP=[[27,15],[18,15],[18,11],[24,11],[24,7],[14,7],[14,10],[6,10],[6,15],[1,15],[1,9],[0,9]];
+const TAILSTOP=new Set([2,4,6,8,10]);
+function startTail(){
+  F.tailing=1;guards=[{tail:1,range:84,x:tc(27),y:tc(15),a:Math.PI,wi:1,state:'patrol',t:0,stop:0,back:0,sus:0,mv:false}];
+  hero.x=30*T;hero.y=15*T-4;hero.dir='left';setGoal('الحق رجّال سعد بدون ما يشوفك');
+  say([[N,'(الرجّال يمشي بهدوء… ويلتفت كل شوي.)']]);
 }
-document.getElementById('snd').addEventListener('click',e=>{soundOn=!soundOn;if(mGain)mGain.gain.value=soundOn?1:0;e.target.textContent='الصوت: '+(soundOn?'يعمل':'مطفأ')});
-
-/* ---------- input ---------- */
-const keys={up:0,down:0,left:0,right:0};
-const KM={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right'};
-addEventListener('keydown',e=>{if(KM[e.code]){keys[KM[e.code]]=1;e.preventDefault()}if(e.code==='Space'||e.code==='Enter'||e.code==='KeyZ'){if(mode==='play'||mode==='talk'){e.preventDefault();action()}}});
-addEventListener('keyup',e=>{if(KM[e.code])keys[KM[e.code]]=0});
-document.querySelectorAll('.pad button').forEach(b=>{const k=b.dataset.k;
-  const on=e=>{e.preventDefault();keys[k]=1;b.classList.add('on')},off=e=>{keys[k]=0;b.classList.remove('on')};
-  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off)});
-document.getElementById('abtn').addEventListener('pointerdown',e=>{e.preventDefault();action()});
-document.getElementById('screen').addEventListener('pointerdown',e=>{if(mode==='talk')action()});
-
-/* ---------- world logic ---------- */
-const DV={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
-function feet(x,y){return[x+3,y+11,x+13,y+16]}
-function blocked(x,y){const[a,b,c,d]=feet(x,y);
-  for(const[px_,py_]of[[a,b],[c-1,b],[a,d-1],[c-1,d-1]]){if(SOLID.has(tileAt(Math.floor(px_/T),Math.floor(py_/T))))return true}
-  for(const n of NPCS){if(c>n.x+3&&a<n.x+13&&d>n.y+10&&b<n.y+16)return true}
-  return false}
-function action(){
-  if(mode==='talk'){advance();return}
-  if(mode!=='play')return;
-  const[dx,dy]=DV[hero.dir],fx=hero.x+8+dx*12,fy=hero.y+13+dy*12;
-  for(const n of NPCS){if(fx>=n.x&&fx<n.x+16&&fy>=n.y+2&&fy<n.y+18){n.dir={up:'down',down:'up',left:'right',right:'left'}[hero.dir];talk(n);return}}
-  const tx=Math.floor(fx/T),ty=Math.floor(fy/T),code=tileAt(tx,ty);
-  if(tx>=17&&tx<=25&&ty>=15&&ty<=19)return say([[N,INSPECT.boat]]);
-  if(code==='D')return say([[N,tx===12?INSPECT.ownDoor:INSPECT.door]]);
-  if(INSPECT[code])return say([[N,INSPECT[code]]]);
+function tailFail(msg){F.tailing=0;guards=[];setBan(banL,'');mode='cut';sfx('bad');
+  setTimeout(()=>card('ضيّعته',msg+'\nحمد: «بيرجع يمر بعد شوي. جرّب مرة ثانية.»','حاول مرة ثانية',()=>startTail()),300)}
+function tailWin(){F.tailing=0;guards=[];F.tail=1;setBan(banL,'');sfx('ok');
+  say([[N,'(الرجّال طلع من السوق، ومشى للطريق اللي ورا الرصيف الشمالي… لين دخل مستودع كبير.)'],['سالم','مستودع العم سعد. الحين أعرف وينه.']],()=>{clue('route');afterMarket()})}
+function canSeeTail(g,hc){const dx=hc.x-g.x,dy=hc.y-g.y,d=Math.hypot(dx,dy);if(d<14)return 6;if(d>g.range*DF().vis)return 0;
+  let da=Math.atan2(dy,dx)-g.a;da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)>FOV)return 0;if(!los(g.x,g.y,hc.x,hc.y))return 0;return DF().det*(1.4+2.6*(1-d/(g.range*DF().vis)))}
+function updTail(dt){const g=guards[0];if(!g)return;g.t+=dt;g.mv=false;const hc=heroC();
+  if(g.stop>0){g.stop-=dt;g.a=g.back+Math.sin(g.t*1.6)*.55}
+  else{const[wx,wy]=TAILWP[g.wi];if(moveTo(g,tc(wx),tc(wy),23,dt)){if(TAILSTOP.has(g.wi)){g.stop=2.8;g.back=g.a+Math.PI}g.wi++;if(g.wi>=TAILWP.length){tailWin();return}}}
+  const r=canSeeTail(g,hc);g.sus=r>0?Math.min(1,g.sus+r*dt):Math.max(0,g.sus-dt*.4);g.state=g.sus>0?'suspect':'patrol';
+  if(g.sus>=1){tailFail('انتبه لك! غيّر طريقه وضاع بين الناس.');return}
+  const d=Math.hypot(hc.x-g.x,hc.y-g.y);
+  if(d>DF().tailLost){tailFail('بعدت عنه كثير، وضيّعته بين الناس.');return}
+  setBan(banL,d>DF().tailLost-38?'بعدت عنه! قرّب شوي':g.stop>0?'وقف ويلتفت… تخبّى ورا البسطات!':'الحقه بدون ما يشوفك',d>DF().tailLost-38||g.stop>0?'alert':'calm');
 }
+
+/* ================= warehouse ================= */
+function makeGuards(){return[
+  {wp:[[29,14],[29,21],[22,21],[22,14]],x:tc(29),y:tc(14)},
+  {wp:[[14,6],[19,6],[19,10],[14,10]],x:tc(14),y:tc(6)},
+  {wp:[[2,13],[9,13],[9,20],[2,20]],x:tc(2),y:tc(13)},
+  {chief:true,wp:null,home:[24,19],x:tc(24),y:tc(19)}
+].map(g=>Object.assign({a:Math.PI/2,wi:1,state:'patrol',sus:0,t:0,path:null,lx:0,ly:0,lost:0,pause:0,rp:0,mv:false,walk:0},g))}
+function resetWare(intro){
+  const s=SC.ware;s.map=makeWare();cur.map=s.map;cache.clear();
+  guards=makeGuards();alarm=null;chaseWas=false;
+  F.ledger=0;F.crowbar=0;F.locked=0;F.alert=0;F.released=0;F.lockT=0;
+  hero.x=16*T;hero.y=22*T-6;hero.dir='up';hero.hidden=false;
+  setMusic('night');setBan(banL,'');setBan(banR,'');
+  setGoal(F.knowLock?'لقى أرقام الصناديق المعلّمة وافتح درج المكتب':'ادخل مكتب العم سعد ولقى الدليل');
+  if(intro)say([
+    [N,'ليلة الخميس. مستودع العم سعد.'],
+    [N,'ثلاث حراس يدورون، ورئيسهم واقف عند الجرس. لو شافني هو، بيدق الجرس.'],
+    [N,'الظلام يخبيني، والفوانيس تكشفني. وأقدر أتخبى ورا البراميل.']]);
+  save();
+}
+function gRange(g){return DF().vis*(g.range?g.range:(g.chief?80:68)*(1+.12*(F.alert||0))*(alarm?1.3:1))}
+function los(x0,y0,x1,y1){const d=Math.hypot(x1-x0,y1-y0),n=Math.ceil(d/4);for(let i=1;i<n;i++){const t=i/n;if(LOSB.has(tileAtPx(x0+(x1-x0)*t,y0+(y1-y0)*t)))return false}return true}
+function lightAt(x,y){let L=0;for(const l of lamps)L=Math.max(L,1-Math.hypot(l.x-x,l.y-y)/62);return L}
+function canSee(g,hc,ignoreHidden){
+  if(hero.hidden&&!ignoreHidden)return 0;
+  const dx=hc.x-g.x,dy=hc.y-g.y,d=Math.hypot(dx,dy);
+  if(d<12)return 8;
+  const R=gRange(g);if(d>R)return 0;
+  let da=Math.atan2(dy,dx)-g.a;da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)>FOV)return 0;
+  if(!los(g.x,g.y,hc.x,hc.y))return 0;
+  return DF().det*(1+2.4*(1-d/R))*(cur.light==='night'&&lightAt(hc.x,hc.y)<.3?.55:1)*(alarm?1.5:1);
+}
+function moveTo(g,tx,ty,sp,dt){const dx=tx-g.x,dy=ty-g.y,d=Math.hypot(dx,dy);if(d<.5)return true;const s=Math.min(d,sp*dt);g.x+=dx/d*s;g.y+=dy/d*s;g.a=turnTo(g.a,Math.atan2(dy,dx),dt*8);g.mv=true;return d<=s+.5}
+function followPath(g,sp,dt){if(!g.path||!g.path.length)return true;const[x,y]=g.path[0];if(moveTo(g,x,y,sp,dt))g.path.shift();return!g.path.length}
+function bfs(sx,sy,tx,ty){const W=cur.w,H=cur.h,si=sy*W+sx,ti=ty*W+tx;if(si===ti)return[];const prev=new Int32Array(W*H).fill(-1);const q=[si];prev[si]=si;let ok=false;
+  for(let qi=0;qi<q.length;qi++){const i=q[qi];if(i===ti){ok=true;break}const x=i%W,y=(i/W)|0;
+    for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const ni=ny*W+nx;if(prev[ni]!==-1)continue;if(SOLID.has(cur.map[ny][nx])&&ni!==ti)continue;prev[ni]=i;q.push(ni)}}
+  if(!ok)return null;const out=[];let i=ti;while(i!==si){out.push([(i%W)*T+8,((i/W)|0)*T+8]);i=prev[i]}return out.reverse()}
+const patrolSp=()=>(alarm?44:26)*DF().pat;
+function chaseStart(g,hc){g.state='chase';g.lx=hc.x;g.ly=hc.y;g.lost=0;g.path=null;g.rp=0;g.sus=1}
+function raise(g,hc){
+  sfx('alert');
+  if(g.chief&&!alarm)startAlarm(55,'رئيس الحراس دق الجرس!');
+  chaseStart(g,hc);
+  for(const o of guards)if(o!==g&&o.state!=='chase'&&Math.hypot(o.x-g.x,o.y-g.y)<110)chaseStart(o,hc);
+}
+function updGuards(dt){
+  const hc=heroC();let anyChase=false;
+  for(const g of guards){
+    g.t+=dt;g.mv=false;
+    const rate=canSee(g,hc);
+    if(g.state==='chase'){
+      anyChase=true;
+      if(rate>0){g.lx=hc.x;g.ly=hc.y;g.lost=0}else g.lost+=dt;
+      const d=Math.hypot(hc.x-g.x,hc.y-g.y);
+      if(d<11&&!hero.hidden){caught();return}
+      const sp=alarm?Math.max(82,DF().chase+2):DF().chase;
+      if(rate>0&&d<26)moveTo(g,hc.x,hc.y,sp,dt);
+      else{g.rp-=dt;if(g.rp<=0||!g.path){g.path=bfs(tileOf(g.x),tileOf(g.y),tileOf(g.lx),tileOf(g.ly))||[];g.rp=.3}followPath(g,sp,dt)}
+      if(g.lost>0&&(Math.hypot(g.lx-g.x,g.ly-g.y)<6||g.lost>2.6)){g.state='search';g.t=0;g.sus=.6;g.path=null}
+      continue}
+    if(rate>0){g.sus=Math.min(1,g.sus+rate*dt);g.a=turnTo(g.a,Math.atan2(hc.y-g.y,hc.x-g.x),dt*4);g.state='suspect';if(g.sus>=1)raise(g,hc);continue}
+    g.sus=Math.max(0,g.sus-dt*.3*DF().decay);
+    if(g.state==='suspect'){if(g.sus<=0){g.state='return';g.path=null}continue}
+    if(g.state==='search'){g.a+=dt*2.4;if(g.t>3.2){g.state='return';g.path=null}continue}
+    if(g.state==='return'){
+      const[wx,wy]=(g.chief||g.sentry)?g.home:g.wp[g.wi];
+      if(!g.path)g.path=bfs(tileOf(g.x),tileOf(g.y),wx,wy)||[];
+      if(followPath(g,patrolSp(),dt)){g.state='patrol';g.path=null}continue}
+    if(g.chief||g.sentry){g.a=(g.base??Math.PI*.9)+Math.sin(g.t*.7)*1.05;continue}
+    if(g.pause>0){g.pause-=dt;g.a+=Math.sin(g.t*2.5)*dt*1.5;continue}
+    const[wx,wy]=g.wp[g.wi];if(moveTo(g,tc(wx),tc(wy),patrolSp(),dt)){g.wi=(g.wi+1)%g.wp.length;g.pause=alarm?.3:.9}
+  }
+  if(anyChase&&!chaseWas){chaseWas=true}
+  if(!anyChase&&chaseWas){chaseWas=false;F.alert=Math.min(3,(F.alert||0)+1);lostT=3}
+}
+let lostT=0;
+function tryHide(){
+  const hc=heroC();
+  if(guards.some(g=>g.state==='chase'&&canSee(g,hc,true)>0)){toast('شافك وأنت تتخبى!');sfx('bad');return}
+  hero.hidden=true;keys.up=keys.down=keys.left=keys.right=0;sfx('rot');
+}
+function startAlarm(sec,msg){
+  sec=Math.round(sec*DF().alarm);alarm={t:sec,max:sec};cur.map[23][16]='G';cur.map[23][17]='G';cache.clear();
+  setMusic('alarm');sfx('bell');toast(msg);
+  setGoal(F.ledger?'دوّر طريق ثاني تطلع منه. فيه سياج مكسور في الجهة الغربية':'لقى الدليل واطلع قبل وصول التعزيزات. فيه سياج مكسور في الجهة الغربية');
+}
+function readLedger(){
+  say([
+    [N,'(دفتر حسابات. الصفحات مليانة أسامي وأرقام.)'],
+    [N,'(في آخر صفحة، بخط العم سعد:)'],
+    [N,'«راشد — سُلِّم في بندر الغار — ١٢ صفر»'],
+    [N,'«فهد — نصيبه: ٢٠٠ ريال»'],
+    ['سالم','سُلِّم؟ … وفهد؟!']],()=>{F.ledger=1;clue('ledger');sfx('ok');setGoal(alarm?'اطلع من السياج المكسور في الجهة الغربية':'اطلع من المستودع بدون ما أحد يشوفك')});
+}
+function failNight(msg,h){
+  mode='cut';alarm=null;setBan(banL,'');setBan(banR,'');sfx('bad');setMusic('none');
+  setTimeout(()=>card(h||'انمسكت',msg,'حاول مرة ثانية',()=>{resetWare(false);say([[N,'ليلة ثانية. نفس المستودع… بس هالمرة بحذر أكثر.']])}),300);
+}
+
+/* ================= interrogation ================= */
+function caught(){
+  if(cur.id==='fort'||cur.id==='prison'){failFort(F.escape?'مسكوك وأنت تهرب.':'شافك حراس القلعة ومسكوك.');return}
+  if(cur.id==='portN'){caughtDock();return}
+  if(cur.id==='port'){caughtOars();return}
+  if(alarm){failNight('مسكوك وقت الإنذار، وما فيه مجال للكلام.\nارجع وحاول مرة ثانية.');return}
+  mode='cut';sfx('bad');setBan(banL,'');hero.hidden=false;chaseWas=false;lostT=0;
+  F.captures=(F.captures||0)+1;
+  setTimeout(()=>{view='interrog';setMusic('interrog');setBan(banR,'يمديك تكذب!','lie');interrogate()},400);
+}
+function interrogate(){
+  let s=DF().interrog,saidSaad=false;
+  const had=F.ledger;
+  const q=[
+    [N,'(يجرّونك لغرفة صغيرة. فانوس واحد، وطاولة، ورجّال وجهه ما يبشّر بخير.)']];
+  if(F.released)q.push(['مبارك','أنت مرة ثانية؟!'],{fn:()=>{s+=2}});
+  if(had)q.push(['مبارك','ووش هذا اللي معك؟ … دفتر العم سعد؟!'],{fn:()=>{s+=3;F.ledger=0;clues=clues.filter(c=>c!=='ledger');save()}});
+  q.push(['مبارك','وش تسوي هنا بنص الليل يا ولد؟'],
+    {ch:[['قطوتي هربت ودخلت من تحت السياج.',()=>{},'كذب:'],
+         ['العم سعد أرسلني أجيب له شي من المكتب.',()=>{s+=1;saidSaad=true},'قصة:'],
+         ['أدوّر على شي يخص أبوي.',()=>{s+=1},'نص الحقيقة:']]},
+    {fn:()=>saidSaad?[['مبارك','العم سعد؟ العم سعد نايم في بيته من المغرب.'],{fn:()=>{s+=1}}]:null},
+    ['مبارك','ولد مين أنت؟'],
+    {ch:[['ولد خالد البقّال.',()=>{},'كذب:'],
+         ['أشتغل عند أبو خليل في السوق، توني جديد.',()=>{s+=1},'قصة:'],
+         ['سالم… ولد راشد.',()=>{s+=3},'الحقيقة:']]},
+    ['مبارك','وشفت شي داخل؟'],
+    {ch:[['لا والله، توني داخل.',()=>{},'كذب:'],
+         ['شفت صناديق بس.',()=>{s+=1},'نص الحقيقة:'],
+         ['(تسكت وتطالع الأرض)',()=>{s+=2},'اسكت:']]},
+    {fn:()=>{
+      setBan(banR,'');
+      if(s<=1)return[[N,'(يطالعك مبارك طويل.)'],['مبارك','اطلع. ولو شفتك مرة ثانية، بتندم.'],{fn:()=>release()}];
+      if(s<=3)return[['مبارك','كلامك ما يدخل العقل.'],['مبارك','بتجلس في المخزن لين يجي العم سعد الصبح، ونشوف وش نسوي فيك.'],{fn:()=>lockUp(60)}];
+      return[[N,'(يتغير وجه مبارك.)'],['مبارك','قفلوا عليه. وواحد يروح ينادي العم سعد الحين.'],{fn:()=>lockUp(42)}];
+    }}
+  );
+  say(q);
+}
+function release(){
+  view='world';F.released=1;F.alert=Math.min(3,(F.alert||0)+1);
+  guards=makeGuards();hero.x=16*T;hero.y=22*T-6;hero.dir='up';
+  setMusic('night');toast('طلّعوك… بس الحراس صاروا منتبهين أكثر');
+}
+function lockUp(sec){
+  view='world';F.locked=1;F.lockT=sec;cur.map[8][12]='Z';cache.clear();
+  guards=makeGuards();hero.x=9*T;hero.y=8*T-4;hero.dir='left';
+  setMusic('night');setGoal('قفلوا عليك المخزن. دوّر طريقة تطلع');
+  toast('انقفل عليك باب المخزن');
+}
+function renderInterrog(){
+  ctx.fillStyle='#120c08';ctx.fillRect(0,0,VW,VH);
+  ctx.fillStyle='#2a1d14';ctx.fillRect(0,0,VW,116);
+  for(let x=0;x<VW;x+=12){ctx.fillStyle='#1f150e';ctx.fillRect(x,0,1,116)}
+  ctx.fillStyle='#1a120c';ctx.fillRect(0,116,VW,64);
+  ctx.drawImage((interFace||SH.guard).down[0],128,12,64,96);
+  ctx.fillStyle='#2e1c0e';ctx.fillRect(84,104,152,14);ctx.fillStyle='#5a3a1e';ctx.fillRect(84,104,152,4);
+  ctx.fillStyle='#2e1c0e';ctx.fillRect(92,118,6,40);ctx.fillRect(222,118,6,40);
+  const lx=206,ly=94;ctx.fillStyle='#2a1e14';ctx.fillRect(lx-4,ly-2,9,12);ctx.fillStyle='#ffd27a';ctx.fillRect(lx-2,ly,5,8);
+  const fl=1+Math.sin(tick*9)*.03;
+  const gr=ctx.createRadialGradient(lx,ly,4,lx,ly,170*fl);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.85)');ctx.fillStyle=gr;ctx.fillRect(0,0,VW,VH);
+  ctx.globalCompositeOperation='lighter';const g2=ctx.createRadialGradient(lx,ly,0,lx,ly,60);g2.addColorStop(0,'rgba(255,170,60,.25)');g2.addColorStop(1,'rgba(255,170,60,0)');ctx.fillStyle=g2;ctx.fillRect(lx-60,ly-60,120,120);ctx.globalCompositeOperation='source-over';
+}
+
+/* ================= chapter end ================= */
+function fmtT(t){t=Math.round(t||0);const m=Math.floor(t/60),s=t%60;return m+' دقيقة و'+s+' ثانية'}
+function endChapter(){
+  mode='cut';alarm=null;setBan(banL,'');setGoal('');setMusic('night');sfx('ok');F.done=1;save();
+  setTimeout(()=>card('نهاية الفصل الأول','سالم رجع البيت قبل الفجر، والدفتر تحت ثوبه.\nما كان يدري وش تعني كلمة «سُلِّم».\nبس كان يدري إن فهد ما قال له كل شي.\n\nمدة لعبك في هذا الفصل: '+fmtT(F.pt)+'','كمّل للفصل الثاني',()=>startCh2()),500);
+}
+
+/* ================= CHAPTER 2 ================= */
+Object.assign(CLUES,{
+  ring:['خاتم أبوي','جدتي عطتني خاتم أبوي. قالت: إذا لقيته عطه إياه، وإذا ما لقيته رجّعه لي.'],
+  threat:['تهديد العم سعد','سعد يدري إن أحد أخذ دفتره. وقال لي: البحر ياخذ الصغار بعد.'],
+  confess:['اعتراف فهد','فهد كان مع رجال سعد. أبوي شاف اللي في الصناديق وقرر يبلّغ، فقرروا يتخلصون منه في بندر الغار.'],
+  song:['أغنية من القلعة','يوسف سمع رجّال غريب في القلعة يغني: «يا ولدي يا سالم، البحر ما يطول». وبعدين سكت.'],
+  fort:['قلعة بندر الغار','الحارس يعرف راشد. قال: تعال الفجر عند الباب الخلفي، لحالك.'],
+  oars:['مجاديف الهوري','رجال سعد أخذوا مجاديف هوري فهد وحطوها في مركب سعد. سعد ما يبي أحد يطلع البحر.'],
+  marks:['خطوط تحت الشباك','تحت شباك القلعة ٤٧ خط محفور… وبعد آخر خط حرف واحد: «س».'],
+  letter:['رسالة فهد','«أنا اللي ربطت يدين أبوك. أنا اللي سلّمته بيدي. سامحني.»']
+});
+const hori=(()=>{const[c,g]=cnv(14,30);px(g,3,2,'#241408',8,26);px(g,2,6,'#241408',10,18);px(g,4,3,'#8a5a30',6,24);px(g,3,7,'#8a5a30',8,16);px(g,4,3,'#a8743e',2,24);px(g,5,0,'#241408',4,3);px(g,5,27,'#241408',4,3);px(g,4,10,'#5a3a1e',6,1);px(g,4,19,'#5a3a1e',6,1);return c})();
+function makePortNight(){const m=makePort();
+  m[13][6]='.';m[13][7]='.';m[13][29]='.';
+  [[4,7],[5,10],[14,9],[26,9],[32,9]].forEach(([x,y])=>m[y][x]='L');
+  [[6,8],[12,7],[18,8],[23,9],[30,11],[4,11],[8,12]].forEach(([x,y])=>m[y][x]='B');
+  return m}
+const GSTALLS=[{x:21,y:9,t:'fish'},{x:26,y:9,t:'spice'}];
+function makeGhar(){const W=34,H=22,m=grid(W,H,'f');
+  for(let x=0;x<W;x++)m[0][x]='R';
+  for(let x=0;x<8;x++){m[1][x]='C';m[2][x]='C';m[3][x]='C'}m[3][3]='D';m[2][1]='O';m[2][6]='O';
+  for(let x=26;x<W;x++){m[1][x]='C';m[2][x]='C';m[3][x]='C'}m[3][29]='D';m[2][27]='O';m[2][32]='O';
+  for(let x=8;x<26;x++)for(let y=0;y<5;y++)m[y][x]='W';
+  m[4][16]='E';m[4][17]='E';m[5][8]='W';m[5][9]='W';m[5][24]='W';m[5][25]='W';
+  m[10][12]='u';[[3,8],[30,6],[6,12]].forEach(([x,y])=>m[y][x]='P');
+  GSTALLS.forEach(s=>fillR(m,s.x,s.y,s.x+2,s.y+1,'X'));
+  for(let x=0;x<W;x++){m[15][x]='w';for(let y=16;y<H;y++)m[y][x]='~'}
+  for(let y=14;y<H;y++){m[y][18]='=';m[y][19]='='}
+  [[10,14],[11,14],[28,13]].forEach(([x,y])=>m[y][x]='q');
+  m[13][22]='r';m[6][21]='c';m[6][22]='c';m[4][20]='N';
+  return m}
+function dockGuards(){const L=[{wp:[[4,13],[10,13]],x:tc(4),y:tc(13)},{wp:[[8,6],[16,6],[16,10],[8,10]],x:tc(8),y:tc(6)}];
+  if(F.saadSus)L.push({wp:[[21,6],[21,12],[27,12],[27,7]],x:tc(21),y:tc(6)});else L.push({wp:[[24,7],[24,11]],x:tc(24),y:tc(7)});
+  return L.map(g=>Object.assign({a:Math.PI/2,wi:1,state:'patrol',sus:0,t:0,path:null,lx:0,ly:0,lost:0,pause:0,rp:0,mv:false,walk:0},g))}
+function resetDock(){
+  const intro=F.stage==='dock'&&!F.dockSeen;
+  SC.portN.map=makePortNight();cur.map=SC.portN.map;cache.clear();
+  guards=dockGuards();alarm=null;chaseWas=false;lostT=0;
+  hero.x=34*T;hero.y=7*T-4;hero.dir='left';hero.hidden=false;
+  setMusic('night');setBan(banL,'');setBan(banR,'');
+  setGoal('وصّل لفهد عند طرف الشاطئ الغربي بدون ما يشوفونك');
+  if(intro){F.dockSeen=1;say([
+    [N,'منتصف الليل. رجال سعد يحرسون الشاطئ بالفوانيس.'],
+    [N,'فهد ينتظرني عند الطرف الغربي، جنب الهوري.'],
+    [N,'لو مسكوني، بيوصلوني لسعد نفسه.']])}
+  save();
+}
+Object.assign(SC,{
+  portN:{w:36,h:24,make:makePortNight,ground:'.',light:'night',music:'night',stealth:true,
+    npcs:()=>[{id:'fahdN',name:'فهد',x:2*T,y:13*T-4,dir:'right',sh:SH.fahd}],walkers:()=>[],
+    objs:()=>[{img:boat,x:17*T+8,y:16*T-44,by:19*T,bob:1},{img:hori,x:1*T+2,y:15*T,by:15*T,bob:1}],
+    exits(){if(hero.x>35*T-2){hero.x-=6;say([[N,'(فهد ينتظرني عند الطرف الغربي.)']])}},
+    onEnter(){resetDock()}},
+  ghar:{w:34,h:22,make:makeGhar,ground:'f',light:'dawn',music:'dive',
+    npcs:()=>[
+      ...(F.fortDone?[]:[{id:'fahdG',name:'فهد',x:20*T,y:14*T-4,dir:'up',sh:SH.fahd}]),
+      {id:'umsaeed',name:'أم سعيد',x:4*T,y:4*T,dir:'down',sh:SH.gran},
+      {id:'yousef',name:'يوسف',x:13*T,y:11*T,dir:'left',sh:SH.boy},
+      {id:'jasim',name:'بو جاسم',x:22*T,y:11*T,dir:'up',sh:SH.man},
+      {id:'fortg',name:'حارس القلعة',x:15*T,y:5*T,dir:'down',sh:SH.guard}],
+    walkers:()=>[{name:'صيّاد',sh:SH.hamad,a:[2,13],b:[15,13],line:'الصيد اليوم زين. الله يرزقنا.'},
+      {name:'حرمة',sh:SH.gran,a:[21,7],b:[31,7],line:'أنت مو من هنا، صح؟ … الله يحفظك.'}],
+    objs:()=>[...GSTALLS.map(s=>({img:STALLIMG[s.t],x:s.x*T,y:(s.y+2)*T-40,by:(s.y+2)*T-1})),...(F.fortDone?[]:[{img:hori,x:20*T+2,y:16*T,by:17*T,bob:1}])],
+    exits(){},
+    onEnter(){if(F.fortDone){cur.map[15][19]='l';cache.clear()}if(!F.gharSeen){F.gharSeen=1;setGoal('دوّر على أي خبر عن أبوي');say([
+      [N,'بندر الغار. ميناء صغير، وفوقه قلعة سودا.'],
+      ['فهد','أنا أنتظرك هنا عند الهوري. لا تقول لأحد من وين جاي.']])}}}
+});
+INSPECT.portN={...INSPECT.port,L:'فانوس. لو وقفت في ضوه بيشوفوني.'};
+INSPECT.ghar={D:'باب بيت. مسكّر.',C:'بيت من حجر البحر.',W:'سور القلعة. عالي وقديم.',E:'باب القلعة الكبير. مقفول.',u:'بير. ماه مالح شوي.',q:'قراقير صيد.',r:'حبال.',P:'نخلة.',
+  c:'صناديق مربوطة بشرايط حمرا… نفس صناديق سعد! وصلت لين هنا.',
+  X:(tx,ty)=>{const s=GSTALLS.find(s=>tx>=s.x&&tx<=s.x+2&&ty>=s.y&&ty<=s.y+1);return s?(s.t==='fish'?'سمك ناشف معلّق.':'بهارات وقهوة.'):null},
+  l:()=>{readLetter();return null},
+  N:()=>{if(!clues.includes('song'))return 'شباك صغير عالي في سور القلعة.';
+    if(F.marks)return 'شباك أبوي. ٤٧ خط… وحرف «س».';
+    say([[N,'(تحت الشباك، على الحجر، خطوط صغيرة محفورة.)'],[N,'(تعدّها: واحد… اثنين… عشرة… سبعة وأربعين.)'],[N,'(وبعد آخر خط، حرف واحد محفور بعمق: «س».)'],['سالم','س… سالم.'],[N,'(وبعد الحرف… ما فيه ولا خط.)']],
+      ()=>{F.marks=1;clue('marks');setGoal('كلّم حارس القلعة عند الباب الكبير')});return null}};
+
+Object.assign(TALK,{
+  gran2(){
+    if(F.g2)return say([['جدتي','الله يحفظك يا ولدي. لا تتأخر.']]);
+    F.g2=1;say([
+      ['جدتي','سالم. تعال.'],
+      ['جدتي','البارحة قمت أصلي الفجر… وفراشك فاضي. وين كنت؟'],
+      {ch:[['نمت عند ولد الجيران.',()=>[[N,'(تطالعك طويل.)'],['جدتي','أنت مثل أبوك… ما تعرف تكذب.']],'كذب:'],
+           ['رحت أدوّر على أبوي.',()=>[[N,'(تسكت جدتك. وعيونها تلمع.)'],['جدتي','كنت أدري إن هاليوم بيجي.']],'الحقيقة:']]},
+      ['جدتي','خذ. هذا خاتم أبوك. نساه يوم سافر.'],
+      ['جدتي','إذا لقيته، عطه إياه. وإذا ما لقيته…'],
+      [N,'(ما كمّلت.)'],
+      ['جدتي','رجّعه لي.']],()=>{clue('ring');setGoal('روح لفهد عند الشباك')});
+  },
+  saad2(){
+    if(F.s2)return say([['العم سعد','روح يا سالم. وانتبه لنفسك.']]);
+    F.s2=1;let s=0;setBan(banR,'يمديك تكذب!','lie');
+    say([
+      ['العم سعد','سالم. تعال هنا.'],
+      ['العم سعد','البارحة أحد دخل مستودعي… وأخذ شي يخصني.'],
+      ['العم سعد','وين كنت البارحة بالليل؟'],
+      {ch:[['كنت نايم في البيت.',()=>{},'كذب:'],['كنت عند أبو خليل، يعلمني شغل القماش.',()=>{s+=1},'قصة:'],['ليش تسأل؟ خايف من شي؟',()=>{s+=3},'تحدّي:']]},
+      ['العم سعد','وفهد… كلّمك عن شي؟'],
+      {ch:[['لا، ما كلمني.',()=>{},'كذب:'],['يقول إنك تخرّف من يوم رجعتوا.',()=>{s+=1},'قصة:'],['ايه. قال لي أشياء.',()=>{s+=3;F.fahdHurt=1},'الحقيقة:']]},
+      {fn:()=>{setBan(banR,'');F.saadSus=s>=3?1:0;
+        return s>=3?[[N,'(يقرّب منك سعد، ويهمس.)'],['العم سعد','انتبه يا سالم. البحر ياخذ الصغار بعد.']]
+                   :[[N,'(يطالعك سعد شوي.)'],['العم سعد','طيب. روح. وسلّم على جدتك.']]}}],
+      ()=>{clue('threat');setGoal('روح لفهد عند الشباك')});
+  },
+  fahd2(){
+    if(!F.g2)return say([['فهد','روح لجدتك أول. كانت تدوّرك من الفجر.']]);
+    if(!F.s2)return say([['فهد','(يهمس) سعد يطالعنا من الصبح. روح له أول لا يشك.']]);
+    if(F.oarsM&&!F.oars)return say([['فهد','المجاديف في مركب سعد عند الرصيف. انتبه للبحّارة.']]);
+    if(F.oars&&!F.oarsDone){F.oarsDone=1;F.oarsM=0;guards=[];cur.stealth=false;setBan(banL,'');return say([['فهد','جبتها؟! … الله يحفظك.'],[N,'(يلف فهد المجاديف بشبك قديم، ويخبّيها تحت الهوري.)'],['فهد','الليلة. عند طرف الشاطئ الغربي.']],
+      ()=>{setGoal('');card('الليل الثاني','سالم تخبّى عند أبو خليل لين نام الميناء.\nبعدها مشى للشاطئ.','روح للشاطئ',()=>{F.stage='dock';goScene('portN')})})}
+    if(F.f2)return say([['فهد','الليلة. عند طرف الشاطئ الغربي.']]);
+    F.f2=1;say([
+      ...(F.fahdHurt?[[N,'(وجه فهد متورّم، وفي يده جرح جديد.)'],['فهد','سعد عرف إني كلمتك.']]:[]),
+      [N,'(تطلّع الدفتر، وتفتحه على آخر صفحة.)'],
+      ['سالم','«فهد — نصيبه ٢٠٠ ريال». وش معنى هذا يا فهد؟'],
+      {ch:[['أبوي كان يعتبرك مثل أخوه.',()=>{F.gentle=1},'بهدوء:'],['أنت بعت أبوي!',()=>{},'بغضب:']]},
+      [N,'(يقعد فهد على الأرض، ويغطي وجهه.)'],
+      ['فهد','كنت معهم. سنة كاملة أشيل صناديقهم وأسكت.'],
+      ['فهد','أبوك فتح صندوق في الطريق، وشاف اللي فيه. قال: إذا رجعنا بلّغت.'],
+      ['فهد','سعد قال لي: الليلة نوقف في بندر الغار، وأنت تلهيه بالسوالف.'],
+      {fn:()=>F.gentle?[['فهد','وأنا لهيته. وهو كان يضحك معي… ما كان يدري.']]:null},
+      ['فهد','الصبح… ما كان على المركب.'],
+      ['سالم','وين هو الحين؟'],
+      [N,'(فهد ما يرفع عينه.)'],
+      ['فهد','ما أدري. والله ما أدري.'],
+      ['فهد','عندي هوري صغير. الليلة أوديك بندر الغار. هذا أقل شي أسويه.'],
+      ['فهد','بس رجال سعد يحرسون الشاطئ بالليل. تعال من الطريق الشرقي، وأنا أنتظرك عند الطرف الغربي.'],
+      ['فهد','بس فيه مشكلة…'],
+      ['فهد','الصبح جوا رجال سعد وأخذوا مجاديف الهوري. حطوها في مركب سعد عند الرصيف.'],
+      ['فهد','أنا لو قربت بيشكّون. أنت صغير… ما أحد يحسب لك حساب.'],
+      ['فهد','جيب المجاديف بدون ما يشوفك البحّارة. تخبّى ورا البراميل إذا لزم.']],
+      ()=>{clue('confess');clue('oars');startOars()});
+  },
+  fahdN(){say([['فهد','جيت؟ بسرعة، اركب.'],[N,'(يدفع فهد الهوري للماي بهدوء، ويقفز وراك.)']],()=>{F.stage='sea';guards=[];save();
+    card('البحر','الهوري صغير، والليل طويل.\nقدامكم صخور، ودوريات رجال سعد بالفوانيس.\nوبعدها… الريح.','يلا',()=>startSea())})},
+  fahdG(){say([['فهد',F.fortDone?'…':'أنا أنتظرك هنا. لا تطوّل.']])},
+  umsaeed(){say([
+    ['أم سعيد','ولدي… من وين أنت؟ من الساحل الثاني؟'],
+    ['أم سعيد','القلعة هذي… كل كم شهر يجيبون لها ناس من البحر. ومحد يطلع.'],
+    ['أم سعيد','إذا تدوّر أحد، اسأل الحارس اللي عند الباب. بس الحارس ما يتكلم ببلاش.']])},
+  yousef(){if(clues.includes('song'))return say([['يوسف','لا تزعل… يمكن رجع يغني.']]);
+    say([
+    ['يوسف','أنت من الساحل الثاني؟ تشبه الرجّال اللي كان في القلعة.'],
+    ['يوسف','كان يطل من الشباك العالي، ويغني بصوت واطي.'],
+    ['يوسف','يقول: «يا ولدي يا سالم، البحر ما يطول».'],
+    [N,'(قلبك يدق.)'],
+    ['سالم','متى آخر مرة سمعته؟'],
+    ['يوسف','من زمان… من أول الصيف.'],
+    ['يوسف','بعدين سكت.'],
+    ['يوسف','شباكه ذاك… فوق الصناديق الحمرا، يمين الباب الكبير.']],()=>{clue('song');if(!F.marks)setGoal('شوف الشباك اللي قال عنه يوسف')})},
+  jasim(){say([
+    ['بو جاسم','سعد؟ تاجر ساحلكم؟ يجي كل شهر، يبيع صناديقه لرجال القلعة.'],
+    ['بو جاسم','ويسلّم معها… ناس. الله يكفينا شرهم.']])},
+  fortg(){
+    if(F.fortDone)return say([['حارس القلعة','قلت لك: الفجر. الباب الخلفي. لحالك.']]);
+    if(!F.marks)return say([['حارس القلعة','امش يا ولد. القلعة مو مكان لعب.']]);
+    const yes=()=>[
+      [N,'(يطالع الحارس الخاتم طويل. ويمسح على وجهه.)'],
+      ['حارس القلعة','شفت هالنقش قبل… على يد رجّال كان يكح بالليل، ويغني لولده.'],
+      ['حارس القلعة','راشد… ايه. أعرفه.'],
+      ['حارس القلعة','تعال الفجر بكرة عند الباب الخلفي. لحالك.'],
+      ['حارس القلعة','وجيب معك قلب قوي.'],
+      {fn:()=>{F.fortDone=1;clue('fort');setGoal('ارجع لفهد عند الرصيف');
+        npcs=npcs.filter(n=>n.id!=='fahdG');objs=objs.filter(o=>o.img!==hori);cur.map[15][19]='l';cache.clear();save()}}];
+    const no=t=>()=>[['حارس القلعة',t],['حارس القلعة','(يرجّع لك اللؤلؤة.) ارجع لي لما يكون معك شي يثبت.']];
+    say([
+      ['حارس القلعة','امش يا ولد. القلعة مو مكان لعب.'],
+      ['سالم','أبوي كان هنا. شفت خطوطه تحت الشباك.'],
+      [N,'(تطلّع اللؤلؤة وتمدها له. يقلّبها بين أصابعه، ويتلفت.)'],
+      ['حارس القلعة','كل يوم يجيني واحد يقول أبوي هنا. وش يثبت لي إنك ولده؟'],
+      {ch:[...(clues.includes('ring')?[['(تطلّع خاتم أبوك)',yes,'دليل:']]:[]),
+           ['رسالة أبوي اللي في الورقة',no('ما أعرف أقرا. وأي أحد يكتب ورقة.'),'دليل:'],
+           ['أعرف أغنيته: «يا ولدي يا سالم»',no('الأغنية سمعها نص البندر. هذا ما يثبت شي.'),'دليل:']]}]);
+  }
+});
+function readLetter(){say([
+  [N,'(الهوري مو موجود. وعلى خشب الرصيف ورقة مطوية تحت حجر.)'],
+  [N,'(خط فهد.)'],
+  ['فهد','«سالم. ما قلت لك كل شي.»'],
+  ['فهد','«ليلة بندر الغار، أبوك ما راح بروحه. أنا اللي ربطت يدينه. أنا اللي سلّمته بيدي.»'],
+  ['فهد','«ومن يومها، كل ليلة أشوف وجهه.»'],
+  ['فهد','«رحت للقلعة أسلّم نفسي بداله. يمكن يقبلون… ويمكن لا.»'],
+  ['فهد','«سامحني يا سالم. وإذا ما قدرت، أفهمك.»'],
+  ['سالم','…فهد!']],()=>{clue('letter');endCh2()})}
+function endCh2(){mode='cut';setGoal('');setMusic('night');F.done2=1;save();
+  setTimeout(()=>card('نهاية الفصل الثاني','سالم لحاله في ميناء غريب.\nفي جيبه خاتم أبوه، وفي يده رسالة فهد.\nوبكرة الفجر… الباب الخلفي للقلعة.\n\nمدة لعبك في هذا الفصل: '+fmtT(F.pt)+'','كمّل للفصل الثالث',()=>startCh3()),500)}
+function startCh2(){unlock(2);
+  F={ch:2,stage:'port2'};
+  const keep=clues.filter(c=>['note','ledger','band','confess'].includes(c));clues=keep;
+  $('chTag').textContent='الفصل الثاني · الطريق إلى بندر الغار';
+  card('الفصل الثاني','الطريق إلى بندر الغار','ابدأ',()=>{mode='play';enterScene('port',12*T,4*T+4);
+    say([[N,'صباح الجمعة. سالم ما نام.'],[N,'الدفتر تحت فراشه، وكلمة «سُلِّم» ما طلعت من راسه.']],()=>TALK.gran2())});
+}
+/* ---------- oars mission (day stealth) ---------- */
+function startOars(){F.oarsM=1;F.oars=0;cur.stealth=true;const m=cur.map;[[13,13],[17,11],[22,9],[28,11]].forEach(([x,y])=>m[y][x]='B');cache.clear();
+  guards=[{wp:[[15,13],[15,22]],x:tc(15),y:tc(14)},{wp:[[18,13],[28,13]],x:tc(18),y:tc(13)}].map(g=>Object.assign({a:Math.PI/2,wi:1,state:'patrol',sus:0,t:0,path:null,lx:0,ly:0,lost:0,pause:0,rp:0,mv:false,walk:0,range:72},g));
+  chaseWas=false;lostT=0;hero.x=30*T;hero.y=8*T-4;hero.dir='left';hero.hidden=false;
+  setGoal('خذ المجاديف من مركب سعد عند الرصيف، ورجّعها لفهد بدون ما يشوفك البحّارة');save()}
+function caughtOars(){mode='cut';sfx('bad');setBan(banL,'');hero.hidden=false;chaseWas=false;lostT=0;let s=0;const had=F.oars;
+  setTimeout(()=>{interFace=SH.saad;view='interrog';setMusic('interrog');setBan(banR,'يمديك تكذب!','lie');
+    say([[N,'(البحّار يمسكك من ثوبك ويجرّك لسعد.)'],
+      ...(had?[['العم سعد','ووش هذا؟ مجاديف؟ … هذي مو لك.'],{fn:()=>{s+=2;F.oars=0}}]:[]),
+      ['العم سعد','وش تسوي عند مركبي يا سالم؟'],
+      {ch:[['أدوّر على سمك أبيعه.',()=>{},'كذب:'],['جدتي أرسلتني أسأل عن أبوي.',()=>{s+=1},'قصة:'],['أبي أعرف وين أبوي!',()=>{s+=3},'الحقيقة:']]},
+      {fn:()=>{setBan(banR,'');if(s>=3)F.saadSus=1;return s<=1?[['العم سعد','… روح. ولا عاد أشوفك عند مركبي.']]:[['العم سعد','انتبه يا سالم. صبري له حد.'],[N,'(سعد بيحط رجال أكثر على الشاطئ الليلة.)']]}}],
+      ()=>{view='world';interFace=null;setMusic('day');startOars();toast('رجّعوك… حاول مرة ثانية')});
+  },400)}
+
+/* ---------- dock capture ---------- */
+let interFace=null;
+function caughtDock(){
+  mode='cut';sfx('bad');setBan(banL,'');hero.hidden=false;chaseWas=false;lostT=0;let s=0;
+  setTimeout(()=>{interFace=SH.saad;view='interrog';setMusic('interrog');setBan(banR,'يمديك تكذب!','lie');
+    say([
+      [N,'(يمسكونك ويجرّونك لسعد. واقف عند الرصيف وفي يده فانوس.)'],
+      ['العم سعد','سالم؟ وش تسوي هنا بنص الليل؟'],
+      {ch:[['جدتي تعبانة، رايح أجيب لها ماي من البير.',()=>{},'كذب:'],['أدوّر على قطوتنا.',()=>{s+=1},'كذب:'],['رايح أدوّر على أبوي.',()=>{s+=3},'الحقيقة:']]},
+      {fn:()=>{setBan(banR,'');return s<=1
+        ?[['العم سعد','… البير من الجهة الثانية. ارجع بيتكم، ولا عاد أشوفك هنا.']]
+        :[['العم سعد','رجّعوه لبيته. وخلّوا واحد يراقب الشاطئ زين.'],{fn:()=>{F.alert=Math.min(3,(F.alert||0)+1)}}]}}],
+      ()=>{view='world';interFace=null;const a=F.alert;resetDock();F.alert=a;toast('رجّعوك… حاول من طريق ثاني')});
+  },400);
+}
+
+/* ---------- sea crossing ---------- */
+let sea=null;
+function genSea(len){const o=[];let d=260,i=0;while(d<len-80){const stm=d>len*.68&&d<len*.86;o.push({d,x:24+rnd(i,3,7)*272,r:6+(rnd(i,5,9)*6|0)});if(rnd(i,8,2)>.55)o.push({d:d+20,x:24+rnd(i,4,1)*272,r:5+(rnd(i,6,3)*4|0)});d+=stm?62+rnd(i,1,1)*32:80+rnd(i,2,2)*50;i++}return o}
+function startSea(){mode='sea';view='sea';setMusic('night');F.stage='sea';setGoal('اعبر البحر لبندر الغار');save();
+  const len=3300;sea={d:0,len,hp:DF().seaHp,x:160,y:132,inv:0,t:0,obs:genSea(len),pat:[{d:900,x:60,dir:1},{d:1650,x:250,dir:-1},{d:2500,x:120,dir:1}],det:0,flash:0,shake:0,lt:3,done:0,sp:55};
+  mgEl.hidden=false}
+function seaFail(msg){mode='cut';mgEl.hidden=true;setBan(banL,'');sfx('bad');
+  setTimeout(()=>card('رجعتوا',msg+'\nفهد رجّع الهوري للشاطئ… تحاولون مرة ثانية.','حاول مرة ثانية',()=>startSea()),300)}
+function updSea(dt){const S=sea;S.t+=dt;
+  const stm=S.d>S.len*.68&&!S.starsDone;
+  if(!S.starsDone&&S.d>S.len*.86){S.starsDone=1;mode='cut';mgEl.hidden=true;setBan(banL,'');S.flash=0;
+    setTimeout(()=>card('ضعنا','العاصفة هدت، والغيم انكشف… بس فهد يطالع حوله.\n«ما أدري وين الشمال! الريح لفّتنا.»\nأبوي علمني: الجدي النجمة الوحيدة اللي ما تتحرك.','طالع السما',()=>startStars()),300);return}
+  S.sp=55+(keys.up?24:0)-(keys.down?28:0);
+  S.d+=S.sp*dt;
+  let vx=(keys.right-keys.left)*72;if(stm)vx+=Math.sin(S.t*.8)*28+Math.sin(S.t*2.3)*10;
+  S.x=clamp(S.x+vx*dt,16,304);
+  S.inv=Math.max(0,S.inv-dt);S.shake=Math.max(0,S.shake-dt);S.flash=Math.max(0,S.flash-dt*2.5);
+  if(stm){S.lt-=dt;if(S.lt<=0){S.lt=2.5+Math.random()*3;S.flash=1;sfx('crash')}}
+  for(const o of S.obs){const sy=S.y-(o.d-S.d);if(sy<100||sy>170)continue;
+    if(Math.hypot(o.x-S.x,sy-S.y)<o.r+5&&S.inv<=0){S.hp--;S.inv=1.3;S.shake=.35;sfx('crash');if(S.hp<=0){seaFail('الهوري انشق على الصخور!');return}}}
+  let seen=false;
+  for(const p of S.pat){p.x+=p.dir*30*dt;if(p.x>296){p.x=296;p.dir=-1}if(p.x<24){p.x=24;p.dir=1}
+    const sy=S.y-(p.d-S.d),lx=p.x,ly=sy+14;p.a=Math.PI/2+Math.sin(S.t*.9+p.d)*.55;
+    const dx=S.x-lx,dy=S.y-ly,d=Math.hypot(dx,dy);
+    if(d<92){let da=Math.atan2(dy,dx)-p.a;da=Math.atan2(Math.sin(da),Math.cos(da));if(Math.abs(da)<.5)seen=true}}
+  S.det=seen?S.det+dt*1.6:Math.max(0,S.det-dt*.8);
+  if(S.det>=1){seaFail('شافتكم دورية سعد!');return}
+  setBan(banL,S.det>0?'الدورية بتشوفكم!\nابعدوا عن الضوء أو أبطئوا':(stm?'عاصفة! الريح تسحب الهوري':''),S.det>0?'alert':'calm');
+  mgEl.textContent=`المسافة ${Math.min(100,Math.floor(S.d/S.len*100))}% · سلامة الهوري ${S.hp}/${DF().seaHp} · ↑ أسرع · ↓ أبطأ`;
+  if(S.d>=S.len&&!S.done){S.done=1;mgEl.hidden=true;setBan(banL,'');mode='cut';sfx('ok');F.stage='dive';save();
+    setTimeout(()=>card('جزيرة صغيرة','قبل الفجر، وقف فهد عند جزيرة صغيرة.\n«في بندر الغار ما يتكلم أحد ببلاش. نبي لؤلؤة.»\n«انزل، وأنا أمسك الحبل.»','انزل للبحر',()=>startDive()),400)}
+}
+function drawRock(x,y,r){x=Math.round(x);y=Math.round(y);
+  for(let dy=-r;dy<=r;dy++){const w=Math.round(Math.sqrt(r*r-dy*dy));ctx.fillStyle=dy<-r/3?'#7a7a80':dy<r/3?'#5a5a60':'#44444a';ctx.fillRect(x-w,y+dy,w*2,1)}
+  ctx.fillStyle='#9a9aa0';ctx.fillRect(x-r/2|0,y-r+2|0,3,2);
+  ctx.fillStyle='rgba(230,240,240,.7)';for(let i=0;i<8;i++){const a=i/8*6.28+tick*.8;ctx.fillRect(Math.round(x+Math.cos(a)*(r+2)),Math.round(y+Math.sin(a)*(r+2)),2,1)}}
+function drawPatrol(x,y){x=Math.round(x);y=Math.round(y);ctx.fillStyle='#1e120a';ctx.fillRect(x-7,y-16,14,32);ctx.fillStyle='#5a3a1e';ctx.fillRect(x-6,y-14,12,28);ctx.fillStyle='#7a5030';ctx.fillRect(x-6,y-14,2,28);
+  ctx.drawImage(SH.guard.down[0],x-8,y-14);ctx.fillStyle='#2a1e14';ctx.fillRect(x-2,y+11,5,6);ctx.fillStyle='#ffd27a';ctx.fillRect(x-1,y+12,3,4)}
+function drawHori(x,y){x=Math.round(x);y=Math.round(y);ctx.drawImage(hori,x-7,y-15);
+  const o=Math.round(Math.sin(sea?sea.t*5:tick*5)*2);ctx.fillStyle='#6a4a2a';ctx.fillRect(x-12,y-6+o,6,1);ctx.fillRect(x+6,y-6-o,6,1);
+  ctx.fillStyle='#5d7f8e';ctx.fillRect(x-2,y-9,5,4);ctx.fillStyle='#a86c42';ctx.fillRect(x-1,y-5,3,1);
+  ctx.fillStyle='#f4f0e6';ctx.fillRect(x-2,y+3,5,3);ctx.fillStyle='#1a1410';ctx.fillRect(x-2,y+5,5,1)}
+function renderSea(){const S=sea,stm=S.d>S.len*.68&&!S.starsDone;
+  ctx.save();if(S.shake>0&&SET.shake)ctx.translate(Math.round((Math.random()-.5)*5),Math.round((Math.random()-.5)*5));
+  ctx.fillStyle=stm?'#0a2030':'#0d2a3d';ctx.fillRect(-6,-6,VW+12,VH+12);
+  for(let i=0;i<46;i++){const y=((i*29+S.d)%220)-20,x=((i*71+Math.sin(S.t+i)*6)%VW+VW)%VW;ctx.fillStyle=stm?'#2e6a86':'#1c4a64';ctx.fillRect(x|0,y|0,stm?11:6,1);if(stm&&i%3===0){ctx.fillStyle='#cfe4ea';ctx.fillRect((x+3)|0,(y-1)|0,4,1)}}
+  if(!stm)for(let i=0;i<12;i++){ctx.fillStyle='rgba(230,230,200,.45)';ctx.fillRect((250+Math.sin(S.t*2+i)*4)|0,((i*15+S.d*.3)%180)|0,6-(i%3),1)}
+  for(const o of S.obs){const sy=S.y-(o.d-S.d);if(sy>-20&&sy<200)drawRock(o.x,sy,o.r)}
+  const vis=[];for(const p of S.pat){const sy=S.y-(p.d-S.d);if(sy>-60&&sy<240){drawPatrol(p.x,sy);vis.push({x:p.x,y:sy+14,a:p.a})}}
+  if(!(S.inv>0&&Math.floor(S.t*12)%2))drawHori(S.x,S.y);
+  dg.globalCompositeOperation='source-over';dg.clearRect(0,0,VW,VH);dg.fillStyle=stm?'rgba(4,8,16,.8)':'rgba(6,12,32,.72)';dg.fillRect(0,0,VW,VH);dg.globalCompositeOperation='destination-out';
+  const L=[...vis.map(v=>({x:v.x,y:v.y,r:60})),{x:S.x,y:S.y,r:40},{x:250,y:20,r:90}];
+  for(const l of L){const gr=dg.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r);gr.addColorStop(0,'rgba(0,0,0,1)');gr.addColorStop(1,'rgba(0,0,0,0)');dg.fillStyle=gr;dg.fillRect(l.x-l.r,l.y-l.r,l.r*2,l.r*2)}
+  ctx.drawImage(dk,0,0);
+  for(const v of vis){ctx.beginPath();ctx.moveTo(v.x,v.y);for(let i=0;i<=12;i++){const a=v.a-.5+i/12;ctx.lineTo(v.x+Math.cos(a)*92,v.y+Math.sin(a)*92)}ctx.closePath();ctx.fillStyle=S.det>0?'rgba(255,90,60,.2)':'rgba(255,230,150,.13)';ctx.fill()}
+  if(S.flash>0){ctx.fillStyle=`rgba(230,240,255,${S.flash*.7})`;ctx.fillRect(-6,-6,VW+12,VH+12)}
+  ctx.restore();
+  ctx.fillStyle='#120c08';ctx.fillRect(8,VH-10,VW-16,5);ctx.fillStyle='#c9a24a';ctx.fillRect(9,VH-9,(VW-18)*Math.min(1,S.d/S.len),3);
+  ctx.fillStyle='#f4efe2';ctx.fillRect(9+(VW-18)*.68,VH-11,1,7);
+  for(let i=0;i<DF().seaHp;i++){ctx.fillStyle=i<S.hp?'#c9a24a':'#33464f';ctx.fillRect(10+i*9,8+16,7,4)}
+}
+
+/* ---------- star navigation ---------- */
+let stars=null;
+function startStars(){mode='stars';view='stars';
+  const st=[];for(let i=0;i<52;i++)st.push({a:rnd(i,1,5)*6.283,r:16+rnd(i,2,5)*170,b:.35+rnd(i,3,5)*.65,big:rnd(i,4,5)>.84});
+  stars={st,px:208,py:58,cx:120,cy:100,t:0,tries:0,done:0,msg:0};
+  mgEl.hidden=false;mgEl.textContent='حرّك المؤشر واختر «الجدي» بزر A (أو المسه) · كل النجوم تدور حوله، وهو ثابت';setGoal('لقى نجمة الجدي');}
+function starPos(s){const w=.07*stars.t;return{x:stars.px+Math.cos(s.a+w)*s.r,y:stars.py+Math.sin(s.a+w)*s.r*.85}}
+function starPick(){const S=stars;if(!S||S.done)return;
+  if(Math.hypot(S.cx-S.px,S.cy-S.py)<9){S.done=1;sfx('ok');mgEl.hidden=true;
+    setTimeout(()=>card('الشمال','«هذا هو الجدي!»\nفهد يضحك لأول مرة: «أبوك علّمك زين.»\nيدير الهوري… وبندر الغار شمال شرق.','كمّلوا',()=>{mode='sea';view='sea';mgEl.hidden=false;setGoal('اعبر البحر لبندر الغار')}),300);return}
+  let best=null,bd=9;for(const s of S.st){const p=starPos(s),d=Math.hypot(S.cx-p.x,S.cy-p.y);if(d<bd){bd=d;best=s}}
+  if(best){S.tries++;sfx('bad');toast(S.tries>2?'فهد: «طالع زين… وحدة بس ما تتحرك، والباقي يلف حولها.»':'هذي تتحرك… مو هي.')}}
+function updStars(dt){const S=stars;S.t+=dt;S.cx=clamp(S.cx+(keys.right-keys.left)*80*dt,4,VW-4);S.cy=clamp(S.cy+(keys.down-keys.up)*80*dt,4,142)}
+function renderStars(){const S=stars;const g=ctx.createLinearGradient(0,0,0,150);g.addColorStop(0,'#040816');g.addColorStop(1,'#16263e');ctx.fillStyle=g;ctx.fillRect(0,0,VW,150);
+  for(const s of S.st){const p=starPos(s);if(p.y>146||p.x<0||p.x>VW||p.y<0)continue;const tw=s.b*(.75+.25*Math.sin(S.t*3+s.a*9));ctx.fillStyle=`rgba(235,240,255,${tw})`;ctx.fillRect(Math.round(p.x),Math.round(p.y),1,1);if(s.big){ctx.fillRect(Math.round(p.x)-1,Math.round(p.y),3,1);ctx.fillRect(Math.round(p.x),Math.round(p.y)-1,1,3)}}
+  ctx.fillStyle=`rgba(235,240,255,${.8+.2*Math.sin(S.t*2.2)})`;ctx.fillRect(S.px,S.py,1,1);ctx.fillRect(S.px-1,S.py,3,1);ctx.fillRect(S.px,S.py-1,1,3);
+  ctx.fillStyle='#0a1a28';ctx.fillRect(0,150,VW,30);for(let i=0;i<30;i++){ctx.fillStyle='#1c3a50';ctx.fillRect(((i*41+S.t*8)%VW)|0,152+(i*7)%26,7,1)}
+  ctx.fillStyle='rgba(235,240,255,.25)';ctx.fillRect(S.px-1,154,3,24);
+  ctx.save();ctx.translate(160,166);ctx.rotate(Math.PI/2);ctx.drawImage(hori,-7,-15);ctx.restore();
+  ctx.fillStyle='#5d7f8e';ctx.fillRect(150,160,5,4);ctx.fillStyle='#f4f0e6';ctx.fillRect(166,161,5,3);
+  ctx.strokeStyle='#e6c890';ctx.lineWidth=1;ctx.strokeRect(Math.round(S.cx)-5.5,Math.round(S.cy)-5.5,11,11);ctx.fillStyle='#e6c890';ctx.fillRect(Math.round(S.cx)-9,Math.round(S.cy),3,1);ctx.fillRect(Math.round(S.cx)+7,Math.round(S.cy),3,1);ctx.fillRect(Math.round(S.cx),Math.round(S.cy)-9,1,3);ctx.fillRect(Math.round(S.cx),Math.round(S.cy)+7,1,3)}
+
+/* ---------- pearl diving ---------- */
+let dive=null;
+const seabed=x=>150+Math.sin(x/50)*8+Math.sin(x/23)*4;
+function startDive(){mode='dive';view='dive';setMusic('dive');F.stage='dive';setGoal('طلّع لؤلؤة من قاع البحر');save();
+  const pearlAt=[2+(Math.random()*3|0),5+(Math.random()*3|0)];
+  dive={x:70,y:30,vx:0,vy:0,b:1,cam:0,W:660,t:0,face:1,inv:0,blk:0,done:0,opened:0,pearl:0,bub:[],
+    oy:[140,205,262,330,392,452,522,598].map((x,i)=>({x,y:seabed(x)-3,open:0,pearl:pearlAt.includes(i)})),
+    jel:[190,280,370,460,560].map((x,i)=>({x,y:70+i*13%60,ph:i*1.7}))};
+  mgEl.hidden=false;mgEl.textContent='دوّر لؤلؤة داخل المحار (A لما تكون قريب) · اطلع فوق عشان تتنفس · ابعد عن القناديل'}
+function divePress(){const D=dive;if(!D||D.done||D.blk>0)return;
+  const o=D.oy.find(o=>!o.open&&Math.hypot(o.x-D.x,o.y-D.y)<16);if(!o)return;
+  o.open=1;D.opened++;if(!o.pearl&&D.opened>=5&&!D.pearl)o.pearl=1;
+  if(o.pearl&&!D.pearl){D.pearl=1;sfx('ok');toast('لقيت لؤلؤة! اطلع فوق')}else{sfx('rot');toast(o.pearl?'لؤلؤة ثانية… وحدة تكفي':'محارة فاضية')}}
+function updDive(dt){const D=dive;D.t+=dt;
+  if(D.blk>0){D.blk-=dt;if(D.blk<=0){D.x=70;D.y=30;D.vx=D.vy=0;D.b=1;toast('فهد سحبك فوق. خذ نفس وارجع')}return}
+  const ax=(keys.right-keys.left)*150,ay=(keys.down-keys.up)*150;
+  D.vx=(D.vx+ax*dt)*Math.pow(.25,dt);D.vy=(D.vy+(ay-10)*dt)*Math.pow(.25,dt);
+  const sp=Math.hypot(D.vx,D.vy);if(sp>62){D.vx*=62/sp;D.vy*=62/sp}
+  D.x=clamp(D.x+D.vx*dt,8,D.W-8);D.y=clamp(D.y+D.vy*dt,26,seabed(D.x)-6);
+  if(Math.abs(D.vx)>4)D.face=D.vx>0?1:-1;
+  if(D.y<34)D.b=Math.min(1,D.b+dt*.6);else D.b-=dt/DF().breath;
+  D.inv=Math.max(0,D.inv-dt);
+  for(const j of D.jel){j.y=70+Math.sin(D.t*.6+j.ph)*30+j.ph*8;j.x+=Math.sin(D.t*.3+j.ph)*8*dt;
+    if(D.inv<=0&&Math.hypot(j.x-D.x,j.y-D.y)<11){D.b-=.25;D.inv=1;sfx('bad');toast('لسعة قنديل!')}}
+  if(Math.random()<dt*3&&D.y>34)D.bub.push({x:D.x+D.face*6,y:D.y-3,t:0});
+  D.bub.forEach(b=>{b.y-=22*dt;b.t+=dt;b.x+=Math.sin(b.t*6)*.3});D.bub=D.bub.filter(b=>b.y>24);
+  D.cam=clamp(D.x-VW/2,0,D.W-VW);
+  if(D.b<=0){D.blk=1.4;sfx('bad');return}
+  if(D.pearl&&D.y<34&&!D.done){D.done=1;mode='cut';mgEl.hidden=true;sfx('ok');F.pearl=1;F.stage='ghar';save();
+    setTimeout(()=>card('بندر الغار','مع أول ضو الفجر، بان ميناء غريب.\nفوقه قلعة من حجر أسود.','انزل للميناء',()=>{goScene('ghar',18*T,15*T-4)}),400)}
+}
+function drawDiver(x,y,f,t){const P=(dx,dy,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(Math.round(x+(f>0?dx:-dx-w)),Math.round(y+dy),w,h)};
+  const k=Math.round(Math.sin(t*10)*1.5);
+  P(-14,-3+k,7,2,'#21150d');P(-14,0-k,7,2,'#21150d');P(-13,-2+k,6,1,'#8e5634');P(-13,1-k,6,1,'#8e5634');
+  P(-8,-3,4,5,'#21150d');P(-7,-2,3,3,'#f0ebe0');
+  P(-4,-4,10,6,'#21150d');P(-4,-3,9,4,'#a86c42');P(-4,1,9,1,'#7e4e2c');
+  P(4,-6,6,7,'#21150d');P(5,-5,4,5,'#a86c42');P(5,-6,4,2,'#1a1410');P(9,-3,1,1,'#1a1a1a');P(8,-4,1,1,'#1a1410');
+  P(5,0,6,2,'#21150d');P(6,0,5,1,'#a86c42');
+  P(-2,2,4,3,'#5a4a30');P(-1,3,2,1,'#8a7a50')}
+function renderDive(){const D=dive,cam=D.cam;
+  const sky=ctx.createLinearGradient(0,0,0,24);sky.addColorStop(0,'#c8786a');sky.addColorStop(1,'#f0b080');ctx.fillStyle=sky;ctx.fillRect(0,0,VW,24);
+  const wg=ctx.createLinearGradient(0,22,0,180);wg.addColorStop(0,'#3f93b8');wg.addColorStop(1,'#0b3046');ctx.fillStyle=wg;ctx.fillRect(0,22,VW,158);
+  for(let x=0;x<VW;x++){const y=22+Math.sin((x+cam)/9+D.t*2)*1.5;ctx.fillStyle='#bfe4f0';ctx.fillRect(x,Math.round(y),1,1)}
+  const bx=60-cam;ctx.fillStyle='#2a1a10';ctx.fillRect(bx-22,14,44,8);ctx.fillRect(bx-18,22,36,3);ctx.fillStyle='#5a3a1e';ctx.fillRect(bx-20,15,40,2);
+  ctx.drawImage(SH.fahd.down[0],bx-8,-6);ctx.fillStyle='#d8c8a0';ctx.fillRect(bx+10,22,1,Math.max(0,D.y-22)*(D.x<200?1:0));
+  ctx.globalCompositeOperation='lighter';for(let i=0;i<6;i++){const x0=((i*90-cam*.4+D.t*6)%(VW+120))-60;ctx.fillStyle='rgba(180,230,255,.05)';ctx.beginPath();ctx.moveTo(x0,22);ctx.lineTo(x0+22,22);ctx.lineTo(x0+70,180);ctx.lineTo(x0+40,180);ctx.closePath();ctx.fill()}ctx.globalCompositeOperation='source-over';
+  for(let i=0;i<10;i++){const fx=((i*67+D.t*(14+i%3*5))%(D.W+40))-20-cam,fy=60+(i*23)%70+Math.sin(D.t*2+i)*3;ctx.fillStyle='#9ac0cc';ctx.fillRect(fx|0,fy|0,4,2);ctx.fillRect((fx+4)|0,(fy-1)|0,1,4)}
+  for(let x=0;x<VW;x++){const wx=x+cam,h=Math.round(seabed(wx));ctx.fillStyle='#b89c6c';ctx.fillRect(x,h,1,180-h);ctx.fillStyle='#d8c08c';ctx.fillRect(x,h,1,2);if(rnd(wx,1,4)>.93){ctx.fillStyle='#8a7450';ctx.fillRect(x,h+4+(rnd(wx,2,4)*12|0),2,1)}}
+  for(let wx=10;wx<D.W;wx+=37){const x=wx-cam;if(x<-10||x>VW+10)continue;const h=seabed(wx);
+    if(rnd(wx,3,3)>.5){for(let j=0;j<12;j++){const sw=Math.round(Math.sin(D.t*1.5+wx+j*.3)*(j/4));ctx.fillStyle=j%2?'#2f6a3a':'#3f8a4a';ctx.fillRect(x+sw,h-j*2,2,2)}}
+    else{ctx.fillStyle=rnd(wx,4,4)>.5?'#d06a5a':'#e09a50';ctx.fillRect(x,h-5,6,5);ctx.fillRect(x+2,h-8,2,3);ctx.fillRect(x+5,h-7,2,2)}}
+  for(const o of D.oy){const x=Math.round(o.x-cam),y=Math.round(o.y);if(x<-10||x>VW+10)continue;
+    ctx.fillStyle='#21150d';ctx.fillRect(x-5,y-2,10,6);ctx.fillStyle='#4a4234';ctx.fillRect(x-4,y-1,8,4);ctx.fillStyle='#6a604c';ctx.fillRect(x-4,y-1,8,1);
+    if(o.open){ctx.fillStyle='#4a4234';ctx.fillRect(x-4,y-6,8,4);ctx.fillStyle='#e8e0d0';ctx.fillRect(x-3,y-1,6,2);if(o.pearl){ctx.fillStyle='#fffaf0';ctx.fillRect(x-1,y-2,3,2)}}
+    else if(Math.hypot(o.x-D.x,o.y-D.y)<16){ctx.fillStyle='#f4efe2';ctx.fillRect(x-1,y-9+(Math.floor(D.t*3)%2),2,3)}}
+  for(const j of D.jel){const x=Math.round(j.x-cam),y=Math.round(j.y);ctx.fillStyle='rgba(240,160,200,.75)';ctx.fillRect(x-4,y-3,8,4);ctx.fillRect(x-3,y-4,6,1);ctx.fillStyle='rgba(255,220,240,.9)';ctx.fillRect(x-2,y-3,2,1);
+    ctx.fillStyle='rgba(240,160,200,.55)';for(let i=0;i<4;i++)ctx.fillRect(x-3+i*2,y+1,1,4+Math.round(Math.sin(D.t*4+i)*1.5))}
+  ctx.fillStyle='rgba(220,240,255,.7)';D.bub.forEach(b=>ctx.fillRect(Math.round(b.x-cam),Math.round(b.y),2,2));
+  if(!(D.inv>0&&Math.floor(D.t*12)%2))drawDiver(D.x-cam,D.y,D.face,D.t);
+  ctx.fillStyle='#120c08';ctx.fillRect(8,30,56,8);ctx.fillStyle=D.b>.35?'#5ab0d8':'#d85a3c';ctx.fillRect(9,31,54*Math.max(0,D.b),6);ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(9,31,54*Math.max(0,D.b),1);
+  if(D.pearl){ctx.fillStyle='#120c08';ctx.fillRect(68,30,10,8);ctx.fillStyle='#fffaf0';ctx.fillRect(71,32,4,4)}
+  if(D.blk>0){ctx.fillStyle=`rgba(0,0,0,${Math.min(1,1.4-D.blk+.3)})`;ctx.fillRect(0,0,VW,VH)}
+}
+
+/* ================= CHAPTER 3 ================= */
+Object.assign(CLUES,{
+  registry:['سجل القلعة','«رجّال من الساحل — جابه سعد — ١٢ صفر — زنزانة ٧». وجنبه بخط ثاني: «مريض».'],
+  carving:['كلام أبوي الأخير','«سالم. البحر ما يطول… بس أنا طوّلت. سامحني. وكن أحسن مني.»']
+});
+function makeFort(){const W=36,H=24,m=grid(W,H,'f');
+  for(let x=0;x<W;x++){m[0][x]='W';m[1][x]='W';m[23][x]='W'}
+  for(let y=0;y<H;y++){m[y][0]='W';m[y][W-1]='W'}
+  m[23][3]='g';m[23][4]='g';
+  for(let x=1;x<W-1;x++){m[11][x]='p';m[21][x]='p'}
+  for(let y=11;y<=21;y++){m[y][17]='p';m[y][18]='p'}
+  outline(m,2,3,10,9,'W');fillR(m,3,4,9,8,'I');m[9][6]='d';m[4][4]='L';m[4][3]='B';m[8][9]='k';m[8][8]='k';
+  outline(m,24,3,33,9,'W');fillR(m,25,4,32,8,'I');m[9][28]='d';m[5][28]='K';m[5][29]='K';m[4][31]='J';m[4][25]='L';m[4][32]='c';
+  outline(m,15,13,20,17,'W');fillR(m,16,14,19,16,'I');m[17][17]='d';m[17][18]='d';m[14][17]='>';m[14][18]='>';
+  m[15][10]='u';
+  [[8,10],[26,10],[14,19],[23,19]].forEach(([x,y])=>m[y][x]='L');
+  [[3,13],[4,13],[11,18],[12,18],[20,19],[21,14],[30,14],[33,17],[14,10],[23,10],[7,22]].forEach(([x,y])=>m[y][x]='B');
+  return m}
+function makePrison(){const W=26,H=14,m=grid(W,H,'I');
+  for(let x=0;x<W;x++){m[0][x]='W';m[13][x]='W'}for(let y=0;y<H;y++){m[y][0]='W';m[y][W-1]='W'}
+  for(let y=1;y<=5;y++)for(const x of[5,10,15,20])m[y][x]='W';
+  for(let y=8;y<=12;y++)for(const x of[5,10,15,20])m[y][x]='W';
+  for(let x=1;x<W-1;x++){if(m[5][x]!=='W')m[5][x]='i';if(m[8][x]!=='W')m[8][x]='i'}
+  m[8][7]='Z';m[6][1]='<';m[7][1]='<';
+  m[5][5]='t';m[5][15]='t';m[8][10]='t';m[8][20]='t';m[5][20]='t';
+  m[7][11]='B';m[7][19]='B';
+  m[2][2]='k';m[3][17]='k';m[11][22]='k';m[11][6]='k';m[1][12]='k';m[13][8]='x';
+  return m}
+const CELLX=[[1,4],[6,9],[11,14],[16,19],[21,24]];
+function gdef(o){return Object.assign({a:Math.PI/2,wi:1,state:'patrol',sus:0,t:0,path:null,lx:0,ly:0,lost:0,pause:0,rp:0,mv:false,walk:0},o)}
+function fortGuards(){
+  if(F.escape&&!F.freed)return[gdef({wp:[[22,12],[31,12],[31,20],[22,20]],x:tc(31),y:tc(20)})];
+  return[gdef({wp:[[6,12],[13,12],[13,19],[6,19]],x:tc(6),y:tc(12)}),
+    gdef({wp:[[22,12],[31,12],[31,20],[22,20]],x:tc(31),y:tc(20)}),
+    gdef({wp:[[25,8],[31,8]],x:tc(25),y:tc(8)}),
+    gdef({sentry:true,home:[21,10],base:Math.PI*.75,range:80,x:tc(21),y:tc(10)})]}
+let trail=[];
+Object.assign(SC,{
+  fort:{w:36,h:24,make:makeFort,ground:'f',light:'night',music:'night',stealth:true,
+    npcs:()=>[{id:'mansour',name:'منصور',x:5*T,y:22*T-4,dir:'up',sh:SH.guard}],walkers:()=>[],objs:()=>[],
+    exits(){const hx=hero.x+8,hy=hero.y+12;
+      if(tileAt(tileOf(hx),tileOf(hy))==='>'){goScene('prison',2*T,7*T-4);return}
+      if(hy>23*T-2&&hx>3*T&&hx<5*T){if(!F.escape){hero.y-=8;say([[N,'(مو قبل ما أعرف وش صار لأبوي.)']]);return}endCh3()}},
+    onEnter(){guards=fortGuards();trail=[];chaseWas=false;lostT=0;
+      if(!F.fortIntro){F.fortIntro=1;setGoal('كلّم منصور عند الباب');say([[N,'قبل الفجر. الباب الخلفي لقلعة بندر الغار.'],[N,'منصور الحارس واقف ينتظر، ويتلفت.']])}
+      else if(F.escape&&F.freed)startFortAlarm(75);
+      else if(F.escape)setGoal('اطلع من الباب الخلفي. فهد شغلهم عنك');
+      else ch3Goal()}},
+  prison:{w:26,h:14,make:makePrison,ground:'I',light:'night',music:'night',stealth:true,
+    npcs:()=>[
+      ...(F.freed?[]:[{id:'fahd3c',name:'فهد',x:12*T,y:4*T-4,dir:'down',sh:SH.fahd,cell:3}]),
+      {id:'p1',name:'سجين',x:2*T,y:3*T-4,dir:'down',sh:SH.man,cell:1},
+      {id:'p5',name:'سجين',x:22*T,y:2*T-4,dir:'down',sh:SH.oldman,cell:5},
+      {id:'p9',name:'سجين',x:17*T,y:10*T-4,dir:'up',sh:SH.hamad,cell:9}],
+    walkers:()=>[],objs:()=>[],
+    exits(){if(hero.x<T+2){goScene('fort',17*T,15*T-4)}},
+    onEnter(){trail=[];chaseWas=false;lostT=0;
+      guards=(F.escape&&!F.freed)?[]:[gdef({wp:[[5,6],[23,6]],wi:0,range:62,x:tc(23),y:tc(6)})];
+      if(F.carved&&cur.map[8][7]==='Z'){cur.map[8][7]='d';cache.clear()}
+      if(!F.prisonIntro){F.prisonIntro=1;say([[N,'(درج حجر نازل للظلام. ريحة رطوبة… وصوت كحة بعيدة.)'],[N,'(سجّان يمشي في الممر بفانوس.)']])}
+      ch3Goal()}}
+});
+function ch3Goal(){if(F.escape)return setGoal('اطلع من القلعة من الباب الخلفي');
+  if(!F.mansour)return setGoal('كلّم منصور عند الباب');
+  if(!F.cell||!F.keys)return setGoal('ادخل مكتب الآمر (شمال شرق): لقى '+(!F.cell&&!F.keys?'سجل السجناء والمفاتيح':!F.cell?'سجل السجناء':'المفاتيح'));
+  if(!F.carved)return setGoal(cur&&cur.id==='prison'?(F.fahdTold?'افتح الزنزانة سبعة':'دوّر على أبوي بين الزنازين'):'انزل للسجن: الدرج في البيت الصغير وسط الساحة');
+  setGoal('ارجع لفهد في الزنزانة ثلاثة')}
+function startFortAlarm(sec){sec=Math.round(sec*DF().alarm);alarm={t:sec,max:sec};setMusic('alarm');sfx('bell');toast('السجّان شاف الزنزانة فاضية! الإنذار!');setGoal('اطلع من الباب الخلفي قبل ما يقفلون القلعة')}
+function failFort(msg){mode='cut';alarm=null;setBan(banL,'');setBan(banR,'');sfx('bad');const id=cur.id;
+  setTimeout(()=>card('انمسكت',msg+'\nحاول مرة ثانية.','حاول مرة ثانية',()=>{mode='play';
+    if(id==='prison')enterScene('prison',2*T,7*T-4);else if(F.escape)enterScene('fort',17*T,15*T-4);else enterScene('fort',3*T,22*T-4)}),300)}
+INSPECT.fort={W:'سور القلعة. حجر أسود قديم.',u:'بير.',L:'شعلة. ضوها يكشفني.',k:'أكياس.',c:'صندوق مربوط بشريطة حمرا. حتى هنا.',Q:'طاولة فاضية.',
+  '>':'درج نازل للسجن.',
+  J:()=>{F.keys=1;cur.map[4][31]='Q';cache.clear();sfx('ok');toast('لقيت: مفاتيح الزنازين');ch3Goal();return 'حلقة مفاتيح حديد ثقيلة. أخذتها وشديتها على صدري لا ترن.'},
+  K:()=>{if(F.cell)return 'سجل السجناء. زنزانة سبعة.';readRegistry();return null}};
+INSPECT.prison={W:'جدار حجر رطب.',k:'قش ناشف.',t:'شعلة على الجدار.',
+  i:(tx,ty)=>{const ci=CELLX.findIndex(([a,b])=>tx>=a&&tx<=b);if(ci<0)return null;const no=ci+1+(ty===5?0:5);const n=npcs.find(n=>n.cell===no);if(n){talk(n);return null}
+    return no===7?'زنزانة سبعة. الباب الحديد مقفول، وجوّا ظلام.':'زنزانة فاضية. ريحة رطوبة.'},
+  Z:()=>{if(!F.keys)return 'باب الزنزانة سبعة مقفول. المفاتيح عند آمر القلعة.';if(!F.cell&&!F.fahdTold)return 'أي زنزانة؟ لازم أعرف من السجل أول.';
+    cur.map[8][7]='d';cache.clear();sfx('rot');return 'جربت المفاتيح وحدة وحدة… لين انفتح القفل.'},
+  x:()=>{readCarving();return null}};
+function readRegistry(){
+  const wrong=()=>[['سالم','(لا… هذا ما يطابق اللي أعرفه. أبوي «سُلِّم» يوم ١٢ صفر، وسعد اللي سلّمه.)']];
+  say([[N,'(سجل جلد كبير. كل سطر: مين، ومين جابه، ويوم دخوله، ورقم زنزانته.)'],[N,'(أغلب الغرباء ما لهم أسامي. مكتوب عنهم «رجّال من الساحل» بس.)'],
+    {ch:[['رجّال من الساحل — جابه بو جاسم — ١٢ صفر — زنزانة ٢',wrong,''],
+         ['رجّال من الساحل — جابه سعد — ٣ محرم — زنزانة ٥',wrong,''],
+         ['رجّال من الساحل — جابه سعد — ١٢ صفر — زنزانة ٧',()=>[[N,'(هذا هو. وجنب السطر، بخط ثاني: «مريض».)'],[N,'(وبعدها كلمة… مشطوبة بالحبر.)'],{fn:()=>{F.cell=1;clue('registry');ch3Goal()}}],''],
+         ['رجّال من الساحل — جابه سعد — ١٢ ربيع — زنزانة ٩',wrong,'']]}]);
+}
+function readCarving(){setMusic('sad');say([
+  [N,'(الزنزانة ضيقة. شباك صغير فوق، وفراش قش في الزاوية.)'],
+  [N,'(على الجدار، خطوط محفورة… سبعة وأربعين خط. نفس اللي برا.)'],
+  [N,'(وتحتها نقش مركب صغير. وكلام بخط أبوي:)'],
+  ['راشد','«سالم. البحر ما يطول… بس أنا طوّلت.»'],
+  ['راشد','«سامحني. وكن أحسن مني.»'],
+  [N,'(الفراش بارد. ما أحد نام عليه من زمان.)'],
+  ['سالم','…يبه.']],()=>{F.carved=1;clue('carving');ch3Goal();save()})}
+Object.assign(TALK,{
+  mansour(){if(F.escape)return say([['منصور','بسرعة! اطلع!']]);
+    if(F.mansour)return say([['منصور','بسرعة يا ولد. الحرس يتبدل مع طلوع الشمس.']]);
+    F.mansour=1;say([['منصور','جيت؟ … تعال، بسرعة.'],['منصور','الحرس يتبدل مع طلوع الشمس. عندك لين ذاك الوقت.'],
+      ['منصور','السجن تحت الأرض. الدرج في البيت الصغير اللي وسط الساحة.'],['منصور','ومفاتيح الزنازين وسجل السجناء في مكتب الآمر، شمال شرق.'],
+      ['منصور','الحارس اللي فوق السور يطالع الساحة، والثاني يدور داخل المكتب.'],['منصور','وأنا… ما شفتك.']],()=>ch3Goal())},
+  p1(){say([['سجين','ماي… عندك ماي؟']])},
+  p5(){say([['سجين','لا تطالعني كذا يا ولد. كلنا بننسى هنا.']])},
+  p9(){say([['سجين','الرجّال اللي في السبعة… كان يغني كل ليلة لولده.'],['سجين','من أسبوعين… سكت.']])},
+  fahd3c(){
+    if(F.escape)return say([['فهد','روح يا سالم! روح!']]);
+    if(!F.fahdTalk){F.fahdTalk=1;return say([['فهد','سالم؟! … ليش جيت؟ قلت لك في الرسالة…'],['سالم','وين أبوي يا فهد؟'],[N,'(فهد يمسك القضبان، وما يرفع عينه.)'],
+      ['فهد','روح للزنزانة سبعة.'],['فهد','لازم تشوفها بعينك. أنا… ما أقدر أقولها.']],()=>{F.fahdTold=1;ch3Goal()})}
+    if(!F.carved)return say([['فهد','الزنزانة سبعة يا سالم.']]);
+    say([[N,'(ترجع لفهد. ما تقدر تتكلم.)'],
+      ['فهد','مات قبل أسبوعين. الكحة… وما أحد عالجه.'],
+      ['فهد','السجّان قال لي البارحة. جيت أبدّل نفسي فيه… ووصلت متأخر.'],
+      ['فهد','كل يوم كان يحفر خط. ويغني لك.'],
+      {ch:[['أنت السبب.',()=>[['فهد','أدري. وبعيش فيها لين أموت.']],''],['(تسكت)',()=>[[N,'(السكوت أثقل من أي كلام.)']],'']]},
+      ['فهد','خلني هنا. هذا مكاني. روح قبل يتبدل الحرس.'],
+      [N,'(في يدك مفاتيح الزنازين.)'],
+      {ch:[['(افتح زنزانة فهد) «قوم. بتقول كل شي قدام الناس.»',()=>{F.freed=1;return[[N,'(يطالعك فهد طويل. وبعدين يقوم.)'],['فهد','بقول كل شي. والله بقول كل شي.']]},'قرار:'],
+           ['(اتركه) «…ابقَ.»',()=>{F.freed=0;return[['فهد','روح يا سالم. وأنا بشغلهم عنك.'],[N,'(يبدأ فهد يضرب القضبان ويصارخ. السجّان يركض له.)']]},'قرار:']]},
+      {fn:()=>{F.escape=1;if(F.freed){npcs=npcs.filter(n=>n.id!=='fahd3c');trail=[];sfx('rot')}else guards=[];setMusic('night');ch3Goal();save()}}]);
+  },
+  gran3(){say([['جدتي','سالم!'],[N,'(تشوف وجهك… وتعرف.)'],[N,'(تطلّع الخاتم من جيبك، وتحطه في يدها.)'],['جدتي','…رجّعته.'],
+    ['سالم','كتب لي على الجدار يا يمّه. قال: كن أحسن مني.'],[N,'(تضمك جدتك. وما تقول شي لفترة طويلة.)'],['جدتي','وأنت بتكون.']],()=>startFinale())},
+  abu3(){say([['أبو خليل','الله يرحمه يا سالم. كان رجّال… والله كان رجّال.']])},
+  fahd3(){say([['فهد','بكرة أوقف قدام رجال الإمارة، وأقول كل شي. حتى اللي يخصني.']])}
+});
+function endCh3(){mode='cut';alarm=null;setBan(banL,'');setMusic('sad');F.stage='end';save();
+  setTimeout(()=>card('الرجوع',F.freed?'منصور فتح الباب الخلفي، وصيّاد من بندر الغار رجّعكم للساحل.\nفهد طول الطريق ما تكلم.':'منصور فتح الباب الخلفي، وصيّاد من بندر الغار رجّعك للساحل.\nوصوت فهد وهو يصارخ… للحين في أذنك.','كمّل',()=>goScene('port',12*T,5*T)),400)}
+/* ---------- finale: walk to the pier and sit ---------- */
+let finale=null;
+function startFinale(){mode='cut';setGoal('');keys.up=keys.down=keys.left=keys.right=0;
+  const path=bfs(tileOf(hero.x+8),tileOf(hero.y+12),15,15)||[];path.push([15*T+5,16*T+8]);
+  finale={path,phase:'walk',t:0,bars:0};setMusic('sad')}
+function updFinale(dt){const f=finale;f.t+=dt;f.bars=Math.min(1,f.bars+dt*.8);
+  if(f.phase==='walk'){
+    if(!f.path.length){hero.moving=false;hero.walk=0;hero.sit=1;hero.dir='left';f.phase='sit';f.t=0;return}
+    const[tx,ty]=f.path[0],cx=hero.x+8,cy=hero.y+12,dx=tx-cx,dy=ty-cy,d=Math.hypot(dx,dy);
+    if(d<1.5){f.path.shift();return}
+    const sp=Math.min(d,38*dt);hero.x+=dx/d*sp;hero.y+=dy/d*sp;
+    hero.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');hero.moving=true;hero.walk+=dt*6;return}
+  if(f.phase==='sit'&&f.t>2.2){f.phase='talk';
+    const lines=F.freed?[
+      [N,'(الشمس تنزل في البحر. والموج يضرب خشب الرصيف بهدوء.)'],
+      ['سالم','يبه…'],
+      ['سالم','الرجّال اللي ربط يدينك… أنا اللي فكّيت يدينه.'],
+      ['سالم','قلت لي كن أحسن مني.'],
+      ['سالم','…ما قلت لي إنها بتوجع كذا.']]:[
+      [N,'(الشمس تنزل في البحر. والموج يضرب خشب الرصيف بهدوء.)'],
+      ['سالم','يبه…'],
+      ['سالم','تركته هناك. في نفس المكان اللي تركوك فيه.'],
+      ['سالم','قلت لي كن أحسن مني…'],
+      ['سالم','…وأنا صرت أشبههم شوي.']];
+    say(lines,()=>{mode='cut';finale.phase='quiet';finale.t=0});return}
+  if(f.phase==='quiet'&&f.t>2.5){f.phase='fade';f.t=0;return}
+  if(f.phase==='fade'){fadeA=Math.min(1,f.t/3);if(f.t>3.4){f.phase='done';endGame()}}
+}
+function endGame(){mode='cut';F.done3=1;save();
+  const ep=F.freed?'في اليوم الثاني، وقف فهد قدام رجال الإمارة وقال كل شي.\nسعد انمسك وهو يحاول يهرب بمركبه.\n\nوسالم… صار يطلع البحر كل فجر مع أبو خليل.\nوعلى صدر مركبه الصغير، نقش مركب صغير.'
+    :'فهد ما رجع من بندر الغار.\nبس الدفتر وصل لرجال الإمارة… وسعد هرب بمركبه قبل الفجر، ومحد شافه بعدها.\n\nوسالم… صار يطلع البحر كل فجر مع أبو خليل.\nوعلى صدر مركبه الصغير، نقش مركب صغير.';
+  setTimeout(()=>cineEpilogue(ep.split('\n'),cineEnd),600)}
+function cineEpilogue(lines,next){mode='card';const o=$('cine');o.innerHTML='';
+  const box=document.createElement('div');box.className='cineLines';let d=.9;
+  lines.forEach(l=>{const q=document.createElement('p');q.textContent=l||'\u00a0';q.style.animationDelay=d+'s';d+=l?1.7:.7;box.appendChild(q)});
+  o.appendChild(box);const b=document.createElement('button');b.className='btn ghost cineB';b.type='button';b.textContent='كمّل';b.style.animationDelay=(d+.4)+'s';b.onclick=next;o.appendChild(b);o.hidden=false;setTimeout(()=>b.focus(),(d+1)*1000)}
+function cineEnd(){const o=$('cine');
+  o.innerHTML='<div class="cineT">النهاية</div><div class="cineLine"></div><div class="cineSub">ميناء ١٩٦٠</div><div class="studioMark cineS"><span>من استوديو</span><b>قرطاس</b></div>'+(F.pt?'<div class="cineTime">مدة الفصل الثالث: '+fmtT(F.pt)+'</div>':'')+'<div class="cineBtns"><button class="btn cineB" id="cineAgain" type="button">ابدأ من جديد</button><button class="btn ghost cineB" id="cineMenu" type="button">العودة للقائمة الرئيسية</button></div>';
+  $('cineAgain').onclick=()=>{clearSave();resetRuntime();cur=null;openMenu('mDiff',['mMain'])};
+  $('cineMenu').onclick=()=>{clearSave();resetRuntime();cur=null;openMenu('mMain')};
+  if(soundOn&&ensureAudio()){setMusic('none');const t=ac.currentTime+.8;[45,52,57,64].forEach((n,i)=>note(hz(n),t+i*.12,5.5,'sine',.05,sfxG))}
+}
+function startCh3(){unlock(3);
+  const keep=clues.filter(c=>['ledger','ring','marks','letter','song'].includes(c));clues=keep;F={ch:3,stage:'fort'};
+  $('chTag').textContent='الفصل الثالث · القلعة';
+  card('الفصل الثالث','القلعة','ابدأ',()=>{mode='play';enterScene('fort',3*T,22*T-4)});
+}
+
+/* ================= update ================= */
 function update(dt){
-  tick+=dt;
-  if(mode==='talk'&&shown<full.length){const prev=shown;shown=Math.min(full.length,shown+dt*38);if((shown|0)!==(prev|0)){txt.textContent=full.slice(0,shown|0);if((shown|0)%2===0)blip()}if(shown>=full.length)more.hidden=false}
+  tick+=dt;if(mode==='menu'||mode==='pause')return;if(mode!=='title'&&mode!=='card'&&F){F.pt=(F.pt||0)+dt}
+  if(fadeDir){fadeA=clamp(fadeA+fadeDir*dt*3,0,1);if(fadeA>=1&&fadeDir>0){const f=fadeCb;fadeCb=null;fadeDir=0;f&&f()}if(fadeA<=0&&fadeDir<0)fadeDir=0}
+  if(toastT>0){toastT-=dt;if(toastT<=0)toastEl.hidden=true}
+  if(mode==='talk'&&shown<full.length){const p=shown;shown=Math.min(full.length,shown+dt*TEXTSP[SET.text]);if((shown|0)!==(p|0)){txt.textContent=full.slice(0,shown|0);if((shown|0)%2===0)blip()}if(shown>=full.length)more.hidden=false}
+  if(mode==='fish'&&fish){updFish(dt);return}
+  if(mode==='sea'&&sea){updSea(dt);return}
+  if(mode==='dive'&&dive){updDive(dt);return}
+  if(mode==='stars'&&stars){updStars(dt);return}
+  if(!cur)return;
+  for(const w of walkers){
+    if(mode!=='play'){w.walk=0;continue}
+    if(w.p>0){w.p-=dt;w.walk=0;continue}
+    const tx=(w.to?w.b[0]:w.a[0])*T,ty=(w.to?w.b[1]:w.a[1])*T-4,dx=tx-w.x,dy=ty-w.y,d=Math.hypot(dx,dy);
+    if(d<1){w.to^=1;w.p=1+Math.random()*1.5;continue}
+    const s=Math.min(d,20*dt);w.x+=dx/d*s;w.y+=dy/d*s;w.dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');w.walk+=dt*6}
+  if(finale&&finale.phase!=='done'){updFinale(dt);return}
   if(mode!=='play'){hero.moving=false;return}
   let mx=keys.right-keys.left,my=keys.down-keys.up;
+  if(hero.hidden&&(mx||my))hero.hidden=false;
   if(mx||my){
     if(Math.abs(mx)>=Math.abs(my)&&mx)hero.dir=mx>0?'right':'left';else if(my)hero.dir=my>0?'down':'up';
-    const l=Math.hypot(mx,my),sp=82*dt;mx=mx/l*sp;my=my/l*sp;
-    if(!blocked(hero.x+mx,hero.y))hero.x+=mx;
-    if(!blocked(hero.x,hero.y+my))hero.y+=my;
-    hero.walk+=dt*8;hero.moving=true;
+    const l=Math.hypot(mx,my),sp=HSP*dt;mx=mx/l*sp;my=my/l*sp;
+    if(!blocked(hero.x+mx,hero.y))hero.x+=mx;else if(mx&&!my)slide('y',mx,sp);
+    if(!blocked(hero.x,hero.y+my))hero.y+=my;else if(my&&!mx)slide('x',my,sp);
+    hero.walk+=dt*9;hero.moving=true;
   }else{hero.moving=false;hero.walk=0}
+  if(F.tailing&&cur.id==='market'){updTail(dt);if(mode!=='play')return}
+  if(F.freed&&(cur.id==='fort'||cur.id==='prison')&&hero.moving){trail.push({x:hero.x,y:hero.y,dir:hero.dir});if(trail.length>240)trail.shift()}
+  if(cur.stealth){
+    updGuards(dt);if(mode!=='play')return;
+    if(alarm){alarm.t-=dt;if(alarm.t<=0){if(cur.id==='ware')failNight('وصلت التعزيزات قبل ما تطلع.\nارجع وحاول مرة ثانية.');else failFort('القلعة كلها صحت وانقفل الباب قبل ما توصل.');return}}
+    if(lostT>0)lostT-=dt;
+    const chasing=guards.some(g=>g.state==='chase');
+    let t='';
+    if(alarm){const s=Math.ceil(alarm.t);t=(cur.id==='ware'?'الإنذار! المخارج مقفلة\nدوّر طريق ثاني قبل التعزيزات · ':'الإنذار! القلعة صحت\nاطلع من الباب الخلفي · ')+Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+    if(chasing)t=(t?t+'\n':'')+'انكشفت! يمديك تهرب\nاقطع نظرهم عنك أو تخبّى';
+    if(t)setBan(banL,t,'alert');else if(lostT>0)setBan(banL,'ضيّعتهم… بس صاروا منتبهين أكثر','calm');else setBan(banL,'');
+  }
+  cur.exits&&cur.exits();
 }
 
-/* ---------- render ---------- */
+/* ================= render ================= */
+const[dk,dg]=cnv(VW,VH);
+function drawGlyph(x,y,ch,col){ctx.fillStyle='#120c08';if(ch==='!'){ctx.fillRect(x-2,y-1,5,10);ctx.fillStyle=col;ctx.fillRect(x-1,y,3,5);ctx.fillRect(x-1,y+6,3,2)}else{ctx.fillRect(x-3,y-1,7,10);ctx.fillStyle=col;ctx.fillRect(x-2,y,5,1);ctx.fillRect(x+1,y+1,2,2);ctx.fillRect(x,y+3,2,2);ctx.fillRect(x,y+6,2,2)}}
+function drawCone(g){if(diffK==='nightmare'&&g.state==='patrol'&&!(g.sus>0))return;const R=gRange(g),n=18;ctx.beginPath();ctx.moveTo(g.x-camX,g.y-camY);
+  for(let i=0;i<=n;i++){const a=g.a-FOV+2*FOV*i/n;let d=0;while(d<R){d+=3;if(LOSB.has(tileAtPx(g.x+Math.cos(a)*d,g.y+Math.sin(a)*d)))break}ctx.lineTo(g.x+Math.cos(a)*d-camX,g.y+Math.sin(a)*d-camY)}
+  ctx.closePath();ctx.fillStyle=g.tail?(g.state==='suspect'?'rgba(230,70,30,.3)':'rgba(200,70,30,.17)'):g.state==='chase'?'rgba(255,80,60,.2)':g.state==='suspect'?'rgba(255,200,80,.2)':'rgba(255,235,160,.11)';ctx.fill()}
+function renderWorld(){
+  const s=cur,W=s.w*T,H=s.h*T;
+  camX=W<VW?-Math.round((VW-W)/2):Math.round(clamp(hero.x+8-VW/2,0,W-VW));camY=H<VH?-Math.round((VH-H)/2):Math.round(clamp(hero.y+8-VH/2,0,H-VH));
+  if(W<VW||H<VH){ctx.fillStyle='#120c08';ctx.fillRect(0,0,VW,VH)}
+  const f=Math.floor(tick*2)%2,x0=Math.floor(camX/T),y0=Math.floor(camY/T);
+  for(let y=Math.max(0,y0);y<=y0+Math.ceil(VH/T);y++)for(let x=Math.max(0,x0);x<=x0+Math.ceil(VW/T);x++)if(x<s.w&&y<s.h)ctx.drawImage(tileImg(s.map[y][x],x,y,f),x*T-camX,y*T-camY);
+  if(s.id==='port')for(let y=15;y<s.h;y++){ctx.fillStyle='rgba(20,40,50,.45)';ctx.fillRect(15*T-camX-1,y*T-camY+2,1,12);ctx.fillRect(17*T-camX,y*T-camY+2,1,12)}
+  for(const o of talls){if(o.img===palm){ctx.fillStyle='rgba(40,25,10,.18)';ctx.fillRect(o.x+4-camX,o.by-1-camY,26,3);ctx.fillRect(o.x+8-camX,o.by-2-camY,18,1)}}
+  if(s.id==='market')for(const o of objs){ctx.fillStyle='rgba(60,30,10,.22)';ctx.fillRect(o.x+2-camX,o.by+1-camY,46,3)}
+  const L=[];
+  for(const o of talls)L.push({by:o.by,d:()=>ctx.drawImage(o.img,o.x-camX,o.y-camY)});
+  for(const o of objs)L.push({by:o.by,d:()=>ctx.drawImage(o.img,o.x-camX,o.y-camY+(o.bob?Math.round(Math.sin(tick*1.6)):0))});
+  const shadow=(x,y)=>{ctx.fillStyle='rgba(30,20,10,.25)';ctx.fillRect(x+4-camX,y+15-camY,8,2)};
+  if(F.freed&&F.escape&&(s.id==='fort'||s.id==='prison')){const q=trail[Math.max(0,trail.length-16)]||{x:hero.x-12,y:hero.y,dir:hero.dir};L.push({by:q.y+15,d:()=>{shadow(q.x,q.y);ctx.drawImage(SH.fahd[q.dir][hero.moving?Math.floor(hero.walk+2)%4:0],Math.round(q.x)-camX,Math.round(q.y)-camY-8)}})}
+  for(const n of npcs)L.push({by:n.y+15,d:()=>{shadow(n.x,n.y);ctx.drawImage(n.sh[n.dir][0],Math.round(n.x)-camX,Math.round(n.y)-camY-8)}});
+  for(const w of walkers)L.push({by:w.y+15,d:()=>{shadow(w.x,w.y);ctx.drawImage(w.sh[w.dir][w.walk?Math.floor(w.walk)%4:0],Math.round(w.x)-camX,Math.round(w.y)-camY-8)}});
+  for(const g of guards)L.push({by:g.y+2,d:()=>{const sh=g.chief?SH.chief:SH.guard,fr=g.mv?Math.floor(g.t*8)%4:0;shadow(g.x-8,g.y-13);ctx.drawImage(sh[dirOf(g.a)][fr],Math.round(g.x-8)-camX,Math.round(g.y-21)-camY);const lx=dirOf(g.a)==='left'?-6:5;if(cur.light==='night'){ctx.fillStyle='#2a1e14';ctx.fillRect(Math.round(g.x+lx)-camX,Math.round(g.y-6)-camY,3,5);ctx.fillStyle='#ffd27a';ctx.fillRect(Math.round(g.x+lx)-camX+1,Math.round(g.y-5)-camY,1,3)}}});
+  L.push({by:hero.y+15,d:()=>{const fi=hero.moving?(Math.floor(hero.walk)%4):0,bob=hero.moving&&fi%2?1:0;
+    if(hero.sit){const hx=Math.round(hero.x)-camX,hy=Math.round(hero.y)-camY;ctx.drawImage(SH.hero.left[0],0,0,16,17,hx,hy-3,16,17);ctx.fillStyle='#21150d';ctx.fillRect(hx+2,hy+14,6,4);ctx.fillStyle='#c4baa2';ctx.fillRect(hx+3,hy+14,4,2);ctx.fillStyle='#c98a5a';ctx.fillRect(hx+3,hy+16,1,3+Math.round(Math.sin(tick*1.5)));ctx.fillRect(hx+6,hy+16,1,3+Math.round(Math.sin(tick*1.5+1)));return}
+    if(hero.hidden)ctx.globalAlpha=.45;shadow(Math.round(hero.x),Math.round(hero.y));ctx.drawImage(SH.hero[hero.dir][fi],Math.round(hero.x)-camX,Math.round(hero.y)-camY-8-bob);ctx.globalAlpha=1}});
+  L.sort((a,b)=>a.by-b.by).forEach(o=>o.d());
+  ambience(s);
+  if(s.light==='night'){
+    const lights=lamps.map(l=>({x:l.x-camX,y:l.y-camY,r:60+Math.sin(tick*7+l.x)*2,warm:1}));
+    for(const g of guards)lights.push({x:g.x+4-camX,y:g.y-2-camY,r:28,warm:1});
+    lights.push({x:hero.x+8-camX,y:hero.y+10-camY,r:24});
+    dg.globalCompositeOperation='source-over';dg.clearRect(0,0,VW,VH);dg.fillStyle=alarm?'rgba(24,6,10,.8)':'rgba(6,12,32,.78)';dg.fillRect(0,0,VW,VH);
+    dg.globalCompositeOperation='destination-out';
+    for(const l of lights){const gr=dg.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r);gr.addColorStop(0,'rgba(0,0,0,1)');gr.addColorStop(.55,'rgba(0,0,0,.7)');gr.addColorStop(1,'rgba(0,0,0,0)');dg.fillStyle=gr;dg.fillRect(l.x-l.r,l.y-l.r,l.r*2,l.r*2)}
+    ctx.drawImage(dk,0,0);
+    ctx.globalCompositeOperation='lighter';
+    for(const l of lights){if(!l.warm)continue;const gr=ctx.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r*.7);gr.addColorStop(0,'rgba(255,160,60,.16)');gr.addColorStop(1,'rgba(255,160,60,0)');ctx.fillStyle=gr;ctx.fillRect(l.x-l.r,l.y-l.r,l.r*2,l.r*2)}
+    ctx.globalCompositeOperation='source-over';
+    for(const g of guards)drawCone(g);
+    for(const g of guards){const gx=Math.round(g.x)-camX,gy=Math.round(g.y-32)-camY;
+      if(g.state==='chase')drawGlyph(gx,gy,'!','#ff5a3c');
+      else if(g.state==='suspect'||g.state==='search'){drawGlyph(gx,gy,'?','#ffd04a');if(g.sus>0){ctx.fillStyle='#120c08';ctx.fillRect(gx-7,gy-5,14,3);ctx.fillStyle='#ffd04a';ctx.fillRect(gx-6,gy-4,12*g.sus,1)}}}
+    if(alarm){ctx.fillStyle=`rgba(200,30,20,${.08+.06*Math.sin(tick*8)})`;ctx.fillRect(0,0,VW,VH)}
+  }else{
+    for(const g of guards){drawCone(g);if(g.sus>0){const gx=Math.round(g.x)-camX,gy=Math.round(g.y-32)-camY;drawGlyph(gx,gy,'?','#ffd04a');ctx.fillStyle='#120c08';ctx.fillRect(gx-7,gy-5,14,3);ctx.fillStyle='#ffd04a';ctx.fillRect(gx-6,gy-4,12*g.sus,1)}}
+    if(s.light==='indoor'){ctx.fillStyle='rgba(40,20,0,.18)';ctx.fillRect(0,0,VW,VH);ctx.globalCompositeOperation='lighter';for(const wx of[9,11]){const gr=ctx.createLinearGradient(0,2*T-camY,0,7*T-camY);gr.addColorStop(0,'rgba(255,220,150,.22)');gr.addColorStop(1,'rgba(255,220,150,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(wx*T-camX,2*T-camY);ctx.lineTo(wx*T+16-camX,2*T-camY);ctx.lineTo(wx*T+30-camX,7*T-camY);ctx.lineTo(wx*T+8-camX,7*T-camY);ctx.closePath();ctx.fill()}ctx.globalCompositeOperation='source-over'}else
+    ctx.fillStyle=s.light==='sunset'?'rgba(255,110,40,.13)':s.light==='dawn'?'rgba(255,130,140,.12)':'rgba(255,170,80,.05)';ctx.fillRect(0,0,VW,VH);
+  }
+  if(mode==='play'){
+    const near=[...npcs,...walkers].find(n=>Math.hypot(n.x-hero.x,n.y-hero.y)<22);
+    if(near){const bx=Math.round(near.x)+6-camX,by=Math.round(near.y)-17-camY+(Math.floor(tick*3)%2);ctx.fillStyle='#2b1d14';ctx.fillRect(bx-1,by-1,6,7);ctx.fillStyle='#f4efe2';ctx.fillRect(bx,by,4,5);ctx.fillStyle='#2b1d14';ctx.fillRect(bx+1,by+1,2,1);ctx.fillRect(bx+1,by+3,2,1)}
+  }
+}
+const gulls=[0,1,2].map(i=>({x:i*190,y:60+i*50,v:14+i*4,ph:i*2}));
+function ambience(s){
+  if(s.id==='port'){for(const b of gulls){b.x+=b.v/60;if(b.x>s.w*T+20)b.x=-20;const x=Math.round(b.x)-camX,y=Math.round(b.y+Math.sin(tick*1.3+b.ph)*6)-camY;const up=Math.floor(tick*5+b.ph)%2;
+    ctx.fillStyle='rgba(30,40,50,.18)';ctx.fillRect(x+2,y+30,5,1);
+    ctx.fillStyle='#2b2b30';ctx.fillRect(x+3,y+1,3,2);ctx.fillStyle='#f4f4f0';ctx.fillRect(x+4,y+1,1,1);
+    if(up){ctx.fillStyle='#e8e8e4';ctx.fillRect(x,y-1,3,1);ctx.fillRect(x+6,y-1,3,1);ctx.fillStyle='#2b2b30';ctx.fillRect(x,y-2,1,1);ctx.fillRect(x+8,y-2,1,1)}
+    else{ctx.fillStyle='#e8e8e4';ctx.fillRect(x,y+2,3,1);ctx.fillRect(x+6,y+2,3,1)}}}
+  if(s.id==='market'){
+    const cols=['#b8322a','#e0b040','#2f6a44','#3a6ab8','#e8dcc0'];
+    for(const yy of[7*T-6,11*T-2]){const y0=yy-camY;
+      for(let x=-camX%6-6;x<VW+6;x+=6){const wx=x+camX,sag=Math.sin((wx%96)/96*Math.PI)*5;const y=Math.round(y0+sag);ctx.fillStyle='#3a2616';ctx.fillRect(x,y,6,1);
+        const c=cols[Math.abs(Math.floor(wx/6))%cols.length];ctx.fillStyle=c;ctx.fillRect(x+1,y+1,4,1);ctx.fillRect(x+2,y+2,2,1);ctx.fillRect(x+2,y+3,1,1)}}
+    ctx.fillStyle='rgba(255,230,170,.55)';for(let i=0;i<14;i++){const x=((i*53+tick*(6+i%3))%VW+VW)%VW,y=(i*37+Math.sin(tick*.7+i)*10+VH)%VH;ctx.fillRect(x|0,y|0,1,1)}}
+  if(s.id==='ware'){ctx.fillStyle='rgba(255,240,200,.8)';for(const l of lamps){for(let i=0;i<2;i++){const a=tick*(3+i)+l.x;ctx.fillRect(Math.round(l.x+Math.cos(a)*7)-camX,Math.round(l.y-8+Math.sin(a*1.3)*5)-camY,1,1)}}}
+}
 function render(){
-  const camX=Math.round(Math.max(0,Math.min(MW*T-VW,hero.x+8-VW/2))),camY=Math.round(Math.max(0,Math.min(MH*T-VH,hero.y+8-VH/2)));
-  const f=Math.floor(tick*2)%2;
-  const x0=Math.floor(camX/T),y0=Math.floor(camY/T);
-  for(let y=y0;y<=y0+Math.ceil(VH/T);y++)for(let x=x0;x<=x0+Math.ceil(VW/T);x++){if(x<MW&&y<MH)ctx.drawImage(tileImg(map[y][x],x,y,f),x*T-camX,y*T-camY)}
-  // dock posts in water
-  for(let y=15;y<MH;y++){ctx.fillStyle='rgba(20,40,50,.45)';ctx.fillRect(15*T-camX-1,y*T-camY+2,1,12);ctx.fillRect(17*T-camX,y*T-camY+2,1,12)}
-  const objs=[];
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y][x]==='P')objs.push({by:y*T+15,draw:()=>ctx.drawImage(palm,x*T-9-camX,y*T+16-44-camY)});
-  objs.push({by:19*T,draw:()=>{const bob=Math.round(Math.sin(tick*1.6));ctx.drawImage(boat,17*T+8-camX,16*T-44-camY+bob)}});
-  const shadow=(x,y)=>{ctx.fillStyle='rgba(40,25,10,.25)';ctx.fillRect(x+4-camX,y+15-camY,8,2)};
-  NPCS.forEach(n=>objs.push({by:n.y+15,draw:()=>{shadow(n.x,n.y);const idle=Math.floor(tick*1.2+n.x)%2;ctx.drawImage(n.sh[n.dir][0],Math.round(n.x)-camX,Math.round(n.y)-camY-(idle&&n.id!=='gran'?0:0))}}));
-  objs.push({by:hero.y+15,draw:()=>{const fi=hero.moving?(Math.floor(hero.walk)%4):0,bob=hero.moving&&fi%2?1:0;shadow(Math.round(hero.x),Math.round(hero.y));ctx.drawImage(SH.hero[hero.dir][fi],Math.round(hero.x)-camX,Math.round(hero.y)-camY-bob)}});
-  objs.sort((a,b)=>a.by-b.by).forEach(o=>o.draw());
-  // talk hint
-  if(mode==='play'){for(const n of NPCS){if(Math.hypot(n.x-hero.x,n.y-hero.y)<22){const bx=Math.round(n.x)+6-camX,by=Math.round(n.y)-8-camY+(Math.floor(tick*3)%2);ctx.fillStyle='#2b1d14';ctx.fillRect(bx-1,by-1,6,7);ctx.fillStyle='#f4efe2';ctx.fillRect(bx,by,4,5);ctx.fillStyle='#2b1d14';ctx.fillRect(bx+1,by+1,2,1);ctx.fillRect(bx+1,by+3,2,1)}}}
-  // warm late-summer tint
-  ctx.fillStyle='rgba(255,170,80,.06)';ctx.fillRect(0,0,VW,VH);
+  if(view==='menu')renderMenu();
+  else if(view==='interrog')renderInterrog();
+  else if(view==='fish'&&fish)renderFish();
+  else if(view==='sea'&&sea)renderSea();
+  else if(view==='dive'&&dive)renderDive();
+  else if(view==='stars'&&stars)renderStars();
+  else if(cur)renderWorld();
+  else{ctx.fillStyle='#0e1a22';ctx.fillRect(0,0,VW,VH)}
+  if(finale&&view==='world'){const k=finale.bars;ctx.fillStyle=`rgba(255,110,50,${.16*k})`;ctx.fillRect(0,0,VW,VH);ctx.globalCompositeOperation='lighter';for(let i=0;i<26;i++){const yy=Math.round(15*T-camY+8+i*5),w=Math.max(2,18-i*.5),xx=Math.round(6*T-camX+Math.sin(tick*2+i*1.7)*6-w/2);ctx.fillStyle=`rgba(255,190,90,${(.35-i*.011)*k})`;ctx.fillRect(xx,yy,w,1)}ctx.globalCompositeOperation='source-over'}
+  if(finale){const h=Math.round(18*finale.bars);ctx.fillStyle='#000';ctx.fillRect(0,0,VW,h);ctx.fillRect(0,VH-h,VW,h)}
+  if(fadeA>0){ctx.fillStyle=`rgba(0,0,0,${fadeA})`;ctx.fillRect(0,0,VW,VH)}
 }
 let last=performance.now();
 function loop(t){const dt=Math.min(.05,(t-last)/1000);last=t;update(dt);render();requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 
-/* ---------- flow ---------- */
-const start=document.getElementById('start'),end=document.getElementById('end');
-function begin(){
-  Object.keys(flags).forEach(k=>flags[k]=false);
-  hero.x=12*T;hero.y=4*T+4;hero.dir='down';NPCS[0].dir='down';NPCS[1].dir='right';NPCS[2].dir='left';
-  start.hidden=true;end.hidden=true;setGoal('');
-  say([[N,'صيف ١٩٦٠. ميناء صغير على ساحل الشرقية.'],[N,'صار له أربعين يوم… كل المراكب رجعت من السفر، إلا مركب واحد.'],[N,'وكان فيه راشد، أبو سالم.']],()=>{setGoal('كلّم جدتك عند باب البيت');startMusic()});
+/* ================= backlog & story recap ================= */
+let LOG=[];
+function logLine(n,t){if(!t)return;LOG.push([n||'',t]);if(LOG.length>400)LOG.shift()}
+const RECAP1=[
+  ['gran','سالم سأل جدته عن أبوه راشد. كل المراكب رجعت من السفر إلا مركبه.'],
+  ['saad','العم سعد قال إنه شاف راشد في البحرين… وبعدين غيّرها لمسقط. وكان يتهرّب.'],
+  ['@north','ولد الجيران شاف المركب يوم طلع: لف ناحية الشمال، مو ناحية مسقط.'],
+  ['fahd','فهد انكشف بالدليل، واعترف إن المركب ما وصل مسقط. ودلّ سالم على أبو خليل في السوق.'],
+  ['note','أبو خليل عطاه ورقة أبوه المقطّعة: «سعد يحمّل صناديق في مستودعه كل ليلة خميس. لو ما رجعت، الدليل في مكتبه.»'],
+  ['hamad','حمد بياع السمك قال إن رجال سعد يشيلون صناديق ثقيلة للمستودع كل خميس.'],
+  ['tail','سالم لحق واحد من رجال سعد من السوق لين المستودع.'],
+  ['night','وفي الليل، تسلل للمستودع.'],
+  ['done','في مكتب سعد لقى الدفتر: «راشد — سُلِّم في بندر الغار». و«فهد — نصيبه ٢٠٠ ريال».']];
+const RECAP2=[
+  ['g2','جدته عطته خاتم أبوه، وقالت: «إذا ما لقيته… رجّعه لي».'],
+  ['s2','العم سعد وقّفه وحقق معه عن الدفتر اللي انسرق.'],
+  ['f2','فهد اعترف إنه كان مع رجال سعد، وإن راشد اكتشف وش في الصناديق وقرر يبلّغ.'],
+  ['oarsDone','سالم استرجع مجاديف هوري فهد من مركب سعد.'],
+  ['@stage:sea','وطلعوا بالليل للبحر، بين الصخور ودوريات سعد والعاصفة.'],
+  ['pearl','وقفوا عند جزيرة، وغاص سالم وطلّع لؤلؤة.'],
+  ['gharSeen','ووصلوا بندر الغار، ميناء غريب فوقه قلعة سودا.'],
+  ['marks','تحت شباك في القلعة لقى ٤٧ خط محفور… وبعدها حرف «س».'],
+  ['fortDone','حارس القلعة عرف خاتم أبوه، وقال: «تعال الفجر عند الباب الخلفي».'],
+  ['done2','لما رجع للرصيف، فهد كان مختفي، وترك رسالة: «أنا اللي ربطت يدين أبوك. أنا اللي سلّمته».']];
+const RECAP3=[
+  ['mansour','منصور الحارس دخّله القلعة قبل الفجر.'],
+  ['cell','في سجل السجناء لقى سطر أبوه: زنزانة ٧. وجنبه: «مريض».'],
+  ['fahdTalk','في السجن لقى فهد ورا القضبان. سلّم نفسه بدال راشد.'],
+  ['carved','في الزنزانة سبعة، على الجدار: «سالم. البحر ما يطول… بس أنا طوّلت. سامحني. وكن أحسن مني.»'],
+  ['escape','فهد قال له الحقيقة: أبوه مات قبل أسبوعين.']];
+function recapSections(Fx,cl){const has=(k)=>k[0]==='@'?(k.startsWith('@stage:')?['sea','dive','ghar'].includes(Fx.stage)||Fx.pearl:cl.includes(k.slice(1))):!!Fx[k];
+  const ch=Fx.ch||1,out=[];
+  const sec=(title,list,all)=>{const items=list.filter(([k])=>all||has(k)).map(x=>x[1]);if(items.length)out.push([title,items])};
+  sec('الفصل الأول · الشرايط الحمرا',RECAP1,ch>1);
+  if(ch>=2)sec('الفصل الثاني · الطريق إلى بندر الغار',RECAP2,ch>2);
+  if(ch>=3){sec('الفصل الثالث · القلعة',RECAP3,false);if(Fx.escape)out[out.length-1][1].push(Fx.freed?'وسالم فتح زنزانة فهد. «بتقول كل شي قدام الناس.»':'وسالم ترك فهد في زنزانته.')}
+  return out}
+function fillRecap(Fx,cl){const box=$('recapBox');box.innerHTML='';const secs=recapSections(Fx||{},cl||[]);
+  if(!secs.length){const p=document.createElement('p');p.className='lgEmpty';p.textContent='لسه ما صار شي. ابدأ اللعبة.';box.appendChild(p);return}
+  secs.forEach(([t,items])=>{const h=document.createElement('h4');h.textContent=t;box.appendChild(h);items.forEach(x=>{const p=document.createElement('p');p.textContent=x;box.appendChild(p)})})}
+function fillLog(L){const box=$('logBox');box.innerHTML='';
+  if(!L||!L.length){const p=document.createElement('p');p.className='lgEmpty';p.textContent='ما فيه حوارات للحين.';box.appendChild(p);return}
+  L.forEach(([n,t])=>{const d=document.createElement('div');d.className='lg'+(n?'':' nar');if(n){const b=document.createElement('b');b.textContent=n;d.appendChild(b)}const s2=document.createElement('span');s2.textContent=t;d.appendChild(s2);box.appendChild(d)});
+  setTimeout(()=>{box.scrollTop=box.scrollHeight},20)}
+function openLogInGame(){if(mode!=='play')return;pauseGame();fillLog(LOG);goPanel('mLog')}
+
+/* ================= settings, difficulty, menu ================= */
+const SKEY='mina1960-settings',PKEY='mina1960-progress';
+let SET={music:80,sfx:80,text:'normal',shake:1};
+try{Object.assign(SET,JSON.parse(localStorage.getItem(SKEY)||'{}'))}catch(e){}
+function saveSet(){try{localStorage.setItem(SKEY,JSON.stringify(SET))}catch(e){}}
+function applyAudio(){if(mGain)mGain.gain.value=soundOn?SET.music/100:0;if(sfxG)sfxG.gain.value=soundOn?SET.sfx/100:0}
+const TEXTSP={slow:22,normal:40,fast:90,instant:99999};
+const DIFFS={
+  normal:{vis:.9,det:.8,chase:74,pat:1,decay:1.3,alarm:1.15,seaHp:5,breath:16,tailLost:160,fishZone:.3,interrog:0,name:'عادية'},
+  hard:{vis:1.2,det:1.5,chase:80,pat:1.18,decay:.75,alarm:.8,seaHp:3,breath:10,tailLost:132,fishZone:.2,interrog:0,name:'صعبة'},
+  nightmare:{vis:1.38,det:2.2,chase:84,pat:1.32,decay:.45,alarm:.62,seaHp:2,breath:7,tailLost:118,fishZone:.15,interrog:1,name:'كابوس'}};
+let diffK='normal';const DF=()=>DIFFS[diffK]||DIFFS.normal;
+function progress(){try{return +localStorage.getItem(PKEY)||1}catch(e){return 1}}
+function unlock(n){try{if(n>progress())localStorage.setItem(PKEY,String(n))}catch(e){}}
+let menuBack=[],pausePrev=null;
+const panels=()=>[...document.querySelectorAll('#menu .mpanel')];
+const curPanel=()=>{const p=panels().find(p=>!p.hidden);return p&&p.id};
+function showPanel(id){panels().forEach(p=>p.hidden=p.id!==id);const f=document.querySelector('#'+id+' .mlist button:not([hidden]):not([disabled])');setTimeout(()=>f&&f.focus(),30)}
+function goPanel(id){menuBack.push(curPanel());showPanel(id)}
+function backPanel(){const p=menuBack.pop();showPanel(p||($('menu').classList.contains('paused')?'mPause':'mMain'))}
+function refreshMain(){const s=load(),b=document.querySelector('#mMain [data-act="cont"]');b.hidden=!s;document.querySelectorAll('#mMain [data-act="recap"],#mMain [data-act="log"]').forEach(x=>x.hidden=!s);
+  if(s){const ch=(s.F&&s.F.ch)||1;$('contInfo').textContent=['الفصل الأول','الفصل الثاني','الفصل الثالث'][ch-1]+' · '+(DIFFS[s.diff]||DIFFS.normal).name}}
+function openMenu(panel,stack){$('chTag').textContent='';goalEl.hidden=true;toastEl.hidden=true;toastT=0;const m=$('menu');m.hidden=false;m.classList.remove('paused');mode='menu';view='menu';menuBack=stack||[];refreshMain();showPanel(panel||'mMain');setMusic('menu')}
+function closeMenu(){$('menu').hidden=true;$('menu').classList.remove('paused');view='world'}
+function resetRuntime(){finale=null;fadeA=0;fadeDir=0;hero.sit=0;hero.hidden=false;['cine','card','puz','book','lock'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
+  boxEl.hidden=true;dq=null;mgEl.hidden=true;setBan(banL,'');setBan(banR,'');alarm=null;guards=[];fish=null;sea=null;dive=null;stars=null;trail=[];interFace=null;
+  $('chTag').textContent='الفصل الأول · الشرايط الحمرا'}
+function syncSettingsUI(){$('setMusic').value=SET.music;$('setSfx').value=SET.sfx;
+  document.querySelectorAll('#setText button').forEach(b=>b.classList.toggle('on',b.dataset.v===SET.text));
+  document.querySelectorAll('#setShake button').forEach(b=>b.classList.toggle('on',+b.dataset.v===+SET.shake))}
+$('setMusic').addEventListener('input',e=>{SET.music=+e.target.value;applyAudio();saveSet()});
+$('setSfx').addEventListener('input',e=>{SET.sfx=+e.target.value;applyAudio();saveSet();sfx('rot')});
+$('setText').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;SET.text=b.dataset.v;saveSet();syncSettingsUI()});
+$('setShake').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;SET.shake=+b.dataset.v;saveSet();syncSettingsUI()});
+function buildChapters(){const n=progress(),L=$('chapList');L.innerHTML='';
+  [['الفصل الأول','الشرايط الحمرا'],['الفصل الثاني','الطريق إلى بندر الغار'],['الفصل الثالث','القلعة']].forEach(([t,s],i)=>{
+    const b=document.createElement('button');b.type='button';b.dataset.ch=i+1;b.appendChild(document.createTextNode(t));
+    const sm=document.createElement('small');sm.textContent=i+1<=n?s:'مقفل. كمّل اللعبة عشان ينفتح';b.appendChild(sm);if(i+1>n)b.disabled=true;L.appendChild(b)});
+  const bk=document.createElement('button');bk.type='button';bk.dataset.act='back';bk.className='mback';bk.textContent='رجوع';L.appendChild(bk)}
+function startChapter(n){closeMenu();resetRuntime();clearSave();LOG=[];
+  if(n===1){newGame();return}
+  if(n===2){F={};clues=[];startCh2();return}
+  F={};clues=['ledger','ring','marks','letter','song'];startCh3()}
+function pauseGame(){if(!['play','talk','sea','dive','stars','fish'].includes(mode))return;pausePrev=mode;mode='pause';keys.up=keys.down=keys.left=keys.right=0;
+  const m=$('menu');m.hidden=false;m.classList.add('paused');menuBack=[];$('pauseInfo').textContent='الصعوبة: '+DF().name+(goalText?' · '+goalText:'');showPanel('mPause')}
+function resumeGame(){$('menu').hidden=true;$('menu').classList.remove('paused');mode=pausePrev||'play';pausePrev=null}
+$('menu').addEventListener('click',e=>{const b=e.target.closest('.mlist button');if(!b)return;ensureAudio();applyAudio();sfx('rot');
+  const a=b.dataset.act;
+  if(b.dataset.diff){diffK=b.dataset.diff;closeMenu();resetRuntime();clearSave();newGame();return}
+  if(b.dataset.ch){startChapter(+b.dataset.ch);return}
+  if(b.dataset.end!=null){closeMenu();resetRuntime();playEnding&&playEnding(+b.dataset.end);return}
+  switch(a){
+    case 'new':goPanel('mDiff');break;
+    case 'cont':closeMenu();resetRuntime();continueGame();break;
+    case 'chapters':buildChapters();goPanel('mChap');break;
+    case 'settings':syncSettingsUI();goPanel('mSet');break;
+    case 'exit':goPanel('mExit');break;
+    case 'recap':{const s=load();fillRecap(s&&s.F,s&&s.clues);goPanel('mRecap');break}
+    case 'log':{const s=load();fillLog(s&&s.log);goPanel('mLog');break}
+    case 'precap':fillRecap(F,clues);goPanel('mRecap');break;
+    case 'plog':fillLog(LOG);goPanel('mLog');break;
+    case 'back':backPanel();break;
+    case 'wipe':goPanel('mConfirm');break;
+    case 'wipeYes':clearSave();try{localStorage.removeItem(PKEY)}catch(e){}menuBack=[];refreshMain();showPanel($('menu').classList.contains('paused')?'mPause':'mMain');toast('انمسح الحفظ');break;
+    case 'resume':resumeGame();break;
+    case 'toMenu':if(cur&&mode!=='card')save();resetRuntime();cur=null;openMenu('mMain');break;
+  }
+});
+$('pauseBtn').addEventListener('click',()=>{if(mode==='pause')resumeGame();else pauseGame()});
+const dhowSil=(()=>{const[c,g]=cnv(132,92);g.drawImage(boat,0,0);g.globalCompositeOperation='source-atop';g.fillStyle='#05070f';g.fillRect(0,0,132,92);return c})();
+function renderMenu(){
+  const g=ctx.createLinearGradient(0,0,0,120);g.addColorStop(0,'#060a1a');g.addColorStop(.55,'#181c3a');g.addColorStop(1,'#4a2c44');ctx.fillStyle=g;ctx.fillRect(0,0,VW,120);
+  for(let i=0;i<80;i++){const x=(rnd(i,1,9)*VW)|0,y=(rnd(i,2,9)*104)|0,tw=.25+.75*Math.abs(Math.sin(tick*(.4+rnd(i,3,9))+i));ctx.fillStyle=`rgba(240,240,255,${tw*(.35+rnd(i,4,9)*.65)})`;ctx.fillRect(x,y,1,1)}
+  const mx=74,my=34;const hg=ctx.createRadialGradient(mx,my,6,mx,my,46);hg.addColorStop(0,'rgba(255,236,190,.22)');hg.addColorStop(1,'rgba(255,236,190,0)');ctx.fillStyle=hg;ctx.fillRect(mx-46,my-46,92,92);
+  ctx.fillStyle='#f3ead0';ctx.beginPath();ctx.arc(mx,my,11,0,7);ctx.fill();ctx.fillStyle='#ddd2b0';ctx.fillRect(mx-4,my-3,3,3);ctx.fillRect(mx+3,my+2,2,2);ctx.fillRect(mx-1,my+5,2,1);
+  let x=0,i=0;while(x<VW){const w=10+((rnd(i,5,9)*16)|0),h=8+((rnd(i,6,9)*14)|0);ctx.fillStyle='#0b0f22';ctx.fillRect(x,118-h,w,h+2);
+    if(rnd(i,7,9)>.35){const wx=x+2+((rnd(i,8,9)*(w-5))|0),wy=118-h+3+((rnd(i,9,9)*(h-7))|0),on=Math.sin(tick*.7+i*3)>-.85;ctx.fillStyle=on?'#ffc66a':'#3a2a1a';ctx.fillRect(wx,wy,2,2)}
+    if(i%9===4){ctx.fillStyle='#0b0f22';ctx.fillRect(x+2,118-h-10,7,10);ctx.fillStyle='#181c3a';ctx.fillRect(x+3,118-h-8,1,5);ctx.fillRect(x+6,118-h-8,1,5)}
+    x+=w;i++}
+  const sg=ctx.createLinearGradient(0,118,0,180);sg.addColorStop(0,'#16223e');sg.addColorStop(1,'#060c1a');ctx.fillStyle=sg;ctx.fillRect(0,118,VW,62);
+  for(let r=0;r<16;r++){const y=121+r*3.8|0,off=(tick*(6+r)+r*37)%40;ctx.fillStyle=r<6?'#22355a':'#18284a';for(let xx=-40+off;xx<VW;xx+=40)ctx.fillRect(xx|0,y,8+(r%3)*3,1)}
+  for(let r=0;r<14;r++){const y=121+r*4,w=Math.max(2,16-r);ctx.fillStyle=`rgba(255,236,190,${.55-r*.035})`;ctx.fillRect(Math.round(mx-w/2+Math.sin(tick*2+r*1.3)*3),y,w,1)}
+  const bx=((tick*5+170)%(VW+200))-160,by=Math.round(Math.sin(tick*1.2)*1.5);ctx.drawImage(dhowSil,Math.round(bx),48+by,99,69);
+  const lx=Math.round(bx+12),ly=96+by;const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,16);lg.addColorStop(0,'rgba(255,190,90,.5)');lg.addColorStop(1,'rgba(255,190,90,0)');ctx.fillStyle=lg;ctx.fillRect(lx-16,ly-16,32,32);ctx.fillStyle='#ffd27a';ctx.fillRect(lx,ly,2,2);
+  ctx.fillStyle='rgba(255,190,90,.25)';ctx.fillRect(lx-1,120,4,1);ctx.fillRect(lx,124,2,1);
+  ctx.fillStyle='#04060c';ctx.fillRect(0,150,70,3);[6,22,40,58].forEach(px_=>ctx.fillRect(px_,150,4,30));
+  const vg=ctx.createRadialGradient(VW/2,VH/2,60,VW/2,VH/2,200);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.55)');ctx.fillStyle=vg;ctx.fillRect(0,0,VW,VH);
 }
-function showEnd(){mode='end';end.hidden=false;document.getElementById('again').focus()}
-document.getElementById('go').addEventListener('click',()=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}begin()});
-document.getElementById('again').addEventListener('click',begin);
+function continueGame(){const s=load();if(!s){newGame();return}
+  F=s.F||{};clues=s.clues||[];diffK=s.diff||'normal';LOG=s.log||[];
+  mode='play';
+  if(F.ch===2)$('chTag').textContent='الفصل الثاني · الطريق إلى بندر الغار';
+  if(F.ch===3)$('chTag').textContent='الفصل الثالث · القلعة';
+  if(!F.ch||F.ch===1)$('chTag').textContent='الفصل الأول · الشرايط الحمرا';
+  if(F.done2&&F.ch===2){startCh3();return}
+  if(F.ch===3&&(s.s==='fort'||s.s==='prison')){enterScene(s.s,s.s==='prison'?2*T:3*T,s.s==='prison'?7*T-4:22*T-4);return}
+  if(F.done&&F.ch!==2){startCh2();return}
+  if(F.tailing&&s.s==='market'){enterScene('market');startTail();return}
+  if(F.ch===2&&F.oarsM&&!F.oarsDone&&s.s==='port'){enterScene('port');startOars();return}
+  if(F.stage==='sea'){enterScene('portN');startSea();return}
+  if(F.stage==='dive'){enterScene('portN');startDive();return}
+  if(s.s==='ware'||s.s==='portN')enterScene(s.s);
+  else{enterScene(s.s,s.x,s.y);setGoal(s.goal)}
+}
+
+/* ================= start ================= */
+function newGame(){F={};clues=[];goalText='';LOG=[];$('chTag').textContent='الفصل الأول · الشرايط الحمرا';
+  mode='play';enterScene('port',12*T,4*T+4);
+  say([[N,'صيف ١٩٦٠. ميناء صغير على ساحل الشرقية.'],[N,'صار له أربعين يوم… كل المراكب رجعت من السفر، إلا مركب واحد.'],[N,'وكان فيه راشد، أبو سالم.']],()=>setGoal('كلّم جدتك عند باب البيت'));
+}
+var playEnding=null;
+/* one-time reset: saves from older builds are cleared once, then never again */
+(function(){const VKEY='mina1960-build',BUILD='2026-10-10-full';
+  try{if(localStorage.getItem(VKEY)!==BUILD){['mina1960-ch1','mina1960-progress'].forEach(k=>localStorage.removeItem(k));localStorage.setItem(VKEY,BUILD)}}catch(e){}})();
+openMenu('mMain');
+// expose a tiny hook for automated testing
+window.__mina={get state(){return{mode,view,scene:cur&&cur.id,hero:{...hero},F:{...F},clues:[...clues],guards:guards.map(g=>({x:g.x,y:g.y,state:g.state})),alarm}},
+  tp(x,y,d){hero.x=x;hero.y=y;if(d)hero.dir=d},go(id,x,y){mode='play';enterScene(id,x,y)},get fish(){return fish},openMenu,setDiff(k){diffK=k},startCh3,get stars(){return stars},clearGuards(){guards=[]},startTail,tailWin,clue,get walkers(){return walkers},get puz(){return{pos:puzPos,rot:puzRot}},openLock,get sea(){return sea},get dive(){return dive},SH,startCh2,startSea,startDive,act:action,setF(o){Object.assign(F,o)},startFish,startPuzzle};
 })();
 </script>
 
-</body></html>
+</body>
+</html>

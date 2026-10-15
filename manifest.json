@@ -1,0 +1,26 @@
+{
+  "id": "/jali/",
+  "name": "جَلِيّ: نظام العمل بوضوح",
+  "short_name": "جَلِيّ",
+  "description": "نظام العمل السعودي بمستويين: عامي لمعرفة حقك وخطوتك التالية، وقانوني لقراءة المادة وتطبيقها، مع مرشد وحاسبة ومحكمة صورية.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/jali/",
+  "scope": "/jali/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#0E4B39",
+  "background_color": "#F2F5F2",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "/jali/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/jali/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/jali/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/jali/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "المرشد", "short_name": "المرشد", "url": "/jali/#guide", "icons": [{ "src": "/jali/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "الحاسبة", "short_name": "الحاسبة", "url": "/jali/#calc", "icons": [{ "src": "/jali/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "المحكمة الصورية", "short_name": "المحكمة", "url": "/jali/#court-promo", "icons": [{ "src": "/jali/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

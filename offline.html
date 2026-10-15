@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E4B39">
+<title>جَلِيّ · لا يوجد اتصال</title>
+<link rel="icon" href="./icons/favicon-32.png">
+<style>
+:root{--bg:#F2F5F2;--surface:#FFFFFF;--ink:#13241E;--muted:#58695F;--line:#D3DCD6;--green:#0E4B39;--brass:#A87A2A}
+@media (prefers-color-scheme: dark){:root{--bg:#0B1411;--surface:#121E19;--ink:#E4EDE8;--muted:#97A99F;--line:#26372F;--green:#5DBA94;--brass:#D9A954;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;line-height:1.8;padding:24px 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 24px;max-width:420px;width:100%;display:grid;gap:14px;text-align:center;justify-items:center}
+img{width:72px;height:72px;border-radius:16px}
+h1{margin:0;font-size:1.4rem}
+p{margin:0;color:var(--muted)}
+button{font:inherit;font-weight:600;background:var(--green);color:#fff;border:0;border-radius:10px;padding:10px 22px;cursor:pointer}
+@media (prefers-color-scheme: dark){button{color:#0B1411}}
+</style>
+</head>
+<body>
+  <main class="card">
+    <img src="./icons/icon-192.png" alt="">
+    <h1>لا يوجد اتصال بالإنترنت</h1>
+    <p>لم تُحفظ هذه الصفحة على جهازك بعد. افتح جَلِيّ مرة واحدة وأنت متصل، وستتمكن بعدها من فتح الصفحات الرئيسية دون اتصال.</p>
+    <button type="button" onclick="location.reload()">أعد المحاولة</button>
+  </main>
+</body>
+</html>

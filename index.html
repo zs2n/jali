@@ -148,6 +148,16 @@ td.k{white-space:nowrap;font-weight:600}
 .formula{font-family:var(--f-body);background:var(--surface-2);border-radius:var(--r);padding:14px 16px;font-size:1rem;text-align:center;direction:rtl}
 .note{font-size:.85rem;color:var(--muted)}
 
+/* feedback */
+.fb{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-top:1px solid var(--line);margin-top:6px}
+.fb-q{font-weight:600}
+.fb-btns{display:flex;gap:8px}
+.fb-btn{min-width:44px;font-size:1.05rem}
+.fb-btn[aria-pressed="true"]{border-color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent)}
+.fb-thanks{color:var(--muted);font-size:.9rem}
+.fb-report{margin-inline-start:auto}
+.suggest{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+@media (max-width:520px){.fb-report{margin-inline-start:0}}
 /* install */
 .install-btn{white-space:nowrap}
 @media (max-width:820px){.install-btn{display:none!important}}
@@ -609,6 +619,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
               </div>
             </div>
           </div>
+          <div class="fb" id="fbTopic">
+            <span class="fb-q">هل كان الشرح واضحاً؟</span>
+            <span class="fb-btns">
+              <button class="btn btn-ghost btn-small fb-btn" type="button" data-fb="yes" aria-pressed="false" aria-label="نعم، واضح">👍</button>
+              <button class="btn btn-ghost btn-small fb-btn" type="button" data-fb="no" aria-pressed="false" aria-label="لا، غير واضح">👎</button>
+            </span>
+            <span class="fb-thanks" id="fbThanks" aria-live="polite"></span>
+            <button class="btn btn-ghost btn-small fb-report" type="button" data-tally="error" data-where="نهاية الخدمة" hidden>بلّغ عن خطأ</button>
+          </div>
         </article>
       </section>
 
@@ -756,6 +775,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
           <div class="panel tcard"><span class="pill soon">قريباً</span><h3>الإيجار السكني</h3><p>حقوق المستأجر والمؤجر ومنصة إيجار.</p></div>
           <div class="panel tcard"><span class="pill soon">قريباً</span><h3>حقوق المستهلك</h3><p>الشراء الإلكتروني والاسترجاع والشكاوى.</p></div>
           <div class="panel tcard"><span class="pill soon">المرحلة الثانية</span><h3>الأحوال الشخصية</h3><p>بعد المراجعة العلمية، لحساسية القضايا.</p></div>
+        </div>
+        <div class="suggest" data-tally-wrap hidden>
+          <span class="note">ما لقيت الموضوع اللي يهمك؟</span>
+          <button class="btn btn-ghost btn-small" type="button" data-tally="suggest" data-where="المواضيع">اقترح موضوعاً</button>
         </div>
       </section>
 
@@ -1840,6 +1863,56 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   /* anonymous event counter (GoatCounter); silently does nothing if blocked */
   function track(name){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:'event-'+name, title:name, event:true}); }catch(e){} }
   window.jaliTrack = track;
+
+
+  /* ---------- feedback ----------
+     Clarity votes are anonymous GoatCounter events (no account needed).
+     Error reports and topic suggestions open a Tally form; they stay hidden
+     until TALLY_FORM is set to the form id (the part after tally.so/r/). */
+  var TALLY_FORM = '';
+  (function(){
+    var box = $('fbTopic'); if(!box) return;
+    var voted = null; try{ voted = localStorage.getItem('jali-fb-topic'); }catch(e){}
+    var thanks = $('fbThanks');
+    function mark(v){
+      box.querySelectorAll('[data-fb]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.fb === v ? 'true' : 'false'); });
+      thanks.textContent = v === 'yes' ? 'شكراً لك.' : 'شكراً، سنبسّطه أكثر.' + (TALLY_FORM ? ' وإذا تحب، قل لنا وش اللي ما اتضح.' : '');
+    }
+    if(voted) mark(voted);
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('[data-fb]'); if(!b) return;
+      var v = b.dataset.fb; if(voted === v) return;
+      var level = $('pane-deep') && !$('pane-deep').hidden ? 'legal' : 'simple';
+      track('clear-' + v + '-' + level);
+      voted = v; try{ localStorage.setItem('jali-fb-topic', v); }catch(e){}
+      mark(v);
+    });
+
+    if(!TALLY_FORM) return;
+    document.querySelectorAll('[data-tally],[data-tally-wrap]').forEach(function(el){ el.hidden = false; });
+    var loading = null;
+    function loadTally(){
+      if(window.Tally) return Promise.resolve();
+      if(loading) return loading;
+      loading = new Promise(function(ok, fail){
+        var sc = document.createElement('script');
+        sc.src = 'https://tally.so/widgets/embed.js'; sc.async = true;
+        sc.onload = ok; sc.onerror = fail; document.head.appendChild(sc);
+      });
+      return loading;
+    }
+    document.addEventListener('click', function(e){
+      var b = e.target.closest('[data-tally]'); if(!b) return;
+      var kind = b.dataset.tally;
+      var hidden = { type: kind === 'error' ? 'خطأ' : 'اقتراح', where: b.dataset.where || '', level: ($('pane-deep') && !$('pane-deep').hidden) ? 'قانوني' : 'عامي' };
+      track('open-' + kind);
+      loadTally().then(function(){
+        window.Tally.openPopup(TALLY_FORM, { layout: 'modal', width: 520, hiddenFields: hidden, autoClose: 2500 });
+      }).catch(function(){
+        window.open('https://tally.so/r/' + TALLY_FORM + '?' + new URLSearchParams(hidden), '_blank', 'noopener');
+      });
+    });
+  })();
 
   /* ---------- install as an app (only in the hosted build: <html data-pwa>) ---------- */
   (function(){

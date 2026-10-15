@@ -1869,7 +1869,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
      Clarity votes are anonymous GoatCounter events (no account needed).
      Error reports and topic suggestions open a Tally form; they stay hidden
      until TALLY_FORM is set to the form id (the part after tally.so/r/). */
-  var TALLY_FORM = '';
+  var TALLY_FORM = 'xVxQDv';
   (function(){
     var box = $('fbTopic'); if(!box) return;
     var voted = null; try{ voted = localStorage.getItem('jali-fb-topic'); }catch(e){}
@@ -1904,7 +1904,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     document.addEventListener('click', function(e){
       var b = e.target.closest('[data-tally]'); if(!b) return;
       var kind = b.dataset.tally;
-      var hidden = { type: kind === 'error' ? 'خطأ' : 'اقتراح', where: b.dataset.where || '', level: ($('pane-deep') && !$('pane-deep').hidden) ? 'قانوني' : 'عامي' };
+      var hidden = { where: (b.dataset.where || '') + ' · ' + (kind === 'error' ? 'زر بلّغ عن خطأ' : 'زر اقترح موضوعاً') + ' · ' + (($('pane-deep') && !$('pane-deep').hidden) ? 'قانوني' : 'عامي') };
       track('open-' + kind);
       loadTally().then(function(){
         window.Tally.openPopup(TALLY_FORM, { layout: 'modal', width: 520, hiddenFields: hidden, autoClose: 2500 });

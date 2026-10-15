@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="نظام العمل السعودي بمستويين: عامي لمعرفة حقك وخطوتك التالية، وقانوني لقراءة المادة وتطبيقها، مع مرشد وحاسبة ومحكمة صورية.">
+<meta name="description" content="اعرف حقك في نهاية الخدمة بلغة بسيطة، واحسب مستحقاتك، واعرف وين تروح. كل معلومة مربوطة بمادتها في نظام العمل.">
 <link rel="manifest" href="/jali/manifest.json">
 <meta name="theme-color" content="#0E4B39">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +13,22 @@
 <link rel="apple-touch-icon" href="/jali/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/jali/icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/jali/icons/icon-192.png">
-<title>جَلِيّ</title>
+<title>جَلِيّ · حقوقك النظامية بلغة تفهمها</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="جَلِيّ">
+<meta property="og:locale" content="ar_SA">
+<meta property="og:title" content="جَلِيّ · حقوقك النظامية بلغة تفهمها">
+<meta property="og:description" content="اعرف حقك في نهاية الخدمة بلغة بسيطة، واحسب مستحقاتك، واعرف وين تروح. كل معلومة مربوطة بمادتها في نظام العمل.">
+<meta property="og:url" content="https://zs2n.github.io/jali/">
+<meta property="og:image" content="https://zs2n.github.io/jali/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="جَلِيّ: حقوقك النظامية بلغة تفهمها">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="جَلِيّ · حقوقك النظامية بلغة تفهمها">
+<meta name="twitter:description" content="اعرف حقك في نهاية الخدمة بلغة بسيطة، واحسب مستحقاتك، واعرف وين تروح. كل معلومة مربوطة بمادتها في نظام العمل.">
+<meta name="twitter:image" content="https://zs2n.github.io/jali/og-image.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700;800;900&display=swap">
@@ -99,6 +114,8 @@ main{position:relative;z-index:1}
 @keyframes halo{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.35;transform:scale(1.25)}}
 .verdict{min-height:8.5em;display:grid;gap:6px;align-content:start}
 .verdict .art{justify-self:start}
+a.art{text-decoration:none}
+a.art:hover{background:color-mix(in srgb,var(--green) 10%,transparent)}
 .verdict p{font-size:1.06rem;line-height:1.95}
 .bench:not(.simple) .verdict p{font-family:var(--f-display);font-weight:500}
 .verdict{transition:opacity .24s ease,transform .24s ease,filter .24s ease}
@@ -293,6 +310,18 @@ input[type=number]:focus,select:focus{border-color:var(--green);outline:none;box
 /* phones: a compact pill in the empty end of the header bar */
 @media (max-width:820px){.level{top:calc(env(safe-area-inset-top,0px) + 9px);right:auto;left:12px;width:auto;grid-template-columns:auto auto;align-items:center;gap:6px;padding:4px 12px 4px 8px;border-radius:999px;z-index:30}.level .morph{width:34px;height:34px}.level .lv-sub{display:none}}
 @media (prefers-reduced-motion: reduce){.level *{transition:none!important;animation:none!important}}
+.review-pill{font-size:.68rem;vertical-align:middle;margin-inline-start:6px}
+.path-title{font-size:1.05rem;margin:0 0 10px}
+.share-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+/* official channels */
+.where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.where > .panel{padding:20px;display:grid;gap:8px;align-content:start}
+.where .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:var(--green-ink);font-weight:700}
+.where .who{font-size:.85rem;color:var(--muted);margin-top:-4px}
+.where .how{font-size:.9rem;color:var(--muted)}
+.where .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.docs{margin-top:16px;padding:20px;display:grid;gap:8px}
+@media (max-width:820px){.where{grid-template-columns:minmax(0,1fr)}}
 /* trust + footer */
 footer .wrap.foot{display:grid;gap:14px;justify-content:stretch}
 .foot>*{min-width:0}
@@ -331,8 +360,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <a href="#faq">أسئلة</a>
         <a href="#guide">المرشد</a>
         <a href="#calc">الحاسبة</a>
+        <a href="#help">وين أروح</a>
         <a href="#quiz">اختبر نفسك</a>
-        <a href="#students">للطلاب</a>
+        <a href="#students">المبادرة</a>
         <a href="#court-promo">المحكمة الصورية</a>
       </nav>
       <button class="btn btn-primary btn-small install-btn" id="installBtn" type="button" hidden>ثبّت التطبيق</button>
@@ -484,7 +514,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
                   <li>ما بعد 5 سنوات: راتب كامل عن كل سنة.</li>
                   <li>الحساب على آخر أجر، وجزء السنة يُحسب بنسبته.</li>
                 </ul>
-                <p class="note" style="margin-top:8px">العمولات والنسب المتغيرة يجوز الاتفاق على استبعادها من الحساب <span class="art">م 86</span></p>
+                <p class="note" style="margin-top:8px">العمولات والنسب المتغيرة يجوز الاتفاق على استبعادها من الحساب <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 86</a></p>
               </div>
               <div class="example"><b>مثال:</b> اشتغلت 7 سنوات وآخر راتب 8,000 ريال، والشركة أنهت عقدك. أول 5 سنوات = 20,000، والسنتان الباقيتان = 16,000. المجموع <b class="num">36,000 ريال</b>.</div>
             </div>
@@ -499,7 +529,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
                   <tr><td>10 سنوات فأكثر</td><td>كاملة</td></tr>
                 </tbody>
               </table></div>
-              <p class="note" style="margin-top:8px">وتاخذها كاملة رغم الاستقالة في حالات، منها القوة القاهرة، واستقالة المرأة خلال 6 أشهر من زواجها أو 3 أشهر من ولادتها <span class="art">م 87</span></p>
+              <p class="note" style="margin-top:8px">وتاخذها كاملة رغم الاستقالة في حالات، منها القوة القاهرة، واستقالة المرأة خلال 6 أشهر من زواجها أو 3 أشهر من ولادتها <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 87</a></p>
             </div>
             <div class="cols">
               <div>
@@ -507,13 +537,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
                 <ul class="list">
                   <li>تبغى تستقيل من عقد غير محدد براتب شهري: إشعار مكتوب قبل <b>30 يوماً</b>.</li>
                   <li>الشركة تبغى تنهي عقدك: إشعار مكتوب قبل <b>60 يوماً</b>.</li>
-                  <li>ما التزم الطرف المنهي بالإشعار؟ للطرف الآخر أجر مدة الإشعار أو المتبقي منها <span class="art">م 76</span></li>
-                  <li>قدّمت استقالتك ولم يردّوا خلال 30 يوماً؟ تُعدّ مقبولة، ولك سحبها خلال 7 أيام <span class="art">م 79 مكرر</span></li>
+                  <li>ما التزم الطرف المنهي بالإشعار؟ للطرف الآخر أجر مدة الإشعار أو المتبقي منها <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 76</a></li>
+                  <li>قدّمت استقالتك ولم يردّوا خلال 30 يوماً؟ تُعدّ مقبولة، ولك سحبها خلال 7 أيام <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 79 مكرر</a></li>
                 </ul>
               </div>
               <div>
                 <h4>الشركة أنهت عقدي بدون سبب مشروع؟</h4>
-                <p>إذا ثبت أن الإنهاء غير مشروع، فقد تستحق تعويضاً إضافة إلى المكافأة، بحسب نوع عقدك وما ورد فيه <span class="art">م 77</span></p>
+                <p>إذا ثبت أن الإنهاء غير مشروع، فقد تستحق تعويضاً إضافة إلى المكافأة، بحسب نوع عقدك وما ورد فيه <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 77</a></p>
                 <ul class="list" style="margin-top:6px">
                   <li>عقد غير محدد المدة: أجر 15 يوماً عن كل سنة خدمة.</li>
                   <li>عقد محدد المدة: أجر المدة الباقية من العقد.</li>
@@ -524,22 +554,22 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
             <div class="cols">
               <div>
                 <h4>متى لازم يعطوني فلوسي؟</h4>
-                <p>خلال <b>أسبوع</b> من نهاية الخدمة، أو <b>أسبوعين</b> إذا أنت اللي استقلت <span class="art">م 88</span></p>
+                <p>خلال <b>أسبوع</b> من نهاية الخدمة، أو <b>أسبوعين</b> إذا أنت اللي استقلت <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 88</a></p>
               </div>
               <div>
                 <h4>وش أسوي إذا ما أعطوني حقي؟</h4>
                 <ol class="list">
                   <li>اجمع أوراقك: العقد، وكشوف الراتب، وإشعار الإنهاء أو الاستقالة، والرسائل.</li>
-                  <li>قدّم طلب تسوية ودية إلكترونياً لوزارة الموارد البشرية. الخدمة مجانية.</li>
-                  <li>إذا ما انحلت ودياً تنتقل القضية للمحكمة العمالية.</li>
+                  <li>قدّم طلب <a href="#help">تسوية ودية</a> إلكترونياً لوزارة الموارد البشرية. الخدمة مجانية، ومدتها 21 يوم عمل.</li>
+                  <li>إذا ما انحلت ودياً، ترفع دعواك في <a href="#help">المحكمة العمالية عبر ناجز</a>.</li>
                 </ol>
-                <p class="note" style="margin-top:6px">انتبه: عندك 12 شهراً من نهاية عملك لرفع الدعوى <span class="art">م 234</span></p>
+                <p class="note" style="margin-top:6px">انتبه: عندك 12 شهراً من نهاية عملك لرفع الدعوى <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 234</a></p>
               </div>
             </div>
             <div class="cols">
               <div>
                 <h4>فصلوني وقالوا عندك مخالفة؟</h4>
-                <p>يقدرون يفصلونك بدون مكافأة ولا إشعار ولا تعويض، بس في حالات محددة بالنظام <span class="art">م 80</span>، منها:</p>
+                <p>يقدرون يفصلونك بدون مكافأة ولا إشعار ولا تعويض، بس في حالات محددة بالنظام <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 80</a>، منها:</p>
                 <ul class="list">
                   <li>اعتديت على صاحب العمل أو مديرك أو أحد رؤسائك في الشغل.</li>
                   <li>ما قمت بواجباتك الأساسية، أو ما طعت أوامر مشروعة، أو خالفت تعليمات السلامة المعلنة بعد ما أنذروك كتابياً.</li>
@@ -550,7 +580,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
               </div>
               <div>
                 <h4>تركت الشغل لأن الشركة ظلمتني؟</h4>
-                <p>تقدر تترك بدون إشعار وتاخذ حقوقك كاملة <span class="art">م 81</span>، إذا:</p>
+                <p>تقدر تترك بدون إشعار وتاخذ حقوقك كاملة <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 81</a>، إذا:</p>
                 <ul class="list">
                   <li>ما يعطونك راتبك أو حقوقك الأساسية في العقد أو النظام.</li>
                   <li>غشّوك في شروط الشغل وقت التعاقد.</li>
@@ -565,7 +595,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
             <div class="cols">
               <div>
                 <h4>عقدي محدد المدة وخلص؟</h4>
-                <p>إذا انتهى عقدك المحدد في وقته، فلك المكافأة <b>كاملة</b> <span class="art">م 84</span>. الثلث والثلثين بس للي يستقيل، مو للي خلص عقده.</p>
+                <p>إذا انتهى عقدك المحدد في وقته، فلك المكافأة <b>كاملة</b> <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 84</a>. الثلث والثلثين بس للي يستقيل، مو للي خلص عقده.</p>
               </div>
               <div class="example"><b>مثال ثاني:</b> اشتغلت 6 سنوات وراتبك 7,000، وفصلوك بدون سبب ولا إشعار. المكافأة 24,500، وتعويض الفصل 21,000، وتعويض الإشعار 14,000. المجموع <b class="num">59,500 ريال</b>.</div>
             </div>
@@ -605,7 +635,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
               </tbody>
             </table></div>
             <div>
-              <h4>معادلة المكافأة <span class="art">م 84</span></h4>
+              <h4>معادلة المكافأة <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 84</a></h4>
               <p class="formula num">المكافأة = (الأجر ÷ 2) × أول 5 سنوات + الأجر × السنوات بعد الخامسة</p>
               <p class="note" style="margin-top:8px">ثم يُضرب الناتج في نسبة المادة 85 عند الاستقالة: صفر أو ثلث أو ثلثان أو واحد.</p>
             </div>
@@ -677,6 +707,21 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
             <summary><span data-lv="simple">غبت كم يوم، يقدرون يفصلوني بدون مكافأة؟</span><span data-lv="legal" hidden>الفسخ بسبب الغياب</span></summary>
             <p data-lv="simple">بس إذا غبت بدون سبب مشروع أكثر من 20 يوم في السنة، أو أكثر من 10 أيام ورا بعض، وبشرط ينذرونك كتابياً قبل الفصل. غير كذا ما يقدرون يحرمونك من المكافأة بسبب الغياب.</p>
             <p data-lv="legal" hidden>يجوز الفسخ دون مكافأة إذا تغيب العامل دون سبب مشروع أكثر من عشرين يوماً خلال السنة الواحدة أو أكثر من عشرة أيام متتالية، على أن يسبقه إنذار كتابي بعد غيابه عشرة أيام في الأولى وانقطاعه خمسة أيام في الثانية (م 80).</p>
+          </details>
+          <details class="panel qa">
+            <summary><span data-lv="simple">الإجازات اللي ما أخذتها، تروح عليّ؟</span><span data-lv="legal" hidden>أجر الإجازة السنوية غير المستعملة عند انتهاء العقد</span> <span class="pill soon review-pill">قيد المراجعة</span></summary>
+            <p data-lv="simple">لا، لك فلوسها. أي إجازة سنوية مستحقة ما أخذتها، تاخذ راتب أيامها لما تترك الشغل، وحتى جزء السنة يُحسب بنسبته. والإجازة السنوية 21 يوم، وتصير 30 يوم إذا كمّلت 5 سنوات متصلة عند نفس الشركة. انتبه: الحاسبة ما تحسب الإجازات، فأضفها لحالك.</p>
+            <p data-lv="legal" hidden>للعامل الحق في الحصول على أجر أيام الإجازة المستحقة إذا ترك العمل قبل استعمالها، ويستحق أجر الإجازة عن أجزاء السنة بنسبة ما قضاه منها في العمل (م 111). ومدة الإجازة السنوية 21 يوماً، تزاد إلى 30 يوماً إذا أمضى العامل في خدمة صاحب العمل خمس سنوات متصلة (م 109).</p>
+          </details>
+          <details class="panel qa">
+            <summary><span data-lv="simple">راتبي يتأخر كل شهر، وش أسوي؟</span><span data-lv="legal" hidden>تأخر صاحب العمل في دفع الأجر</span> <span class="pill soon review-pill">قيد المراجعة</span></summary>
+            <p data-lv="simple">الراتب الشهري لازم ينصرف مرة في الشهر على الأقل. إذا تأخروا: وثّق كل شهر تأخر فيه (كشف حسابك يكفي)، وطالب برواتبك عن طريق التسوية الودية ثم المحكمة. وإذا كان التأخير إخلال واضح، تقدر تترك الشغل بدون إشعار وتاخذ حقوقك كاملة (شوف «تركت الشغل لأن الشركة ظلمتني؟» فوق).</p>
+            <p data-lv="legal" hidden>يُدفع أجر العامل المعيّن بأجر شهري مرة في الشهر على الأقل (م 90). وعدم وفاء صاحب العمل بالتزاماته الجوهرية، ومنها دفع الأجر، يجيز للعامل ترك العمل دون إشعار مع احتفاظه بحقوقه النظامية كلها (م 81). وتُطالَب الأجور المتأخرة بطلب تسوية ودية لدى الوزارة، ثم أمام المحكمة العمالية عند تعذّرها.</p>
+          </details>
+          <details class="panel qa">
+            <summary><span data-lv="simple">أنا غير سعودي، تذكرة رجعتي على مين؟</span><span data-lv="legal" hidden>تذكرة عودة العامل غير السعودي</span> <span class="pill soon review-pill">قيد المراجعة</span></summary>
+            <p data-lv="simple">إذا انتهت العلاقة بينك وبين الشركة، فتذكرة رجوعك لبلدك على الشركة، ومعها رسوم الإقامة ورخصة العمل والخروج والعودة. إلا في حالتين التذكرة عليك: إذا ما كنت صالح للعمل، أو إذا أنت اللي تبي ترجع بدون سبب مشروع.</p>
+            <p data-lv="legal" hidden>يتحمل صاحب العمل رسوم استقدام العامل غير السعودي، ورسوم الإقامة ورخصة العمل وتجديدهما، ورسوم الخروج والعودة، وتذكرة عودة العامل إلى موطنه بعد انتهاء العلاقة بين الطرفين، ويتحمل العامل تكاليف عودته إذا لم يكن صالحاً للعمل أو رغب في العودة دون سبب مشروع (م 40).</p>
           </details>
         </div>
       </section>
@@ -763,7 +808,61 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
               <span>• <span data-lv="simple">الرقم ما يشمل رواتب متأخرة أو إجازات أو ديون عليك للشركة.</span><span data-lv="legal" hidden>لا تشمل النتيجة الأجور المتأخرة أو الإجازات المستحقة أو ديون صاحب العمل.</span></span>
               <span>• <span data-lv="simple">هذا رقم تقريبي للتوعية، وممكن يتغير حسب عقدك وظروفك.</span><span data-lv="legal" hidden>نتيجة أولية للتوعية، وقد تتغير بحسب العقد والوقائع.</span></span>
             </div>
+            <div class="share-row">
+              <button class="btn btn-ghost btn-small" type="button" id="shareCalc">شارك النتيجة</button>
+              <span class="note" id="shareMsg" aria-live="polite"></span>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section id="help">
+        <div class="sec-head">
+          <span class="eyebrow">الجهات الرسمية</span>
+          <h2><span data-lv="simple">وين أروح إذا ما أخذت حقي؟</span><span data-lv="legal" hidden>مسار المطالبة العمالية</span></h2>
+          <p>بالترتيب: تبدأ بالتسوية الودية، وإذا ما انحلت تنتقل للمحكمة. والخدمتان إلكترونيتان.</p>
+        </div>
+        <div class="where">
+          <div class="panel">
+            <span class="n">1</span>
+            <h3>التسوية الودية</h3>
+            <p class="who">وزارة الموارد البشرية والتنمية الاجتماعية</p>
+            <p>المرحلة الأولى لأي خلاف عمالي: وسيط من الوزارة يحاول يوصّلك أنت والشركة لحل يرضيكم. مجانية، ومدتها 21 يوم عمل.</p>
+            <p class="how">تقدّم من بوابة الخدمات الإلكترونية للعمل ← بوابة الأفراد ← التسوية الودية، وترفق مستنداتك.</p>
+            <div class="links">
+              <a class="btn btn-primary btn-small" href="https://es.hrsd.gov.sa/" target="_blank" rel="noopener" data-out="settlement-portal">ادخل البوابة</a>
+              <a class="btn btn-ghost btn-small" href="https://www.hrsd.gov.sa/ar/ministry-services/services/269970" target="_blank" rel="noopener" data-out="settlement-info">تفاصيل الخدمة</a>
+            </div>
+          </div>
+          <div class="panel">
+            <span class="n">2</span>
+            <h3>المحكمة العمالية</h3>
+            <p class="who">وزارة العدل · منصة ناجز</p>
+            <p>إذا ما انحل الخلاف ودياً، يصدر محضر بعدم التسوية، وبعده ترفع صحيفة دعواك في المحكمة العمالية.</p>
+            <p class="how">انتبه للمهلتين: ترفع دعواك خلال 21 يوم عمل من أول جلسة تسوية، وما تُسمع الدعوى بعد 12 شهراً من نهاية عملك <a class="art" href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener" title="افتح النص الرسمي لنظام العمل">م 234</a></p>
+            <div class="links">
+              <a class="btn btn-primary btn-small" href="https://najiz.sa/" target="_blank" rel="noopener" data-out="najiz">ادخل ناجز</a>
+            </div>
+          </div>
+          <div class="panel">
+            <span class="n">؟</span>
+            <h3>عندك سؤال؟</h3>
+            <p class="who">الرقم الموحد لوزارة الموارد البشرية</p>
+            <p>للاستفسار عن حالتك أو عن طريقة التقديم، قبل ما تبدأ أو أثناءها.</p>
+            <div class="links">
+              <a class="btn btn-primary btn-small num" href="tel:19911" data-out="call-19911">اتصل 19911</a>
+            </div>
+          </div>
+        </div>
+        <div class="panel docs">
+          <h3>جهّز أوراقك قبل ما تقدّم</h3>
+          <ul class="list">
+            <li>عقد العمل</li>
+            <li>كشوف الراتب أو كشف حسابك البنكي</li>
+            <li>خطاب الإنهاء أو الاستقالة، وتاريخه</li>
+            <li>أي رسائل أو إيميلات بينك وبين الشركة</li>
+            <li>نتيجة <a href="#calc">الحاسبة</a>، تعرف منها وش تطالب فيه</li>
+          </ul>
         </div>
       </section>
 
@@ -795,10 +894,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 
       <section id="students">
         <div class="sec-head">
-          <span class="eyebrow">لطلاب القانون والمهتمين</span>
-          <h2>من النص إلى القضية</h2>
-          <p>كل موضوع في وضع «بعمق» يصير درساً: المادة، شرحها، تمرين محلول، ثم اختبار تطبيقي.</p>
+          <span class="eyebrow">مبادرة طلابية</span>
+          <h2>من طلاب القانون، للناس</h2>
+          <p>جَلِيّ مبادرة طلابية مجانية: يكتب محتواها طلاب قانون بلغة يفهمها الجميع، ويُراجَع علمياً قبل الإطلاق. فالناس يعرفون حقوقهم، والطلاب يتدرّبون على تطبيق النظام على قضايا حقيقية. <a href="./about.html">اعرف أكثر عن جَلِيّ</a></p>
         </div>
+        <h3 class="path-title">وإذا كنت طالب قانون: من النص إلى القضية</h3>
         <div class="path">
           <div><b>اقرأ المادة</b><p>النص مع رقم المادة ورابط مصدرها الرسمي.</p></div>
           <div><b>افهم التطبيق</b><p>تمرين محلول بالأرقام وأخطاء شائعة.</p></div>
@@ -837,6 +937,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <button type="button" class="foot-link" data-tally="error" data-where="التذييل" hidden>بلّغ عن خطأ</button>
         <button type="button" class="foot-link" data-tally="suggest" data-where="التذييل" hidden>اقترح موضوعاً</button>
         <button type="button" class="foot-link" id="footInstall" hidden>ثبّت التطبيق</button>
+        <a class="foot-link" href="./about.html">عن جَلِيّ</a>
         <a class="foot-link" href="./privacy.html">الخصوصية والشروط</a>
       </nav>
       <p class="foot-note">المعلومات للتوعية فقط ولا تُعد استشارة قانونية، ولا تغني عن محامٍ مرخّص. المرجع هو النص الرسمي <a href="https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/08381293-6388-48e2-8ad2-a9a700f2aa94/1" target="_blank" rel="noopener">لنظام العمل المنشور على موقع هيئة الخبراء</a>.</p>
@@ -1695,6 +1796,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     r.appendChild(lv('p',null,'simple',c.s.get)); r.appendChild(lv('p',null,'legal',c.l.get));
     var h = el('h4',null,'ماذا أفعل؟'); h.style.cssText = 'font-family:var(--f-display);font-weight:600;margin:0'; r.appendChild(h);
     ['simple','legal'].forEach(function(w){ var ol = lv('ol',null,w); (w==='simple'?c.s:c.l).steps.forEach(function(t){ ol.appendChild(el('li',null,t)); }); r.appendChild(ol); });
+    var wh = el('a',null,'وين أقدّم؟ الجهات الرسمية ↓'); wh.href = '#help'; wh.style.cssText = 'justify-self:start;font-weight:600;color:var(--green)'; r.appendChild(wh);
     var go = el('button','btn btn-primary btn-small','احسب مستحقاتي لهذه الحالة'); go.type='button'; go.style.justifySelf='start';
     go.addEventListener('click', function(){ kindSel.value = c.id; update(); $('calc').scrollIntoView({behavior: reduce?'auto':'smooth'}); });
     r.appendChild(go);
@@ -1761,6 +1863,25 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   $('calcForm').addEventListener('change', update);
   $('calcForm').addEventListener('submit', function(e){ e.preventDefault(); });
   update();
+
+
+  /* share the calculator result (Web Share on phones, WhatsApp link elsewhere) */
+  (function(){
+    var b = $('shareCalc'); if(!b) return;
+    function vis(e){ var x = e.querySelector('[data-lv]:not([hidden])'); return (x || e).textContent.trim(); }
+    b.addEventListener('click', function(){
+      var total = $('total').textContent;
+      if(total === '—'){ $('shareMsg').textContent = 'كمّل البيانات أولاً.'; return; }
+      var lines = all(document, '.out .line').filter(function(e){ return !e.hidden; }).map(function(e){
+        return '• ' + vis(e.firstElementChild) + ': ' + e.querySelector('[data-v]').textContent + ' ريال';
+      });
+      var url = 'https://zs2n.github.io/jali/#calc';
+      var text = 'حسبت مستحقاتي في جَلِيّ:\n' + lines.join('\n') + '\nالمجموع التقريبي: ' + total + ' ريال\n(نتيجة أولية للتوعية، ولا تغني عن مختص)\n\nاحسب حقك أنت: ' + url;
+      track('share-calc');
+      if(navigator.share){ navigator.share({title:'جَلِيّ', text:text}).catch(function(){}); return; }
+      window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+    });
+  })();
 
   /* ---------- quiz (every question, option and explanation built once at load) ---------- */
   var Q = [
@@ -1887,6 +2008,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   /* anonymous event counter (GoatCounter); silently does nothing if blocked */
   function track(name){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:'event-'+name, title:name, event:true}); }catch(e){} }
   window.jaliTrack = track;
+  document.addEventListener('click', function(e){ var o = e.target.closest('[data-out]'); if(o) track('out-' + o.dataset.out); });
 
 
   /* ---------- feedback ----------

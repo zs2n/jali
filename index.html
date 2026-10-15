@@ -293,6 +293,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.hint .arrow{animation:none}.bench.strike .gavel,.bench.strike .ripple,.bench.idle .halo{animation:none}.verdict{transition:none}}
 </style>
+<script data-goatcounter="https://zs2n.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -1836,6 +1837,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   })();
   $('playCourt').addEventListener('click', function(){ if(window.openCourt) window.openCourt(this); });
 
+  /* anonymous event counter (GoatCounter); silently does nothing if blocked */
+  function track(name){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:'event-'+name, title:name, event:true}); }catch(e){} }
+  window.jaliTrack = track;
+
   /* ---------- install as an app (only in the hosted build: <html data-pwa>) ---------- */
   (function(){
     if(document.documentElement.dataset.pwa !== '1') return;
@@ -1846,14 +1851,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
       }).catch(function(){});
     }
     var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
-    if(standalone) return;
+    if(standalone){ window.addEventListener('load', function(){ setTimeout(function(){ track('app-open'); }, 1500); }); return; }
     var btn = $('installBtn'), bar = $('installBar'), deferred = null;
     var ua = navigator.userAgent, ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     var dismissed = false; try{ dismissed = localStorage.getItem('jali-install-dismissed') === '1'; }catch(e){}
     function show(){ btn.hidden = false; if(!dismissed) bar.hidden = false; }
     function hide(){ btn.hidden = true; bar.hidden = true; }
     function install(){
-      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(){ deferred = null; hide(); }); return; }
+      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(c){ if(c && c.outcome==='accepted') track('install'); deferred = null; hide(); }); return; }
       if(ios){ $('iosSheet').hidden = false; $('iosClose').focus(); }
     }
     window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; show(); });

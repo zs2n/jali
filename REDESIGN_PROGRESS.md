@@ -40,4 +40,11 @@
 - **Verified:** scripted playthrough of case 1 (case list → dialogue → cross-examination → evidence modal → choices → «كسبت القضية») at 360 and 1280 with no JS errors; Escape closes and focus returns to `#playCourt`; no overflow; all mobile buttons ≥44px; all 5 canvases still pixelated. Run-to-run comparison of the step sequence wasn't usable (the old version varies too, from bot/animation timing), so logic preservation is shown by identical scripts instead. Screenshots inspected. Evidence sheet opens scrolled on mobile, as before (existing behavior).
 - **Not pushed** (awaiting approval).
 
-## Next: Session 6 (awaiting prompt)
+## Session 6 — Secondary Pages
+### 6a. about.html ✅ Complete
+- **Changed:** `about.html` only — its own inline `<style>` replaced with Emerald Luxury tokens (same values as index; dark default, light under `[data-theme="light"]`), plus the same Google Fonts link the homepage uses. No body markup, text or link changes. (Each page has its own inline styles; there is no shared stylesheet.)
+- **Styling:** full-width sticky top bar (box-shadow bleed, no overflow) with pill back link; display-font headings with gold dash; gold-pill meta; gradient cards with emerald-tinted lead card; feature grid with hover; dashed phase list with emerald «متاح» tag; emerald/gold CTAs (full-width on mobile); centered footer credit with divider.
+- **Verified:** rendered text and every href/src identical to the original; RTL; no horizontal overflow at 360/1280; icon loads; back link resolves to `/jali/`; no JS errors. Dark (360, 1280) and light screenshots inspected.
+- **Not pushed** (awaiting approval).
+
+### Next: 6b. privacy.html (awaiting approval)

@@ -75,3 +75,10 @@ Keep/enrich سالم; improve خالد, عبدالله; replace ناصر; add ر
 - **Courtroom art:** cartoon proportions (heads ×1.32, large expressive eyes); judge in red shemagh without agal; male lawyers in red shemagh + agal with the shemagh under a gold-trimmed bisht; Faisal's royal pleats; all women in black abaya + niqab (eyes only).
 - **Not done (blocked):** Stage C/D legal case work (ريم, سعد, enriched سالم/خالد/عبدالله, replacing ناصر) — laws.boe.gov.sa and hrsd.gov.sa unreachable from this environment; existing four cases unchanged.
 - **Verified:** calculator 462 cases = main; quiz seeded run = main; guide/links/nav; all 4 court cases won (1280 + 360); offline court via service worker; no overflow/console errors on all pages; URLs and article references unchanged.
+
+## Release 2 — characters from the approved concept sheet
+- **Sprites:** characters cut from the user's Canva sheet (version 4) into `court/cast.webp` (one atlas, ~150 KB); background removed; witness lanyard removed for his use as سالم. Code-drawn art stays as the fallback until the image loads.
+- **Mapping:** judge, فيصل, ماجد from the sheet; سالم ← witness art, خالد ← clerk art, نورة (was ناصر) ← female client art, عبير (was عبدالله) ← female lawyer art.
+- **Case text:** only names and grammatical gender changed in the two cases whose clients became women; numbers, article references, answers and totals identical (checked).
+- **sw.js:** `cast.webp` precached, VERSION release-2.
+- **Verified:** all 4 cases won (1280, 360); calculator 462 = main; quiz seeded run = main; pages/overflow/console clean; offline court with sprites.

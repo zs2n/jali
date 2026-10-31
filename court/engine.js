@@ -274,7 +274,7 @@
     try{ localStorage.setItem('jali-court-done', JSON.stringify(done)); }catch(e){}
     var b = $('c-endBody'); b.textContent='';
     $('c-endTitle').textContent = 'كسبت القضية';
-    b.appendChild(para('حصل ' + CLIENTS[cur.client].name + ' على ' + cur.total + ' ريال' + (mistakes ? '، بعد ' + mistakes + ' أخطاء.' : ' دون أي خطأ.'), true));
+    b.appendChild(para((CLIENTS[cur.client].f ? 'حصلت ' : 'حصل ') + CLIENTS[cur.client].name + ' على ' + cur.total + ' ريال' + (mistakes ? '، بعد ' + mistakes + ' أخطاء.' : ' دون أي خطأ.'), true));
     cur.summary.forEach(function(t){ b.appendChild(para(t)); });
     var remaining = CASES.filter(function(c){ return !done[c.id]; }).length;
     if(!remaining) b.appendChild(para('كسبت كل القضايا. أحسنت يا أستاذ فيصل!', true));
@@ -320,5 +320,7 @@
     ac(); $('c-introModal').hidden = true; view = 'lobby'; mode = 'busy'; next(); $('c-box').focus({preventScroll:true});
   });
   view = 'wide';
+  /* the character sheet image loads asynchronously: refresh portraits once it is ready */
+  if(ART.onReady) ART.onReady(function(){ buildCaseList(); faceEl.dataset.id = ''; });
   window.JaliCourtReady = true;
 })();

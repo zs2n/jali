@@ -4,7 +4,7 @@
    - Icons, manifest and fonts: served from cache and refreshed in the background.
    - VERSION changes on every publish, which makes the browser install the new
      worker and delete the old caches automatically. */
-const VERSION = '20261016-010840';
+const VERSION = '20261031-court-b';
 const PAGES = 'jali-pages-' + VERSION;
 const ASSETS = 'jali-assets-' + VERSION;
 const FONTS = 'jali-fonts';
@@ -21,10 +21,20 @@ const PRECACHE = [
   './icons/apple-touch-icon.png',
   './icons/favicon-32.png'
 ];
+/* The mock court loads on demand; precache it so the game also works offline. */
+const COURT = [
+  './court/court.css',
+  './court/art.js',
+  './court/cases.js',
+  './court/engine.js'
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(PAGES).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
+    Promise.all([
+      caches.open(PAGES).then((cache) => cache.addAll(PRECACHE)),
+      caches.open(ASSETS).then((cache) => cache.addAll(COURT))
+    ]).then(() => self.skipWaiting())
   );
 });
 

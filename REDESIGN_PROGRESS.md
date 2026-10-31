@@ -48,3 +48,16 @@
 - **Not pushed** (awaiting approval).
 
 ### Next: 6b. privacy.html (awaiting approval)
+
+## Courtroom redesign
+### Stage A — Audit ✅ (approved)
+Keep/enrich سالم; improve خالد, عبدالله; replace ناصر; add ريم (probation) and سعد (overtime). Annual leave / work injury later.
+
+### Stage B — Visual redesign ✅ Complete (awaiting review)
+- **New `court/` folder:** `art.js` (all pixel art in code, 480×270), `cases.js` (the 4 existing cases moved verbatim — deep-equal to the old data), `engine.js` (original game logic carried over + new interface hooks), `court.css`.
+- **`index.html`:** the inline court styles/markup/script (813 lines) replaced by the entry-card styles and a small loader; the game now loads only when «ادخل قاعة المحكمة» is clicked. Everything outside that block is byte-identical.
+- **`sw.js`:** court files precached in the assets cache; VERSION bumped.
+- **Art:** 12 characters, each with its own silhouette, outfit, face and palette (judge, Faisal, Majed, clerk, Salem, Khalid, Nasser, Abdullah + Reem, Saad, Hind, Fahd for later cases); 11 expressions; poses (point, think, crossed, present, slam, clasp, write, gavel); outline + warm rim light; 6 rooms (wide establishing shot, judge bench, both counsel tables, witness stand, office); document thumbnails.
+- **Interface:** pixel-framed HUD/stage/dialogue, portrait name plates, numbered decision cards, case-intro card, «تُفتح الجلسة» establishing shot, stepped blinds transitions, verdict sheet with seal.
+- **Verified (headless Chromium):** all 4 cases won with correct totals (59,500 / 12,000 / 6,000 / 25,000) at 1280 and 360; lose path; buttons, Escape, focus return, sound toggle, evidence list; court files load only on click from `/jali/court/`; offline open works via the service worker; calculator 462-case comparison identical; homepage text identical; guide, quiz and promo art unaffected; no JS errors.
+- **Legal sources still blocked** (laws.boe.gov.sa, hrsd.gov.sa) — Stage C waits.

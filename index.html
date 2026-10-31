@@ -32,36 +32,85 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700;800;900&display=swap">
+<script>try{if(localStorage.getItem('jali-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <style>
 body{margin:0}[hidden]{display:none!important}img{max-width:100%}
 /* Layout: RTL editorial column; the hero pairs the headline with a bench card where one gavel strikes a sound block and switches the article between statute language and plain language. */
+/* ===== JALI design system — Premium Emerald Luxury (Session 1) =====
+   Dark is the default theme. A light theme is prepared under [data-theme="light"] (no toggle yet).
+   Legacy names (--bg, --surface, --ink, --green, --brass…) are kept and mapped onto the new tokens
+   so existing selectors keep working. #court defines its own scoped palette and is unaffected. */
 :root{
-  --bg:#F2F5F2; --surface:#FFFFFF; --surface-2:#E8EEEA; --ink:#13241E; --muted:#58695F; --line:#D3DCD6;
-  --green:#0E4B39; --green-ink:#FFFFFF; --brass:#A87A2A; --brass-soft:#EFE3C8;
+  /* Palette — dark layers */
+  --jali-night:#071A14; --jali-deep:#0C241B; --jali-forest:#102D23; --jali-forest-2:#153829;
+  /* Emerald */
+  --emerald:#0D8B65; --emerald-strong:#0A7354; --emerald-bright:#3DBB8F; --emerald-soft:#123D2E;
+  /* Champagne gold */
+  --gold-champagne:#D4B77A; --gold-deep:#B8975A; --gold-soft:#2A2818;
+  /* Ivory text */
+  --ivory:#F2EBDD; --ivory-muted:#B4BCAD;
+  /* Light-theme surfaces (used by [data-theme="light"]) */
+  --light-bg:#F6F2E9; --light-surface:#FFFDF8; --light-surface-2:#ECE6D8; --light-line:#D9D1BF;
+  --light-ink:#10241C; --light-muted:#4F5F56;
+
+  /* Semantic tokens (dark default) */
+  --bg:var(--jali-night); --surface:var(--jali-deep); --surface-2:var(--jali-forest); --surface-3:var(--jali-forest-2);
+  --ink:var(--ivory); --muted:var(--ivory-muted); --line:#1F4434; --line-strong:#2C5A46;
+  --border-gold:color-mix(in srgb,var(--gold-champagne) 35%,transparent);
+  --primary:var(--emerald); --primary-ink:var(--ivory);
+  --green:var(--emerald-bright); --green-ink:var(--jali-night);
+  --brass:var(--gold-champagne); --brass-soft:var(--gold-soft);
+  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
+  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C;
+  --shadow-sm:0 1px 2px rgb(0 0 0 / .35);
+  --shadow-md:0 6px 18px -6px rgb(0 0 0 / .5), 0 0 0 1px rgb(255 255 255 / .02);
+  --shadow-lg:0 22px 48px -16px rgb(0 0 0 / .65);
+  --focus-color:var(--gold-champagne); --focus-width:2px; --focus-offset:3px;
+  --focus-ring:0 0 0 3px color-mix(in srgb,var(--focus-color) 35%,transparent);
+  --selection-bg:color-mix(in srgb,var(--emerald) 45%,transparent);
+
+  /* Typography — heading font: Noto Kufi Arabic (Saudi Font not yet verified for licensing/hosting) */
+  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,"Geeza Pro","Segoe UI",sans-serif;
+  --f-body:"IBM Plex Sans Arabic",Tahoma,"Geeza Pro","Segoe UI",sans-serif;
+  --font-heading:var(--f-display); --font-body:var(--f-body);
+  --fs-xs:.8rem; --fs-sm:.9rem; --fs-base:1rem; --fs-md:1.15rem; --fs-lg:1.4rem;
+  --fs-xl:clamp(1.6rem,3.2vw,2.3rem); --fs-2xl:clamp(2.6rem,7vw,4.6rem);
+  --lh-body:1.85; --lh-heading:1.35; --measure:68ch;
+
+  /* Spacing, radii, transitions */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-xl:24px; --radius-pill:999px;
+  --r:var(--radius-md); --wrap:1120px;
+  --ease:cubic-bezier(.2,.7,.2,1); --dur-fast:.15s; --dur-base:.25s; --dur-slow:.45s;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:var(--light-bg); --surface:var(--light-surface); --surface-2:var(--light-surface-2); --surface-3:#E3DCCB;
+  --ink:var(--light-ink); --muted:var(--light-muted); --line:var(--light-line); --line-strong:#C4BAA3;
+  --border-gold:color-mix(in srgb,#8A6420 35%,transparent);
+  --primary:var(--emerald-strong); --primary-ink:#FFFFFF;
+  --green:#0B6E50; --green-ink:#FFFFFF;
+  --brass:#8A6420; --brass-soft:#F0E4C6;
   --wood:#6E4027; --wood-2:#4B2A19; --wood-hi:#8C5636; --metal:#C9A45C;
   --good:#1F7A4D; --warn:#9A6A12; --bad:#A63A2E;
-  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;
-  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
-  --r:10px; --wrap:1120px;
+  --shadow-sm:0 1px 2px rgb(16 36 28 / .08);
+  --shadow-md:0 6px 18px -8px rgb(16 36 28 / .18);
+  --shadow-lg:0 22px 48px -18px rgb(16 36 28 / .25);
+  --focus-color:#8A6420;
+  --selection-bg:color-mix(in srgb,var(--emerald) 25%,transparent);
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0B1411; --surface:#121E19; --surface-2:#18271F; --ink:#E4EDE8; --muted:#97A99F; --line:#26372F;
-  --green:#5DBA94; --green-ink:#0B1411; --brass:#D9A954; --brass-soft:#352B18;
-  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
-  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0B1411; --surface:#121E19; --surface-2:#18271F; --ink:#E4EDE8; --muted:#97A99F; --line:#26372F;
-  --green:#5DBA94; --green-ink:#0B1411; --brass:#D9A954; --brass-soft:#352B18;
-  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
-  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C; color-scheme:dark}
+@media (prefers-reduced-motion: reduce){:root{--dur-fast:0s;--dur-base:0s;--dur-slow:0s}}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.85}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--selection-bg);color:var(--ink)}
 .site{position:relative;padding-inline:16px;overflow-x:clip}
 .wrap{max-width:var(--wrap);margin-inline:auto}
 a{color:var(--green)}
-:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:var(--focus-width) solid var(--focus-color);outline-offset:var(--focus-offset);border-radius:4px}
 h1,h2,h3{font-family:var(--f-display);line-height:1.35;text-wrap:balance;margin:0}
 h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:600}
 h3{font-size:1.2rem;font-weight:600}
@@ -71,15 +120,26 @@ p{margin:0}
 .art{display:inline-flex;align-items:center;gap:.25em;font-size:.78rem;font-weight:600;color:var(--green);border:1px solid color-mix(in srgb,var(--green) 40%,transparent);border-radius:999px;padding:0 .6em;line-height:1.7;white-space:nowrap;vertical-align:middle}
 
 /* header */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
-.top .wrap{display:flex;align-items:center;gap:20px;min-height:62px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
+.top::after{content:"";position:absolute;inset-inline:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--border-gold) 30%,var(--border-gold) 70%,transparent);pointer-events:none}
+.top .wrap{display:flex;align-items:center;gap:var(--space-5);min-height:64px}
 .brand{font-family:var(--f-display);font-size:1.6rem;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
-.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--green);display:grid;place-items:center}
+.brand-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(145deg,var(--emerald-bright),var(--emerald));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold-champagne) 45%,transparent),var(--shadow-sm);display:grid;place-items:center;transition:transform var(--dur-base) var(--ease)}
+.brand:hover .brand-mark{transform:rotate(-8deg)}
 .brand-mark svg{width:18px;height:18px}
 .nav{display:flex;gap:4px;margin-inline-start:auto;flex-wrap:wrap}
-.nav a{color:var(--muted);text-decoration:none;font-size:.92rem;padding:6px 10px;border-radius:8px}
-.nav a:hover{color:var(--ink);background:var(--surface-2)}
-@media (max-width:820px){.nav{display:none}}
+.nav a{position:relative;color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:500;padding:6px 10px;border-radius:var(--radius-sm);white-space:nowrap;transition:color var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease)}
+.nav a::after{content:"";position:absolute;inset-inline:10px;bottom:2px;height:1px;background:var(--brass);transform:scaleX(0);transition:transform var(--dur-base) var(--ease)}
+.nav a:hover,.nav a:focus-visible{color:var(--ink);background:color-mix(in srgb,var(--surface-2) 70%,transparent)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1)}
+@media (max-width:820px){
+  .top .wrap{flex-wrap:wrap;row-gap:0}
+  .brand{min-height:60px}
+  .nav{order:3;flex:1 0 100%;flex-wrap:nowrap;margin-inline:-16px;padding:2px 16px 8px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent)}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{scroll-snap-align:start;font-size:.88rem;padding:5px 10px;border:1px solid var(--line);border-radius:var(--radius-pill)}
+  .nav a::after{display:none}
+}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;font-size:.95rem;border-radius:var(--r);padding:10px 18px;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:background .2s,border-color .2s,transform .1s}
 .btn:active{transform:translateY(1px)}
 .btn-primary{background:var(--green);color:var(--green-ink)}
@@ -92,9 +152,12 @@ p{margin:0}
 main{position:relative;z-index:1}
 
 /* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding-block:64px 48px}
-@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr);gap:28px;padding-top:40px}}
-.hero-text{max-width:34rem;display:grid;gap:22px}
+.hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:var(--space-7);align-items:center;padding-block:72px 56px}
+.hero::before{content:"";position:absolute;z-index:-1;inset:-40px -10% auto;height:min(620px,100%);background:radial-gradient(60% 55% at 78% 30%,color-mix(in srgb,var(--emerald) 22%,transparent),transparent 70%),radial-gradient(40% 40% at 15% 75%,color-mix(in srgb,var(--gold-champagne) 7%,transparent),transparent 70%);pointer-events:none}
+@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr);gap:var(--space-6);padding-top:40px}.hero::before{inset:-20px -16px auto}}
+.hero-text{max-width:36rem;display:grid;gap:var(--space-5)}
+.hero .eyebrow{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border:1px solid var(--border-gold);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--brass) 8%,transparent)}
+.hero .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brass)}
 /* bench: the gavel, the sound block, and the article it rules on */
 .bench{padding:20px 20px 22px;display:grid;gap:14px;border-radius:18px}
 .bench-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -121,11 +184,23 @@ a.art:hover{background:color-mix(in srgb,var(--green) 10%,transparent)}
 .verdict{transition:opacity .24s ease,transform .24s ease,filter .24s ease}
 .verdict.fading{opacity:0;transform:translateY(-6px);filter:blur(3px)}
 .bench-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
-.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;line-height:1.15}
+.hero h1{font-size:clamp(2.4rem,6.4vw,4.3rem);font-weight:700;line-height:1.25;letter-spacing:0}
+.hero h1 .h1-accent{color:var(--green)}
 .hero h1 .dot{color:var(--brass)}
+.hero-sub{margin:0;font-size:clamp(1.12rem,2.2vw,1.3rem);font-weight:500;line-height:1.8;color:var(--ink);max-width:32rem}
 .lead{font-size:1.15rem;color:var(--muted);max-width:32rem}
 .lead b{color:var(--ink);font-weight:600}
-.cta{display:flex;flex-wrap:wrap;gap:10px}
+.cta{display:flex;flex-wrap:wrap;gap:var(--space-3)}
+.hero .cta .btn{min-height:48px;padding:12px 22px;font-size:1rem;border-radius:var(--radius-md);transition:background-color var(--dur-base) var(--ease),border-color var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease),transform var(--dur-fast) var(--ease)}
+.hero .cta .btn-primary{background:linear-gradient(180deg,var(--emerald-strong),#085E45);color:var(--ivory);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold-champagne) 30%,transparent),0 10px 24px -12px color-mix(in srgb,var(--emerald) 80%,transparent)}
+.hero .cta .btn-primary:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold-champagne) 60%,transparent),0 14px 30px -12px color-mix(in srgb,var(--emerald) 90%,transparent);transform:translateY(-1px)}
+.hero .cta .btn-ghost{background:color-mix(in srgb,var(--surface) 60%,transparent);border-color:var(--line-strong)}
+.hero .cta .btn-ghost:hover{border-color:var(--brass);color:var(--brass)}
+.hero .cta .btn:focus-visible{outline-offset:3px;box-shadow:var(--focus-ring)}
+.cta-arrow{display:inline-block;transition:transform var(--dur-base) var(--ease)}
+.hero .cta .btn-primary:hover .cta-arrow{transform:translateX(-4px)}
+:root[data-theme="light"] .hero .cta .btn-primary{color:#fff}
+@media (max-width:480px){.hero .cta .btn{flex:1 1 100%}}
 .hint{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
 .hint .arrow{display:inline-block;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(4px)}}
@@ -342,6 +417,127 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;font-size:.85rem
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
 
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.hint .arrow{animation:none}.bench.strike .gavel,.bench.strike .ripple,.bench.idle .halo{animation:none}.verdict{transition:none}}
+
+/* ===== Session 3 — homepage sections (scoped to main#top; #court is outside main) ===== */
+#top > .wrap > section:not(.hero){padding-block:clamp(56px,8vw,88px);scroll-margin-top:72px}
+#top > .wrap > section:not(.hero) + section{border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+#top .sec-head{gap:var(--space-3);margin-bottom:var(--space-6)}
+#top .sec-head .eyebrow{display:inline-flex;align-items:center;gap:10px;justify-self:start}
+#top .sec-head .eyebrow::before{content:"";width:22px;height:1px;background:var(--brass)}
+#top .sec-head h2{line-height:1.4}
+#top .sec-head p{font-size:1.02rem;max-width:var(--measure)}
+/* Shared informational card look */
+#top .step,#top .where > .panel,#top .tcard,#top .trust > div,#top .qa,#top .topic{border-radius:var(--radius-lg);background:linear-gradient(180deg,color-mix(in srgb,var(--surface-2) 55%,var(--surface)),var(--surface));box-shadow:var(--shadow-sm);transition:border-color var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease)}
+#top .step:hover,#top .where > .panel:hover,#top .tcard:hover,#top .trust > div:hover,#top .qa:hover{border-color:var(--border-gold);box-shadow:var(--shadow-md)}
+/* How it works */
+#top .step{padding:var(--space-5)}
+#top .step .n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--border-gold);background:color-mix(in srgb,var(--brass) 10%,transparent);font-size:.95rem}
+.step-links{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2)}
+.step-links a{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 14px;border-radius:var(--radius-pill);border:1px solid var(--line-strong);color:var(--green);font-size:.88rem;font-weight:600;text-decoration:none;transition:border-color var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease)}
+.step-links a::after{content:"←";transition:transform var(--dur-base) var(--ease)}
+.step-links a:hover,.step-links a:focus-visible{border-color:var(--green);background:color-mix(in srgb,var(--emerald) 12%,transparent)}
+.step-links a:hover::after{transform:translateX(-3px)}
+/* Topic article: legal explanation */
+#top .topic{background:var(--surface)}
+#top .topic-head{background:linear-gradient(180deg,color-mix(in srgb,var(--emerald) 12%,transparent),transparent);border-bottom-color:var(--line)}
+#top .topic-body h4{color:var(--ink)}
+#top .example{border-inline-start:3px solid var(--brass);border-radius:var(--radius-sm)}
+#top .tbl-wrap{border-radius:var(--radius-md)}
+#top tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 40%,transparent)}
+/* FAQ */
+#top .qa summary{min-height:56px;transition:color var(--dur-fast) var(--ease)}
+#top .qa summary:hover{color:var(--brass)}
+#top .qa summary:focus-visible{outline-offset:-2px;border-radius:var(--radius-lg)}
+#top .qa summary::after{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--border-gold);font-size:1.1rem}
+#top .qa[open]{border-color:var(--border-gold)}
+#top .qa p{line-height:1.9}
+/* Where to go */
+#top .where .n{background:transparent;color:var(--brass);border:1px solid var(--border-gold)}
+#top .where .who{color:var(--green);font-weight:500}
+/* Topics */
+#top .tcard:has(.pill.live){border-color:color-mix(in srgb,var(--green) 45%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--emerald) 14%,var(--surface)),var(--surface))}
+/* Student path */
+#top .path-title{margin-top:var(--space-2);margin-bottom:var(--space-3)}
+#top .path{border-radius:var(--radius-lg);counter-reset:path}
+#top .path > div{counter-increment:path;padding:var(--space-5)}
+#top .path > div b::before{content:counter(path) " · ";color:var(--brass)}
+/* Court promo (canvas untouched) */
+#top .promo{margin-top:var(--space-5);padding:var(--space-6);border-radius:var(--radius-xl);border-color:var(--border-gold);background:radial-gradient(80% 120% at 100% 0%,color-mix(in srgb,var(--emerald) 22%,transparent),transparent 60%),var(--surface);box-shadow:var(--shadow-md)}
+/* Trust */
+#top .trust > div{border-top:2px solid color-mix(in srgb,var(--brass) 55%,transparent)}
+@media (max-width:820px){
+  #top .promo{grid-template-columns:minmax(0,1fr);padding:var(--space-5)}
+  #top .step,#top .where > .panel,#top .trust > div{padding:var(--space-4) var(--space-5)}
+}
+@media (max-width:480px){#top .sec-head{margin-bottom:var(--space-5)}}
+
+/* ===== Session 4a — calculator (visual only; IDs/classes used by JS unchanged) ===== */
+#calc .calc{gap:var(--space-5)}
+#calc .form,#calc .out{border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-md)}
+#calc .form{gap:var(--space-5);background:linear-gradient(180deg,color-mix(in srgb,var(--surface-2) 50%,var(--surface)),var(--surface))}
+#calc .row2{gap:var(--space-4)}
+#calc .field{gap:var(--space-2)}
+#calc .field label{font-size:.92rem;color:var(--ink)}
+#calc .field .help{font-size:.82rem;line-height:1.7}
+#calc input[type=number],#calc select{min-height:48px;padding:10px 14px;font-size:1rem;border:1px solid var(--line-strong);border-radius:var(--radius-md);background-color:color-mix(in srgb,var(--bg) 80%,var(--surface));color:var(--ink);transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease)}
+#calc input[type=number]{font-variant-numeric:tabular-nums}
+#calc select{appearance:none;-webkit-appearance:none;padding-inline-end:40px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23D4B77A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:left 16px center;background-size:12px 8px;background-repeat:no-repeat}
+:root[data-theme="light"] #calc select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238A6420' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+#calc input[type=number]:hover,#calc select:hover{border-color:color-mix(in srgb,var(--brass) 55%,var(--line-strong))}
+#calc input[type=number]:focus,#calc select:focus{border-color:var(--green);background-color:var(--bg);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}
+#calc input[type=number]:focus-visible,#calc select:focus-visible{outline:var(--focus-width) solid var(--focus-color);outline-offset:2px}
+#calc .check{min-height:44px;padding:var(--space-3) var(--space-4);border:1px solid var(--line);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface-2) 40%,transparent);cursor:pointer;line-height:1.75}
+#calc .check input{width:20px;height:20px;flex:none;margin-top:.3em;cursor:pointer}
+#calc .check:has(input:checked){border-color:color-mix(in srgb,var(--green) 55%,transparent);background:color-mix(in srgb,var(--emerald) 12%,transparent)}
+#calc .err{display:flex;gap:8px;align-items:flex-start;margin:0;padding:10px 14px;border-radius:var(--radius-md);border:1px solid color-mix(in srgb,var(--bad) 45%,transparent);background:color-mix(in srgb,var(--bad) 10%,transparent);font-weight:500;line-height:1.7}
+#calc .err::before{content:"!";flex:none;display:inline-grid;place-items:center;width:20px;height:20px;margin-top:.2em;border-radius:50%;background:var(--bad);color:var(--bg);font-size:.8rem;font-weight:700}
+#calc .err[hidden]{display:none!important}
+#calc .out{gap:var(--space-4);border-color:var(--border-gold);background:radial-gradient(90% 70% at 100% 0%,color-mix(in srgb,var(--emerald) 18%,transparent),transparent 70%),var(--surface);top:calc(var(--space-8) + 24px)}
+#calc .out .total{color:var(--green);padding-block:var(--space-2) var(--space-3);border-bottom:1px solid var(--border-gold);letter-spacing:0}
+#calc .out .total small{color:var(--brass)}
+#calc .lines{border-top:0}
+#calc .line{align-items:baseline;padding:12px 0;border-bottom-style:dashed}
+#calc .line:last-child{border-bottom:0}
+#calc .line span:last-child{color:var(--ink)}
+#calc .assume{gap:6px;padding:var(--space-4);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface-2) 45%,transparent);line-height:1.8}
+#calc .share-row{margin-top:0;padding-top:var(--space-2)}
+#calc .share-row .btn{min-height:44px}
+@media (max-width:900px){#calc .out{position:static}}
+@media (max-width:480px){#calc .form,#calc .out{padding:var(--space-5)}#calc .row2{gap:var(--space-3)}}
+.theme-btn{display:inline-grid;place-items:center;flex:none;width:40px;height:40px;padding:0;border:1px solid var(--line-strong);border-radius:999px;background:transparent;color:var(--brass);cursor:pointer;transition:border-color .2s,background-color .2s}
+.theme-btn:hover{border-color:var(--brass);background:color-mix(in srgb,var(--brass) 10%,transparent)}
+.theme-btn svg{width:18px;height:18px}
+.theme-btn .i-moon{display:none}
+:root[data-theme="light"] .theme-btn .i-sun{display:none}
+:root[data-theme="light"] .theme-btn .i-moon{display:block}
+
+/* ===== Session 4b–4d — guide, «وين أروح», quiz (visual only; JS-built classes unchanged) ===== */
+#guide .q,#guide .result,#quiz .quiz,#help .docs{border-radius:var(--radius-lg);background:linear-gradient(180deg,color-mix(in srgb,var(--surface-2) 55%,var(--surface)),var(--surface));box-shadow:var(--shadow-md)}
+#guide .guide{gap:var(--space-5)}
+#guide .q,#guide .result{padding:var(--space-6)}
+#guide .choices{gap:var(--space-3)}
+#guide .choice{min-height:56px;padding:12px 16px;border-radius:var(--radius-md);background:color-mix(in srgb,var(--bg) 60%,var(--surface));border-color:var(--line-strong);font-weight:600;transition:border-color var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease)}
+#guide .choice small{font-weight:400}
+#guide .choice:hover{border-color:var(--brass);transform:translateY(-1px)}
+#guide .choice:focus-visible{outline-offset:2px}
+#guide .choice[aria-pressed="true"]{border-color:var(--green);background:color-mix(in srgb,var(--emerald) 16%,var(--surface));box-shadow:inset 0 0 0 1px var(--green)}
+#guide .result{border-top:3px solid var(--brass)}
+#guide .result .tag{justify-self:start;padding:2px 12px;border-radius:var(--radius-pill);border:1px solid color-mix(in srgb,var(--green) 45%,transparent);background:color-mix(in srgb,var(--emerald) 12%,transparent)}
+#guide .result ol li::marker{color:var(--brass);font-weight:700}
+#help .where .links .btn{min-height:42px}
+#help .docs{padding:var(--space-6);border-color:var(--border-gold)}
+#help .docs li::marker{color:var(--brass)}
+#quiz .quiz{padding:var(--space-6);margin-inline:auto;border-color:var(--border-gold)}
+#quiz .bar{height:8px;background:color-mix(in srgb,var(--surface-2) 70%,var(--bg));box-shadow:inset 0 0 0 1px var(--line)}
+#quiz .bar i{background:linear-gradient(90deg,var(--gold-deep),var(--brass));transition:width var(--dur-slow) var(--ease)}
+#quiz .opts{gap:var(--space-3)}
+#quiz .opt{position:relative;min-height:50px;padding:12px 16px;padding-inline-end:44px;border-radius:var(--radius-md);background:color-mix(in srgb,var(--bg) 60%,var(--surface));border-color:var(--line-strong);font-weight:500;transition:border-color var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease)}
+#quiz .opt:hover:not(:disabled){border-color:var(--brass)}
+#quiz .opt.right::after,#quiz .opt.wrong::after{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:.8rem;font-weight:700;color:#fff}
+#quiz .opt.right::after{content:"✓";background:var(--good)}
+#quiz .opt.wrong::after{content:"✗";background:var(--bad)}
+#quiz .explain{padding:12px 14px;padding-inline-start:14px;border-radius:var(--radius-sm);background:color-mix(in srgb,var(--surface-2) 55%,transparent);line-height:1.9}
+@media (max-width:480px){#guide .q,#guide .result,#quiz .quiz,#help .docs{padding:var(--space-5)}}
 </style>
 <script data-goatcounter="https://zs2n.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
@@ -355,6 +551,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
         <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-ink)" stroke-width="2" stroke-linecap="round"><path d="M4 19h10M13 5l6 6M10 8l6 6M14 7l-5 5"/></svg></span>
         جَلِيّ
       </a>
+      <button class="theme-btn" type="button" aria-pressed="false" aria-label="التبديل إلى الوضع الفاتح" title="التبديل إلى الوضع الفاتح"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
       <nav class="nav" aria-label="أقسام الموقع">
         <a href="#topic">الموضوع</a>
         <a href="#faq">أسئلة</a>
@@ -418,10 +615,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
       <section class="hero" id="hero">
         <div class="hero-text">
           <span class="eyebrow">منصة توعية قانونية · نسخة تجريبية</span>
-          <h1>القانون،<br>جَلِيّ<span class="dot">.</span></h1>
+          <h1>لا تترك حقك<br><span class="h1-accent">مجهولًا</span><span class="dot">.</span></h1>
+          <p class="hero-sub">افهم حقوقك في العمل، واعرف موقفك النظامي، وخطوتك القادمة.</p>
           <p class="lead"><span data-lv="simple">نظام العمل السعودي بكلام بسيط: تعرف <b>وش حقك</b> و<b>وش تسوي</b> بعدها، وإذا تبي النص النظامي اضغط زر «قانوني».</span><span data-lv="legal" hidden>نظام العمل السعودي مشروحاً بمستويين: <b>«عامي»</b> لمعرفة الحق والخطوة التالية، و<b>«قانوني»</b> لقراءة المادة النظامية وتطبيقها على قضية.</span></p>
           <div class="cta">
-            <a class="btn btn-primary" href="#guide">ابدأ المرشد</a>
+            <a class="btn btn-primary" href="#guide">ابدأ بمعرفة حقك <span class="cta-arrow" aria-hidden="true">←</span></a>
             <a class="btn btn-ghost" href="#calc">احسب مستحقاتك</a>
           </div>
           <p class="hint">اضغط المطرقة: مرة للشرح المبسّط، ومرة للغة النظام.</p>
@@ -484,9 +682,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
           <h2>ثلاث خطوات من السؤال إلى القرار</h2>
         </div>
         <div class="steps">
-          <div class="panel step"><span class="n">1</span><h3>أفهم حقي</h3><p>شرح بلغة يومية مع مثال واقعي، ومتى تنطبق القاعدة ومتى لا تنطبق.</p></div>
-          <div class="panel step"><span class="n">2</span><h3>أعرف وضعي</h3><p>مرشد يسألك عن حالتك، وحاسبة تعطيك نتيجة أولية مع افتراضاتها.</p></div>
-          <div class="panel step"><span class="n">3</span><h3>أعرف ماذا أفعل</h3><p>الخطوات العملية والمستندات المطلوبة والجهة الرسمية المناسبة لحالتك.</p></div>
+          <div class="panel step"><span class="n">1</span><h3>أفهم حقي</h3><p>شرح بلغة يومية مع مثال واقعي، ومتى تنطبق القاعدة ومتى لا تنطبق.</p><div class="step-links"><a href="#topic">اقرأ الشرح</a></div></div>
+          <div class="panel step"><span class="n">2</span><h3>أعرف وضعي</h3><p>مرشد يسألك عن حالتك، وحاسبة تعطيك نتيجة أولية مع افتراضاتها.</p><div class="step-links"><a href="#guide">المرشد</a><a href="#calc">الحاسبة</a></div></div>
+          <div class="panel step"><span class="n">3</span><h3>أعرف ماذا أفعل</h3><p>الخطوات العملية والمستندات المطلوبة والجهة الرسمية المناسبة لحالتك.</p><div class="step-links"><a href="#help">وين أروح</a></div></div>
         </div>
       </section>
 
@@ -950,775 +1148,52 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 </div>
 
 <style>
-/* Mock court game: scoped under #court, its own dark palette */
-#court{
-  --bg:#12100E; --panel:#1E1915; --panel-2:#2A231D; --ink:#F3ECE1; --muted:#B5A898; --line:#4A3D31;
-  --gold:#E2B04A; --gold-ink:#1A140E; --red:#E0533F; --blue:#6FB7E8; --good:#6CCB8B;
-  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;
-  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
-  color-scheme:dark;
-}
-#court .cwrap{max-width:900px;margin-inline:auto;padding-inline:16px;padding-block:20px 40px;display:grid;gap:12px}
-#court :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-#court button{font:inherit;cursor:pointer}
-#court .hud{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-#court .title{font-family:var(--f-display);font-weight:900;font-size:1.25rem;letter-spacing:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#court .title span{color:var(--gold)}
-#court .title small{font-family:var(--f-body);font-weight:500;font-size:.85rem;color:var(--muted)}
-#court .hud-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-#court .trust{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
-#court .trust i{width:14px;height:14px;background:var(--gold);display:inline-block;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-#court .trust i.off{background:var(--line)}
-#court .pbtn{background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:4px;padding:5px 12px;font-weight:600;font-size:.88rem;box-shadow:0 3px 0 #000}
-#court .pbtn:hover{border-color:var(--gold)}
-#court .pbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #000}
-#court .pbtn.gold{background:var(--gold);color:var(--gold-ink);border-color:#000}
-#court .pbtn.red{background:var(--red);color:#fff;border-color:#000}
-#court .stage{position:relative;aspect-ratio:16/9;width:100%;max-width:100%;border:4px solid #000;border-radius:6px;overflow:hidden;background:#000;box-shadow:0 0 0 2px var(--line)}
-#court canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
-#court .stage.shake{animation:c-shake .35s steps(6)}
-@keyframes c-shake{20%{transform:translate(6px,-3px)}40%{transform:translate(-6px,3px)}60%{transform:translate(4px,2px)}80%{transform:translate(-3px,-2px)}}
-#court .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
-#court .flash.on{animation:c-flash .3s ease-out}
-@keyframes c-flash{0%{opacity:.85}100%{opacity:0}}
-#court .objection{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
-#court .objection b{font-family:var(--f-display);font-weight:900;font-size:clamp(2.2rem,9vw,5rem);color:#fff;background:var(--red);padding:.2em .8em .35em;clip-path:polygon(4% 18%,16% 4%,30% 14%,46% 0,58% 13%,74% 2%,84% 16%,98% 10%,92% 34%,100% 52%,90% 66%,97% 88%,80% 84%,66% 100%,52% 86%,36% 98%,24% 84%,6% 94%,10% 70%,0 52%,8% 36%);-webkit-text-stroke:3px #000;paint-order:stroke fill;animation:c-pop .9s steps(4)}
-@keyframes c-pop{0%{transform:scale(.3)}20%{transform:scale(1.12)}35%{transform:scale(1)}100%{transform:scale(1)}}
-#court .box{background:var(--panel);border:4px solid #000;box-shadow:0 0 0 2px var(--line);border-radius:6px;padding:14px 18px 16px;min-height:9.5em;display:grid;gap:8px;align-content:start;position:relative;cursor:pointer}
-#court .name{justify-self:start;font-family:var(--f-display);font-weight:800;font-size:.95rem;background:var(--gold);color:var(--gold-ink);padding:1px 12px 3px;border-radius:3px;margin-top:-30px;border:2px solid #000}
-#court .name.n-judge{background:#D9D2C4}
-#court .name.n-rival{background:var(--red);color:#fff}
-#court .name.n-client{background:var(--blue);color:#0B1822}
-#court .name.n-note{background:var(--good);color:#0D1F14}
-#court .text{font-size:1.08rem;line-height:1.95;min-height:3.9em}
-#court .text.cross{color:var(--good)}
-#court .more{position:absolute;inset-inline-end:16px;bottom:8px;color:var(--gold);animation:c-blink 1s steps(2) infinite}
-@keyframes c-blink{50%{opacity:0}}
-#court .ctrl{display:flex;flex-wrap:wrap;gap:8px}
-#court .ctrl .sp{flex:1}
-#court .choices{display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}
-#court .choice{background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:4px;padding:9px 12px;text-align:start;font-weight:500}
-#court .choice:hover{border-color:var(--gold)}
-#court .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px;z-index:10}
-#court .sheet{background:var(--panel);border:4px solid #000;box-shadow:0 0 0 2px var(--line);border-radius:6px;padding:18px;max-width:600px;width:100%;max-height:88vh;overflow:auto;display:grid;gap:12px}
-#court .sheet h2{font-family:var(--f-display);font-weight:800;font-size:1.2rem;margin:0}
-#court .ev{background:var(--panel-2);border:2px solid var(--line);border-radius:4px;padding:12px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
-#court .ev canvas{width:44px;height:44px;image-rendering:pixelated;background:#0d0b09;border:2px solid #000}
-#court .ev h3{margin:0;font-family:var(--f-display);font-size:1rem;font-weight:800}
-#court .ev p{margin:0;font-size:.92rem;color:var(--muted)}
-#court .ev .pbtn{margin-top:8px}
-#court .empty{color:var(--muted)}
-#court .start{display:grid;gap:14px;text-align:center;justify-items:center}
-#court .start h1{font-family:var(--f-display);font-weight:900;font-size:clamp(2rem,6vw,3rem);margin:0;line-height:1.3}
-#court .start h1 span{color:var(--gold)}
-#court .start p{margin:0;color:var(--muted);max-width:30rem}
-#court .cases{display:grid;gap:10px;width:100%;text-align:start}
-#court .case{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--panel-2);border:2px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--ink);text-align:start;box-shadow:0 3px 0 #000}
-#court .case:hover{border-color:var(--gold)}
-#court .case .no{font-family:var(--f-display);font-weight:900;color:var(--gold);font-size:1.4rem;line-height:1}
-#court .case b{font-family:var(--f-display);font-weight:800;display:block}
-#court .case small{color:var(--muted);font-size:.85rem;display:block;line-height:1.6}
-#court .case .badge{font-size:.75rem;font-weight:700;border-radius:3px;padding:1px 8px;white-space:nowrap}
-#court .case .badge.done{background:var(--good);color:#0D1F14}
-#court .case .badge.new{background:var(--line);color:var(--ink)}
-#court .end-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-#court .foot{font-size:.8rem;color:var(--muted);text-align:center}
-@media (prefers-reduced-motion: reduce){#court .stage.shake,#court .flash.on,#court .objection b,#court .more{animation:none}}
-#court{position:fixed;inset:0;z-index:50;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8;overflow-y:auto;overscroll-behavior:contain;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-#court .modal{z-index:60}
-#court *{box-sizing:border-box}
-
+/* Courtroom entry card on the homepage. The game itself lives in ./court/ and loads on demand. */
+#court-promo{overflow:hidden}
+#court-promo .promo-text h3{font-size:clamp(1.35rem,2.6vw,1.75rem);line-height:1.4}
+#court-promo .promo-text p{line-height:1.9;max-width:34rem}
+#court-promo #playCourt{min-height:48px;padding:10px 22px;border:2px solid #000;border-radius:6px;box-shadow:0 4px 0 #000,inset 0 0 0 1px color-mix(in srgb,var(--gold-champagne) 45%,transparent);transition:transform var(--dur-fast) steps(2),box-shadow var(--dur-fast) steps(2)}
+#court-promo #playCourt:hover{transform:translateY(-1px);box-shadow:0 5px 0 #000,inset 0 0 0 1px var(--gold-champagne)}
+#court-promo #playCourt:active{transform:translateY(3px);box-shadow:0 1px 0 #000}
+#court-promo #promoArt{border-width:4px;border-radius:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gold-champagne) 40%,transparent),0 18px 40px -18px rgb(0 0 0 / .8);transition:box-shadow var(--dur-base) var(--ease)}
+#court-promo:hover #promoArt{box-shadow:0 0 0 2px var(--gold-champagne),0 18px 40px -18px rgb(0 0 0 / .8)}
+@media (max-width:820px){#court-promo #promoArt{order:-1}#court-promo #playCourt{justify-self:stretch}}
+@media (prefers-reduced-motion: reduce){#court-promo #playCourt,#court-promo #promoArt{transition:none}}
 </style>
-<div id="court" hidden role="dialog" aria-modal="true" aria-label="محكمة جَلِيّ">
-<div class="cwrap" dir="rtl" lang="ar">
-  <div class="hud">
-    <div class="title"><button class="pbtn" id="c-exit" type="button" style="margin-inline-end:4px">خروج</button>محكمة <span>جَلِيّ</span> <small id="c-caseTitle"></small></div>
-    <div class="hud-r">
-      <div class="trust" aria-label="ثقة المحكمة"><span>ثقة المحكمة</span><span id="c-trust"></span></div>
-      <button class="pbtn" id="c-recBtn" type="button">المستندات</button>
-      <button class="pbtn" id="c-casesBtn" type="button">القضايا</button>
-      <button class="pbtn" id="c-sndBtn" type="button" aria-pressed="true"><span data-s="on">الصوت: مفتوح</span><span data-s="off" hidden>الصوت: مغلق</span></button>
-    </div>
-  </div>
-
-  <div class="stage" id="c-stage">
-    <canvas id="c-cv" width="320" height="180" aria-label="قاعة المحكمة"></canvas>
-    <div class="flash" id="c-flash"></div>
-    <div class="objection" id="c-obj" hidden><b>اعتراض!</b></div>
-  </div>
-
-  <div class="box" id="c-box" tabindex="0" aria-live="polite">
-    <span class="name" id="c-name">جَلِيّ</span>
-    <p class="text" id="c-text">اختر قضية لتبدأ الجلسة.</p>
-    <div class="ctrl" id="c-crossCtrl" hidden>
-      <button class="pbtn" id="c-prevBtn" type="button">السابق</button>
-      <button class="pbtn" id="c-nextBtn" type="button">التالي</button>
-      <span class="sp"></span>
-      <button class="pbtn red" id="c-objBtn" type="button">اعتراض بمستند</button>
-    </div>
-    <div class="choices" id="c-choices" hidden></div>
-    <span class="more" id="c-more" hidden>▼</span>
-  </div>
-
-  <p class="foot">محاكاة تعليمية مبسّطة لقضايا عمالية متخيَّلة. الإجراءات الفعلية أمام المحاكم تختلف، والشخصيات والأسماء من وحي الخيال.</p>
-</div>
-
-<div class="modal" id="c-startModal">
-  <div class="sheet start">
-    <h1>محكمة <span>جَلِيّ</span></h1>
-    <p>أنت المحامي فيصل. اختر قضية، واقرأ مستنداتك، واعترض على كل إفادة كاذبة، ثم اطلب لموكلك حقه كاملاً وفق نظام العمل.</p>
-    <div class="cases" id="c-caseList"></div>
-  </div>
-</div>
-
-<div class="modal" id="c-recModal" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="c-recTitle">
-    <h2 id="c-recTitle">المستندات</h2>
-    <p class="empty" id="c-recHint">اختر المستند الذي يناقض العبارة.</p>
-    <div id="c-recList" style="display:grid;gap:10px"></div>
-    <button class="pbtn" id="c-recClose" type="button">إغلاق</button>
-  </div>
-</div>
-
-<div class="modal" id="c-endModal" hidden>
-  <div class="sheet start">
-    <h1 id="c-endTitle"></h1>
-    <div id="c-endBody" style="display:grid;gap:8px;text-align:start"></div>
-    <div class="end-btns">
-      <button class="pbtn gold" id="c-nextCaseBtn" type="button">القضية التالية</button>
-      <button class="pbtn" id="c-againBtn" type="button">أعد القضية</button>
-      <button class="pbtn" id="c-listBtn" type="button">كل القضايا</button>
-    </div>
-  </div>
-</div>
-
-</div>
 <script>
+/* Theme switch: dark is the default; the choice is remembered on this device only. */
 (function(){
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var $ = function(id){ return document.getElementById(id); };
-  var cv = $('c-cv'), C = cv.getContext('2d'); C.imageSmoothingEnabled = false;
-  function R(x,y,w,h,c){ C.fillStyle=c; C.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h)); }
-
-  /* ---------------- characters (all original) ---------------- */
-  var SKIN='#C98E62', SKIN_D='#A8714B', SKIN_L='#D9A27A', HAIR='#1C1410';
-  var CHARS = {
-    player:{name:'فيصل (أنت)', tag:'n-player', red:true,  bisht:'#15120F', trim:'#D9A93E', beard:'#1C1410', beardStyle:'full', glasses:false, view:'player'},
-    rival: {name:'ماجد، محامي الشركة', tag:'n-rival', red:true, bisht:'#5B3A22', trim:'#B98A43', beard:'#2A1E17', beardStyle:'goatee', glasses:true, view:'rival'},
-    judge: {name:'القاضي', tag:'n-judge', red:false, bisht:'#121110', trim:'#E2B04A', beard:'#8E8A84', beardStyle:'full', grey:true, glasses:false, view:'judge'}
-  };
-  var CLIENTS = {
-    salem:   {name:'سالم',   tag:'n-client', red:false, beard:'#2B2019', beardStyle:'full',     skin:'#C98E62', view:'lobby'},
-    khalid:  {name:'خالد',   tag:'n-client', red:true,  beard:'#231914', beardStyle:'goatee',   skin:'#B98055', glasses:true, view:'lobby'},
-    nasser:  {name:'ناصر',   tag:'n-client', red:false, beard:'#9C968E', beardStyle:'full',     skin:'#C08A60', grey:true, view:'lobby'},
-    abdullah:{name:'عبدالله', tag:'n-client', red:true,  beard:'#1E1612', beardStyle:'moustache',skin:'#D29A6E', view:'lobby'}
-  };
-
-  function shemagh(x,y,w,h,red){
-    R(x,y,w,h,'#F1EEE8');
-    if(red){ for(var j=0;j<h;j+=2){ for(var i=((j>>1)%2);i<w;i+=2){ C.fillStyle='#C23B2E'; C.fillRect(Math.round(x+i),Math.round(y+j),1,1); } } }
-    else { for(var k=3;k<h;k+=6) R(x,y+k,w,1,'#E8E4DD'); }
-  }
-  function fringe(x,y,w,red){ for(var i=0;i<w;i+=2){ R(x+i,y,1,2+((i>>1)%2),red?'#C23B2E':'#D8D3CA'); } }
-  function person(ch, cx, top, st){
-    var thobe='#EDEFEA', thobeS='#D3D7D0', skin = ch.skin || SKIN;
-    var breath = st.breath ? 1 : 0;
-    // 1. shemagh falling behind the head and neck, one continuous cloth
-    shemagh(cx-24, top+4, 48, 46, ch.red);
-    R(cx-24, top+4, 2, 46, 'rgba(0,0,0,.08)'); R(cx+22, top+4, 2, 46, 'rgba(0,0,0,.08)');
-    // 2. body
-    R(cx-31, top+42+breath, 62, 160, thobe);
-    R(cx-31, top+42+breath, 4, 160, thobeS);
-    R(cx+20, top+60, 2, 120, thobeS); R(cx-14, top+70, 2, 110, thobeS);
-    R(cx-7, top+40, 14, 3, thobeS);
-    R(cx-1, top+44, 2, 26, thobeS);
-    R(cx-1, top+50, 2, 2, '#9EA39A'); R(cx-1, top+58, 2, 2, '#9EA39A'); R(cx-1, top+66, 2, 2, '#9EA39A');
-    if(ch.bisht){
-      R(cx-41, top+42, 17, 160, ch.bisht); R(cx+24, top+42, 17, 160, ch.bisht);
-      R(cx-25, top+42, 2, 160, ch.trim); R(cx+23, top+42, 2, 160, ch.trim);
-      R(cx-41, top+40, 82, 4, ch.bisht);
-      R(cx-39, top+60, 1, 120, 'rgba(255,255,255,.06)'); R(cx+37, top+60, 1, 120, 'rgba(255,255,255,.06)');
-    }
-    // 3. shemagh ends draped over the chest
-    shemagh(cx-27, top+32, 12, 36, ch.red); fringe(cx-27, top+68, 12, ch.red);
-    shemagh(cx+15, top+32, 12, 30, ch.red); fringe(cx+15, top+62, 12, ch.red);
-    // 4. neck and head
-    R(cx-6, top+30, 12, 12, SKIN_D);
-    R(cx-13, top+7, 26, 27, skin); R(cx-11, top+33, 22, 3, skin);
-    R(cx+9, top+12, 4, 18, 'rgba(0,0,0,.08)'); R(cx-12, top+10, 3, 6, 'rgba(255,255,255,.08)');
-    // 5. shemagh crown framing the face, with the front peak
-    shemagh(cx-19, top-1, 38, 9, ch.red);
-    R(cx-3, top-3, 6, 3, '#F1EEE8'); if(ch.red){ R(cx-2, top-3, 1, 1, '#C23B2E'); R(cx+1, top-2, 1, 1, '#C23B2E'); }
-    shemagh(cx-20, top+4, 7, 34, ch.red); shemagh(cx+13, top+4, 7, 34, ch.red);
-    // 6. agal, double ring
-    R(cx-18, top+1, 36, 3, '#111'); R(cx-18, top+5, 36, 2, '#111'); R(cx-18, top+4, 36, 1, '#2A2A2A');
-    // brows
-    var browY = top+13 + (st.expr==='shock'?-1:0), bc = ch.grey?'#9b968f':HAIR;
-    if(st.expr==='worried' || st.expr==='sweat'){ R(cx-9,browY+1,2,1,bc); R(cx-7,browY,3,1,bc); R(cx+4,browY,3,1,bc); R(cx+7,browY+1,2,1,bc); }
-    else if(st.expr==='stern'){ R(cx-9,browY,3,1,bc); R(cx-6,browY+1,2,1,bc); R(cx+4,browY+1,2,1,bc); R(cx+6,browY,3,1,bc); }
-    else if(st.expr==='happy'){ R(cx-9,browY-1,5,1,bc); R(cx+4,browY-1,5,1,bc); }
-    else { R(cx-9,browY,5,1,bc); R(cx+4,browY,5,1,bc); }
-    // eyes
-    var ey = top+16;
-    if(st.blink || st.expr==='happy'){ R(cx-8,ey+1,3,1,'#1b1b1b'); R(cx+5,ey+1,3,1,'#1b1b1b'); }
-    else if(st.expr==='shock'){ R(cx-9,ey-1,5,4,'#fff'); R(cx+4,ey-1,5,4,'#fff'); R(cx-7,ey,1,2,'#000'); R(cx+6,ey,1,2,'#000'); }
-    else { R(cx-8,ey,3,3,'#1b1b1b'); R(cx+5,ey,3,3,'#1b1b1b'); R(cx-7,ey,1,1,'#fff'); R(cx+6,ey,1,1,'#fff'); }
-    if(ch.glasses){ var g='#222'; R(cx-10,ey-2,7,1,g); R(cx-10,ey+3,7,1,g); R(cx-10,ey-2,1,6,g); R(cx-4,ey-2,1,6,g); R(cx+3,ey-2,7,1,g); R(cx+3,ey+3,7,1,g); R(cx+3,ey-2,1,6,g); R(cx+9,ey-2,1,6,g); R(cx-3,ey,6,1,g); }
-    // nose
-    R(cx-1, top+19, 2, 5, SKIN_D); R(cx-2, top+23, 4, 1, SKIN_D);
-    // beard styles
-    var b = ch.beard;
-    if(ch.beardStyle==='full'){ R(cx-13, top+24, 4, 11, b); R(cx+9, top+24, 4, 11, b); R(cx-10, top+31, 20, 5, b); R(cx-6, top+25, 12, 2, b); }
-    else if(ch.beardStyle==='goatee'){ R(cx-6, top+25, 12, 2, b); R(cx-4, top+31, 8, 5, b); }
-    else { R(cx-6, top+25, 12, 2, b); R(cx-1, top+32, 2, 2, b); }
-    // mouth
-    if(st.mouth){ R(cx-3, top+27, 6, 3, '#3A0E0E'); R(cx-2, top+29, 4, 1, '#8C3B3B'); }
-    else if(st.expr==='happy'){ R(cx-3, top+28, 6, 1, '#3A2016'); R(cx-4, top+27, 1, 1, '#3A2016'); R(cx+3, top+27, 1, 1, '#3A2016'); }
-    else { R(cx-3, top+28, 6, 1, '#3A2016'); }
-    // sweat
-    if(st.expr==='sweat'){ R(cx+15, top+12, 2, 3, '#9FD3FF'); R(cx+14, top+15, 4, 2, '#9FD3FF'); }
-    // pointing arm, attached at the shoulder
-    if(st.pose==='point'){
-      var dir = st.dir || 1, sx = dir>0 ? cx+18 : cx-18-58;
-      R(sx, top+58, 58, 11, thobe); R(sx, top+67, 58, 2, thobeS);
-      var hx = dir>0 ? sx+58 : sx-8;
-      R(hx, top+59, 8, 10, skin); R(dir>0? hx+8 : hx-7, top+61, 7, 3, skin);
-    }
-  }
-
-  /* ---------------- backgrounds ---------------- */
-  function wall(base, dark, light){
-    R(0,0,320,180,base);
-    for(var x=0;x<320;x+=32){ R(x,0,2,180,dark); R(x+2,0,1,180,light); }
-    R(0,38,320,3,dark); R(0,41,320,1,light);
-  }
-  var BOOKS = ['#7A2E26','#2F4A3A','#B98A43','#3C4C6A','#5E3A22','#8E6A3A','#2A3A33','#6B2B3A'];
-  function shelf(x,y,w){
-    R(x,y,w,60,'#3A2414'); R(x+2,y+2,w-4,56,'#24160C');
-    for(var row=0;row<2;row++){
-      var yy=y+4+row*28, xx=x+4, k=row*3;
-      while(xx < x+w-8){ var bw=4+((k*7)%4), bh=20+((k*5)%5); R(xx, yy+(24-bh), bw, bh, BOOKS[k%BOOKS.length]); R(xx, yy+(24-bh)+3, bw, 1, 'rgba(255,255,255,.15)'); xx+=bw+1; k++; }
-      R(x+2, yy+24, w-4, 3, '#4A2E18');
-    }
-  }
-  function scales(cx, y){
-    R(cx-1,y,2,22,'#D9A93E'); R(cx-14,y+4,28,2,'#D9A93E');
-    R(cx-15,y+6,1,8,'#D9A93E'); R(cx+14,y+6,1,8,'#D9A93E');
-    R(cx-19,y+14,10,2,'#D9A93E'); R(cx+10,y+14,10,2,'#D9A93E'); R(cx-6,y+22,12,2,'#D9A93E');
-  }
-  function desk(x, w, color, top){
-    R(x, 134, w, 46, color); R(x, 130, w, 5, top); R(x, 150, w, 1, 'rgba(0,0,0,.25)');
-    for(var i=x+20;i<x+w;i+=60) R(i, 138, 1, 40, 'rgba(0,0,0,.18)');
-  }
-  var gavelT = -1, client = 'salem';
-  var VIEWS = {
-    judge:function(st){
-      wall('#5C3B25','#43291A','#74503A'); scales(160, 8);
-      R(96,40,128,4,'#43291A');
-      person(CHARS.judge, 160, 46, st);
-      R(40,112,240,68,'#6E4428'); R(40,108,240,6,'#8B5A35'); R(40,124,240,1,'#4A2D1A');
-      for(var i=60;i<280;i+=40) R(i,130,1,50,'#4A2D1A');
-      R(140,128,40,24,'#5A381F'); scales(160,128);
-      R(222,102,24,6,'#3E2414'); R(224,100,20,3,'#6B4226');
-      var down = gavelT>=0 && gavelT<0.35;
-      if(down){ R(226,92,16,8,'#5E3A22'); R(242,94,22,3,'#8B5A35'); }
-      else { R(230,74,10,16,'#5E3A22'); R(238,86,18,3,'#8B5A35'); }
-      R(70,101,30,7,'#E9E3D3'); R(72,99,26,2,'#D6CEBA');
-    },
-    player:function(st){
-      wall('#3D4A3F','#2C372E','#4F5E52');
-      shelf(8,52,72); shelf(240,52,72);
-      person(CHARS.player, 150, 36, st);
-      desk(0,320,'#7A4B2A','#94603A');
-      R(30,124,40,8,'#E9E3D3'); R(32,122,36,2,'#D6CEBA'); R(250,122,28,10,'#2B241D'); R(252,120,24,2,'#3D342A');
-    },
-    rival:function(st){
-      wall('#4B3B44','#382B32','#5E4B56');
-      shelf(8,52,72); shelf(240,52,72);
-      person(CHARS.rival, 170, 36, st);
-      desk(0,320,'#6A3F25','#83532F');
-      R(240,122,46,10,'#E9E3D3'); R(30,123,22,9,'#B98A43');
-    },
-    lobby:function(st){
-      R(0,0,320,180,'#9DAA98'); R(0,118,320,62,'#6C665C'); R(0,116,320,3,'#5A554C');
-      R(232,30,56,90,'#5C3B25'); R(236,34,48,84,'#6E4428'); R(276,74,4,6,'#D9A93E');
-      R(18,40,60,40,'#C8D2C2'); R(20,42,56,36,'#A9B8A6'); R(47,42,2,36,'#C8D2C2'); R(20,59,56,2,'#C8D2C2');
-      R(96,96,8,24,'#5C4A2E'); R(88,78,24,22,'#4E7A45'); R(92,72,16,8,'#5E8A52');
-      R(0,150,320,30,'#4E483F');
-      person(CLIENTS[client], 170, 40, st);
-    }
-  };
-
-  /* ---------------- cases ---------------- */
-  var CASES = [
-    {id:'salem', client:'salem', title:'سالم ضد الشركة', sub:'إنهاء العقد دون سبب مشروع', arts:'م 76 · م 77 · م 80 · م 84',
-     intro:'موكلك سالم فقد عمله بعد ست سنوات، والشركة تقول إنه استقال.',
-     evid:{
-       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة بين سالم والشركة منذ عام 2020. الأجر الشهري 7,000 ريال.', icon:'#E9E3D3'},
-       letter:{title:'خطاب الإنهاء', desc:'صادر من الشركة في آخر يوم عمل: «نُنهي عقدك اعتباراً من اليوم». لا يذكر سبباً ولا مهلة إشعار.', icon:'#F5D9A6'},
-       attendance:{title:'سجل الحضور', desc:'سجل الحضور الرسمي للشركة للسنة الأخيرة: لا يوجد أي يوم غياب.', icon:'#BFE0C8'}},
-     script:[
-      {scene:'lobby', expr:'worried'},
-      {say:'client', text:'أستاذ فيصل، الحمد لله إنك جيت. الشركة أنهت عقدي بعد ست سنوات، والحين يقولون إني أنا اللي استقلت!'},
-      {say:'player', text:'اهدأ يا سالم. دعني أنظر في أوراقك أولاً.'},
-      {add:'contract'}, {add:'letter'}, {add:'attendance'},
-      {say:'player', text:'العقد غير محدد المدة، وخطاب الإنهاء صادر من الشركة دون سبب، وسجل الحضور نظيف. أوراقنا قوية.'},
-      {say:'client', text:'جربنا التسوية الودية في الوزارة وما وصلنا لحل، فانتقلت القضية للمحكمة العمالية.', expr:'normal'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'فُتحت الجلسة في الدعوى العمالية المقامة من سالم ضد الشركة. يتفضل محامي الشركة بإفادته.'},
-      {scene:'rival', expr:'normal'},
-      {say:'rival', text:'شكراً يا صاحب الفضيلة. موقفنا بسيط: المدعي استقال بإرادته، فلا يستحق إلا ما يقرره النظام للمستقيل.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'يا أستاذ فيصل، في الإفادة التالية عبارة واحدة يكذّبها أحد مستنداتك. تنقّل بين العبارات بزرّي السابق والتالي، ثم اعترض عليها بالمستند المناسب.'},
-      {cross:{lines:['المدعي عمل لدى الشركة منذ عام 2020 بعقد غير محدد المدة.','وكان أجره الشهري 7,000 ريال.','وفي آخر يوم عمل قدّم استقالته بنفسه، ولم يصدر من الشركة أي قرار بإنهاء عقده.'], line:2, ev:'letter'}},
-      {objection:true},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'هذا خطاب صادر من الشركة نفسها في آخر يوم عمل، ونصه: «نُنهي عقدك اعتباراً من اليوم». الشركة هي التي أنهت العقد، لا موكلي.'},
-      {scene:'rival', expr:'shock'},
-      {say:'rival', text:'هذا... حسناً. نعم، أنهينا العقد. لكن السبب أنه كثير الغياب، وهذه من حالات المادة 80 التي تجيز الفسخ دون مكافأة!', expr:'sweat'},
-      {scene:'judge', expr:'stern'},
-      {say:'judge', text:'إفادة جديدة. يا أستاذ فيصل، ابحث فيها عن العبارة التي يكذّبها مستند في يدك.'},
-      {cross:{lines:['نحن لا ننكر أن خطاب الإنهاء صدر من الشركة.','والمادة 80 تجيز فسخ العقد دون مكافأة في حالات محصورة.','والمدعي تغيّب مرات كثيرة خلال السنة الأخيرة دون عذر.'], line:2, ev:'attendance'}},
-      {objection:true},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'سجل الحضور الرسمي للشركة لا يُظهر يوم غياب واحداً في السنة الأخيرة. والمادة 80 لا تنطبق إلا في حالاتها المحصورة، وبعد إتاحة الفرصة للعامل لبيان اعتراضه، وهذا لم يحدث.'},
-      {scene:'rival', expr:'sweat'},
-      {say:'rival', text:'لا تعليق، يا صاحب الفضيلة.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'ثبت للمحكمة أن إنهاء العقد غير مشروع. يا أستاذ فيصل، حدد طلبات موكلك.'},
-      {choice:{prompt:'ما الذي يستحقه سالم؟', options:[
-        {label:'مكافأة نهاية الخدمة فقط', why:'المكافأة حق، لكن الإنهاء غير المشروع يضيف تعويض المادة 77، وعدم الإشعار يضيف تعويض المادة 76.'},
-        {label:'المكافأة، وتعويض المادة 77، وتعويض الإشعار وفق المادة 76', ok:true},
-        {label:'ثلثا المكافأة لأنه خدم ست سنوات', why:'نسب المادة 85 خاصة بالاستقالة، وسالم لم يستقل.'},
-        {label:'تعويض المادة 77 بدلاً من المكافأة', why:'المكافأة والتعويض مستحقان مستقلان، ولا يغني أحدهما عن الآخر.'}]}},
-      {say:'judge', text:'وكم المبلغ؟ أجره الأخير 7,000 ريال، وخدمته 6 سنوات، ولم يُمنح أي مهلة إشعار.'},
-      {choice:{prompt:'احسب المطالبة', options:[
-        {label:'59,500 ريال', ok:true},
-        {label:'45,500 ريال', why:'نسيت تعويض الإشعار: أجر 60 يوماً، أي 14,000 ريال.'},
-        {label:'24,500 ريال', why:'هذه المكافأة وحدها. أضف تعويض المادة 77 وتعويض الإشعار.'},
-        {label:'42,000 ريال', why:'المكافأة ليست أجر شهر عن كل سنة من البداية: أول 5 سنوات نصف أجر عن كل سنة.'}]}},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'المكافأة 24,500 ريال. وتعويض المادة 77 أجر 15 يوماً عن كل سنة: 21,000 ريال. وتعويض الإشعار أجر 60 يوماً: 14,000 ريال. المجموع 59,500 ريال.'},
-      {scene:'judge', expr:'normal'}, {gavel:true},
-      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 59,500 ريال. رُفعت الجلسة.'},
-      {scene:'lobby', expr:'happy'},
-      {say:'client', text:'الله يجزاك خير يا أستاذ فيصل. ما كنت أعرف إن لي كل هالحقوق.'},
-      {end:true}],
-     summary:['المكافأة (م 84): 5 × 3,500 + 1 × 7,000 = 24,500 ريال.','تعويض الإنهاء غير المشروع (م 77): 6 × أجر 15 يوماً = 21,000 ريال.','تعويض الإشعار (م 76): أجر 60 يوماً = 14,000 ريال.','الدرس: خطاب الإنهاء أسقط ادعاء الاستقالة، وسجل الحضور أسقط ادعاء الغياب.'],
-     total:'59,500'},
-
-    {id:'khalid', client:'khalid', title:'خالد ومهلة الإشعار', sub:'إنهاء العقد بإشعار ناقص', arts:'م 75 · م 76',
-     intro:'الشركة أنهت عقد خالد لإعادة هيكلة القسم، لكنها أبلغته قبل 20 يوماً فقط.',
-     evid:{
-       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة منذ ثلاث سنوات، والأجر الشهري 9,000 ريال يُصرف شهرياً.', icon:'#E9E3D3'},
-       letter:{title:'خطاب الإنهاء', desc:'مؤرخ في 1 مارس، ونصه: «يُنهى عقدك لإعادة هيكلة القسم، ويكون آخر يوم عمل لك 20 مارس».', icon:'#F5D9A6'},
-       release:{title:'المخالصة النهائية', desc:'صرفت الشركة لخالد مكافأة نهاية الخدمة كاملة 13,500 ريال، ولا يوجد أي مبلغ عن مهلة الإشعار.', icon:'#C9D6F0'}},
-     script:[
-      {scene:'lobby', expr:'worried'},
-      {say:'client', text:'يا أستاذ، أنا ما أعترض على سبب الإنهاء، القسم كله انقفل. بس عطوني عشرين يوم بس وقالوا مع السلامة!'},
-      {add:'contract'}, {add:'letter'}, {add:'release'},
-      {say:'player', text:'العقد غير محدد المدة وأجرك شهري، فمهلة إشعار صاحب العمل 60 يوماً على الأقل. والخطاب يثبت أنك أُبلغت قبل 20 يوماً فقط.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'فُتحت الجلسة في دعوى خالد ضد الشركة. المدعي لا ينازع في سبب الإنهاء، والخلاف في مهلة الإشعار. يتفضل محامي الشركة.'},
-      {scene:'rival', expr:'normal'},
-      {say:'rival', text:'يا صاحب الفضيلة، الشركة التزمت بكل ما يقرره النظام.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'يا أستاذ فيصل، عبارة واحدة في هذه الإفادة يكذّبها أحد مستنداتك. ابحث عنها.'},
-      {cross:{lines:['أنهت الشركة عقد المدعي بسبب إعادة هيكلة القسم.','وقد سلّمناه خطاب الإنهاء قبل ستين يوماً كاملة من آخر يوم عمل.','وصرفنا له مكافأة نهاية الخدمة كاملة.'], line:1, ev:'letter'}},
-      {objection:true},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'خطاب الإنهاء مؤرخ في 1 مارس، وآخر يوم عمل فيه 20 مارس. هذه 20 يوماً فقط، لا 60.'},
-      {scene:'rival', expr:'sweat'},
-      {say:'rival', text:'لكن... المكافأة صُرفت كاملة! ألا يكفي هذا؟'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'ثبت أن الشركة لم تلتزم بمهلة الإشعار. يا أستاذ فيصل، ما الذي يستحقه موكلك بعد ما صُرف له؟'},
-      {choice:{prompt:'ما الذي يستحقه خالد الآن؟', options:[
-        {label:'تعويض عن الأيام الباقية من مهلة الإشعار (م 76)', ok:true},
-        {label:'تعويض الإنهاء غير المشروع (م 77)', why:'خالد لا ينازع في سبب الإنهاء. الخلل هنا في مهلة الإشعار، وحكمه في المادة 76.'},
-        {label:'مكافأة نهاية الخدمة مرة أخرى', why:'المخالصة تثبت أن المكافأة صُرفت كاملة، فلا تُطلب مرتين.'},
-        {label:'لا شيء، لأن المكافأة صُرفت', why:'تعويض الإشعار حق مستقل عن المكافأة، ولا يسقط بصرفها.'}]}},
-      {say:'judge', text:'وكم المبلغ؟ أجره 9,000 ريال شهرياً، والمهلة النظامية 60 يوماً، وأُبلغ قبل 20 يوماً.'},
-      {choice:{prompt:'احسب تعويض الإشعار', options:[
-        {label:'12,000 ريال', ok:true},
-        {label:'18,000 ريال', why:'هذا أجر 60 يوماً كاملة. خالد مُنح 20 يوماً، فالتعويض عن المتبقي فقط: 40 يوماً.'},
-        {label:'6,000 ريال', why:'هذا أجر 20 يوماً، وهي المدة التي مُنحها فعلاً. التعويض عن الأيام الناقصة.'},
-        {label:'13,500 ريال', why:'هذه مكافأة نهاية الخدمة، وقد صُرفت له.'}]}},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'أجر اليوم 300 ريال، والأيام الناقصة من المهلة 40 يوماً. التعويض 12,000 ريال.'},
-      {scene:'judge', expr:'normal'}, {gavel:true},
-      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 12,000 ريال تعويضاً عن مهلة الإشعار. رُفعت الجلسة.'},
-      {scene:'lobby', expr:'happy'},
-      {say:'client', text:'كنت أحسب إن المكافأة هي كل شيء. مشكور يا أستاذ.'},
-      {end:true}],
-     summary:['مهلة إشعار صاحب العمل في العقد غير محدد المدة بأجر شهري: 60 يوماً (م 75).','الأيام الناقصة: 60 − 20 = 40 يوماً.','التعويض (م 76): 9,000 ÷ 30 × 40 = 12,000 ريال.','الدرس: تعويض الإشعار حق مستقل، ولا يسقط بصرف المكافأة.'],
-     total:'12,000'},
-
-    {id:'nasser', client:'nasser', title:'ناصر والعقد المنتهي', sub:'انتهاء العقد المحدد المدة', arts:'م 84 · م 85',
-     intro:'انتهى عقد ناصر المحدد المدة، فصرفت له الشركة ثلث المكافأة كأنه استقال.',
-     evid:{
-       contract:{title:'عقد العمل', desc:'عقد محدد المدة بثلاث سنوات ينتهي في 30 يونيو، والأجر الشهري 6,000 ريال.', icon:'#E9E3D3'},
-       email:{title:'رسالة الموارد البشرية', desc:'رسالة من الشركة قبل نهاية العقد بشهر: «نفيدكم بعدم رغبة الشركة في تجديد عقدكم».', icon:'#F5D9A6'},
-       release:{title:'المخالصة', desc:'صرفت الشركة لناصر 3,000 ريال فقط، وكُتب بجانبها: «ثلث المكافأة».', icon:'#C9D6F0'}},
-     script:[
-      {scene:'lobby', expr:'worried'},
-      {say:'client', text:'يا ولدي، عقدي خلص ثلاث سنوات، والشركة هي اللي ما جددت. وفي الأخير عطوني ثلث المكافأة كأني مستقيل!'},
-      {add:'contract'}, {add:'email'}, {add:'release'},
-      {say:'player', text:'نسب الثلث والثلثين في المادة 85 خاصة بالاستقالة. وعقدك انتهى بانتهاء مدته، فلنرَ ماذا تقول الشركة.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'فُتحت الجلسة في دعوى ناصر ضد الشركة. يتفضل محامي الشركة بإفادته.'},
-      {scene:'rival', expr:'normal'},
-      {say:'rival', text:'يا صاحب الفضيلة، صرفنا للمدعي ما يستحقه وفق المادة 85.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'يا أستاذ فيصل، استمع للإفادة، وابحث عن العبارة التي يكذّبها مستند في يدك.'},
-      {cross:{lines:['عقد المدعي محدد المدة بثلاث سنوات.','وانتهى العقد في موعده المحدد في 30 يونيو.','والمدعي هو الذي طلب عدم تجديد العقد، فخروجه بمنزلة الاستقالة.'], line:2, ev:'email'}},
-      {objection:true},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'هذه رسالة الشركة نفسها: «نفيدكم بعدم رغبة الشركة في تجديد عقدكم». الشركة هي التي لم تجدد، وموكلي لم يستقل.'},
-      {scene:'rival', expr:'shock'},
-      {say:'rival', text:'آه... هذه الرسالة... أُرسلت دون علمي.', expr:'sweat'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'ثبت أن العقد انتهى بانتهاء مدته، لا بالاستقالة. ما الحكم الصحيح للمكافأة؟'},
-      {choice:{prompt:'ما الذي يستحقه ناصر؟', options:[
-        {label:'المكافأة كاملة وفق المادة 84، ويُخصم ما صُرف له', ok:true},
-        {label:'ثلث المكافأة، لأن خدمته أقل من خمس سنوات', why:'نسبة الثلث في المادة 85 للمستقيل فقط، وناصر لم يستقل.'},
-        {label:'لا شيء، لأن العقد انتهى طبيعياً', why:'انتهاء العقد لا يسقط المكافأة، بل يستحقها العامل كاملة.'},
-        {label:'تعويض الإنهاء غير المشروع (م 77)', why:'العقد لم يُنهَ قبل وقته، بل انتهى بانتهاء مدته، فلا محل لتعويض المادة 77.'}]}},
-      {say:'judge', text:'وكم الفرق المستحق؟ أجره 6,000 ريال، وخدمته 3 سنوات، وصُرف له 3,000 ريال.'},
-      {choice:{prompt:'احسب الفرق', options:[
-        {label:'6,000 ريال', ok:true},
-        {label:'9,000 ريال', why:'هذه المكافأة كاملة، لكن الشركة صرفت 3,000 ريال، فالمطالبة بالفرق.'},
-        {label:'15,000 ريال', why:'المكافأة ليست أجر شهر عن كل سنة في أول 5 سنوات، بل نصف أجر.'},
-        {label:'3,000 ريال', why:'هذا ما صُرف له بالفعل. المكافأة الكاملة 9,000 ريال.'}]}},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'المكافأة الكاملة 3 × 3,000 = 9,000 ريال، صُرف منها 3,000، فالباقي 6,000 ريال.'},
-      {scene:'judge', expr:'normal'}, {gavel:true},
-      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 6,000 ريال فرق مكافأة نهاية الخدمة. رُفعت الجلسة.'},
-      {scene:'lobby', expr:'happy'},
-      {say:'client', text:'بارك الله فيك يا ولدي. الحق ما يضيع.'},
-      {end:true}],
-     summary:['المكافأة الكاملة (م 84): 3 × 3,000 = 9,000 ريال.','ما صُرف: 3,000 ريال، والفرق 6,000 ريال.','الدرس: نسب المادة 85 للاستقالة فقط، وانتهاء العقد المحدد المدة يستحق فيه العامل المكافأة كاملة.'],
-     total:'6,000'},
-
-    {id:'abdullah', client:'abdullah', title:'عبدالله والرواتب المتأخرة', sub:'ترك العمل لإخلال صاحب العمل', arts:'م 81 · م 84',
-     intro:'توقفت الشركة عن صرف رواتب عبدالله ثلاثة أشهر، فترك العمل. والشركة تقول إنه هرب.',
-     evid:{
-       contract:{title:'عقد العمل', desc:'عقد غير محدد المدة منذ أربع سنوات، والأجر الشهري 5,000 ريال.', icon:'#E9E3D3'},
-       bank:{title:'كشف الحساب البنكي', desc:'لا توجد أي إيداعات رواتب من الشركة في مارس وأبريل ومايو.', icon:'#BFE0C8'},
-       notice:{title:'خطاب عبدالله للشركة', desc:'خطاب مستلَم بختم الشركة: «أترك العمل لعدم صرف رواتبي منذ ثلاثة أشهر».', icon:'#F5D9A6'}},
-     script:[
-      {scene:'lobby', expr:'worried'},
-      {say:'client', text:'ثلاث شهور وأنا أشتغل بدون راتب! تركت الشغل، والحين الشركة تقول إني مستقيل وما لي شيء.'},
-      {add:'contract'}, {add:'bank'}, {add:'notice'},
-      {say:'player', text:'المادة 81 تجيز للعامل ترك العمل دون إشعار مع احتفاظه بحقوقه كاملة، إذا أخلّ صاحب العمل بالتزاماته الجوهرية. وعدم صرف الأجر من أهمها.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'فُتحت الجلسة في دعوى عبدالله ضد الشركة. يتفضل محامي الشركة.'},
-      {scene:'rival', expr:'normal'},
-      {say:'rival', text:'يا صاحب الفضيلة، المدعي ترك عمله دون مبرر، فهو في حكم المستقيل.'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'يا أستاذ فيصل، عبارة واحدة هنا يكذّبها أحد مستنداتك.'},
-      {cross:{lines:['المدعي ترك العمل في نهاية شهر مايو.','ولم يقدّم إشعاراً مدته ثلاثون يوماً.','ورواتبه كانت تُصرف كاملة في موعدها حتى آخر يوم.'], line:2, ev:'bank'}},
-      {objection:true},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'كشف الحساب لا يُظهر أي راتب من الشركة في مارس وأبريل ومايو. وموكلي أبلغ الشركة كتابياً بسبب تركه العمل.'},
-      {scene:'rival', expr:'sweat'},
-      {say:'rival', text:'حتى لو تأخرت الرواتب، فقد ترك العمل دون إشعار، والمستقيل بعد أربع سنوات لا يستحق إلا ثلث المكافأة!'},
-      {scene:'judge', expr:'normal'},
-      {say:'judge', text:'ثبت للمحكمة أن الشركة لم تصرف الأجر ثلاثة أشهر. يا أستاذ فيصل، حدد طلبات موكلك.'},
-      {choice:{prompt:'ما الذي يستحقه عبدالله؟', options:[
-        {label:'الرواتب المتأخرة والمكافأة كاملة (م 81)', ok:true},
-        {label:'ثلث المكافأة، لأنه في حكم المستقيل', why:'المادة 81 تحفظ للعامل حقوقه كاملة إذا ترك العمل لإخلال صاحب العمل، فلا تُطبق نسب الاستقالة.'},
-        {label:'الرواتب المتأخرة فقط', why:'المادة 81 تحفظ حقوقه النظامية كلها، ومنها مكافأة نهاية الخدمة كاملة.'},
-        {label:'لا شيء، لأنه لم يقدّم إشعاراً', why:'المادة 81 تجيز ترك العمل دون إشعار في هذه الحالة.'}]}},
-      {say:'judge', text:'وكم المطالبة؟ أجره 5,000 ريال، وخدمته 4 سنوات، ولم يُصرف له ثلاثة أشهر.'},
-      {choice:{prompt:'احسب المطالبة', options:[
-        {label:'25,000 ريال', ok:true},
-        {label:'15,000 ريال', why:'هذه الرواتب المتأخرة وحدها. أضف المكافأة الكاملة: 10,000 ريال.'},
-        {label:'18,333 ريال', why:'أضفت ثلث المكافأة فقط، لكن المادة 81 تحفظ المكافأة كاملة.'},
-        {label:'35,000 ريال', why:'المكافأة في أول 5 سنوات نصف أجر عن كل سنة، لا أجر شهر كامل.'}]}},
-      {scene:'player', pose:'point', dir:1},
-      {say:'player', text:'الرواتب المتأخرة 3 × 5,000 = 15,000 ريال، والمكافأة 4 × 2,500 = 10,000 ريال. المجموع 25,000 ريال.'},
-      {scene:'judge', expr:'normal'}, {gavel:true},
-      {say:'judge', text:'حكمت المحكمة بإلزام الشركة بأن تدفع للمدعي 25,000 ريال. رُفعت الجلسة.'},
-      {scene:'lobby', expr:'happy'},
-      {say:'client', text:'أخيراً! كنت خايف إن تركي للشغل ضيّع حقي كله.'},
-      {end:true}],
-     summary:['الرواتب المتأخرة: 3 × 5,000 = 15,000 ريال.','المكافأة كاملة (م 84): 4 × 2,500 = 10,000 ريال.','الدرس: المادة 81 تحفظ للعامل حقوقه كاملة إذا ترك العمل لإخلال صاحب العمل بالتزاماته الجوهرية.'],
-     total:'25,000'}
-  ];
-
-  /* ---------------- state ---------------- */
-  var view = 'lobby', st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false, breath:false};
-  var cur = null, S = [], EVID = {};
-  var i = 0, trust = 5, record = [], mode = 'idle', speaker = null;
-  var typing = null, full = '', crossIdx = 0, crossStep = null, mistakes = 0;
-  var done = {};
-  try{ done = JSON.parse(localStorage.getItem('jali-court-done') || '{}') || {}; }catch(e){ done = {}; }
-
-  /* ---------------- sound ---------------- */
-  var audio = null, soundOn = true;
-  function ac(){ if(!audio){ try{ audio = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audio = null; } } if(audio && audio.state==='suspended') audio.resume(); return audio; }
-  function beep(freq, len, type, vol){
-    if(!soundOn || !audio) return;
-    var t = audio.currentTime, o = audio.createOscillator(), g = audio.createGain();
-    o.type = type||'square'; o.frequency.value = freq; g.gain.setValueAtTime(vol||0.05, t); g.gain.exponentialRampToValueAtTime(0.0001, t+len);
-    o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t+len+0.02);
-  }
-  var VOICE = {player:520, rival:380, judge:260, client:640, note:880};
-  $('c-sndBtn').addEventListener('click', function(){
-    soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn));
-    Array.prototype.forEach.call(this.querySelectorAll('[data-s]'), function(s){ s.hidden = (s.dataset.s==='on') !== soundOn; });
-    if(soundOn) ac();
-  });
-
-  /* ---------------- rendering ---------------- */
-  var visible = true, last = 0, blinkAt = 2000, raf = 0;
-  function charOf(who){ return who==='client' ? CLIENTS[client] : CHARS[who]; }
-  function frame(now){
-    if(!visible){ raf = 0; return; }
-    var ch = speaker ? charOf(speaker) : null;
-    var talking = typing && ch && ch.view === view;
-    st.mouth = !!talking && Math.floor(now/95)%2===0;
-    st.breath = !reduce && Math.floor(now/900)%2===0;
-    if(now > blinkAt){ st.blink = true; if(now > blinkAt+120){ st.blink=false; blinkAt = now + 2200 + Math.random()*2400; } }
-    if(gavelT>=0){ gavelT += (now-last)/1000; if(gavelT>0.7) gavelT=-1; }
-    last = now;
-    C.save();
-    var bob = talking && !reduce ? (Math.floor(now/190)%2) : 0;
-    C.translate(0, bob);
-    VIEWS[view](st);
-    C.restore();
-    raf = requestAnimationFrame(frame);
-  }
-  raf = requestAnimationFrame(frame);
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){ es.forEach(function(e){ visible = e.isIntersecting; if(visible && !raf) raf = requestAnimationFrame(frame); }); }).observe(cv);
-  }
-
-  /* ---------------- dialogue ---------------- */
-  var nameEl = $('c-name'), textEl = $('c-text'), moreEl = $('c-more'), crossCtrl = $('c-crossCtrl'), choicesEl = $('c-choices');
-  function setName(who, override){
-    var ch = charOf(who);
-    nameEl.className = 'name ' + (who==='note' ? 'n-note' : ch ? ch.tag : '');
-    nameEl.textContent = override || (ch ? ch.name : '');
-  }
-  function type(who, text, done, cls){
-    speaker = who; full = text; textEl.textContent = ''; textEl.className = 'text' + (cls ? ' '+cls : '');
-    moreEl.hidden = true;
-    clearInterval(typing);
-    if(reduce){ textEl.textContent = full; typing = null; if(done) done(); else moreEl.hidden = false; return; }
-    var shown = 0;
-    typing = setInterval(function(){
-      shown++; textEl.textContent = full.slice(0, shown);
-      if(shown % 2 === 0 && full.charAt(shown-1) !== ' ') beep((VOICE[who]||500) + (shown%3)*20, 0.04, 'square', 0.035);
-      if(shown >= full.length){ clearInterval(typing); typing = null; if(done) done(); else moreEl.hidden = false; }
-    }, 26);
-  }
-  function finishTyping(){ if(typing){ clearInterval(typing); typing = null; textEl.textContent = full; if(mode==='say') moreEl.hidden = false; return true; } return false; }
-
-  function renderTrust(){
-    var t = $('c-trust'); t.textContent = '';
-    for(var k=0;k<5;k++){ var d = document.createElement('i'); if(k>=trust) d.className='off'; t.appendChild(d); }
-  }
-  function hurt(){
-    trust--; renderTrust(); mistakes++;
-    var s = $('c-stage'); s.classList.remove('shake'); void s.offsetWidth; if(!reduce) s.classList.add('shake');
-    beep(140, 0.25, 'sawtooth', 0.06);
-    if(trust<=0){ setTimeout(lose, 600); return true; }
-    return false;
-  }
-
-  function next(){
-    while(i < S.length){
-      var s = S[i];
-      if(s.scene){ view = s.scene; st.expr = s.expr||'normal'; st.pose = s.pose||null; st.dir = s.dir||1; i++; continue; }
-      if(s.say){ if(s.expr) st.expr = s.expr; mode='say'; setName(s.say); type(s.say, s.text); i++; return; }
-      if(s.add){ record.push(s.add); mode='say'; setName('note','أُضيف إلى المستندات'); type('note', EVID[s.add].title + ': ' + EVID[s.add].desc); beep(880,0.12,'triangle',0.06); i++; return; }
-      if(s.cross){ startCross(s.cross); return; }
-      if(s.choice){ startChoice(s.choice); return; }
-      if(s.objection){ i++; objection(); return; }
-      if(s.gavel){ i++; gavel(); return; }
-      if(s.end){ win(); return; }
-      i++;
-    }
-  }
-  function advance(){
-    if(mode!=='say') return;
-    if(finishTyping()) return;
-    ac(); next();
-  }
-  $('c-box').addEventListener('click', function(e){ if(e.target.closest('button')) return; advance(); });
-  document.addEventListener('keydown', function(e){
-    if($('court').hidden) return;
-    if(!$('c-recModal').hidden || !$('c-startModal').hidden || !$('c-endModal').hidden) return;
-    if(e.key==='Enter' || e.key===' '){ if(mode==='say'){ e.preventDefault(); advance(); } }
-  });
-
-  /* ---------------- cross-examination ---------------- */
-  function showCrossLine(){
-    view = 'rival'; st.pose = null;
-    setName('rival', 'ماجد · إفادة ' + (crossIdx+1) + ' من ' + crossStep.lines.length);
-    type('rival', crossStep.lines[crossIdx], function(){}, 'cross');
-  }
-  function startCross(c){
-    mode = 'cross'; crossStep = c; crossIdx = 0; crossCtrl.hidden = false; choicesEl.hidden = true; moreEl.hidden = true;
-    st.expr = st.expr==='shock' ? 'sweat' : 'normal';
-    showCrossLine();
-  }
-  $('c-prevBtn').addEventListener('click', function(){ if(mode!=='cross') return; finishTyping(); crossIdx = (crossIdx - 1 + crossStep.lines.length) % crossStep.lines.length; showCrossLine(); });
-  $('c-nextBtn').addEventListener('click', function(){ if(mode!=='cross') return; finishTyping(); crossIdx = (crossIdx + 1) % crossStep.lines.length; showCrossLine(); });
-  $('c-objBtn').addEventListener('click', function(){ if(mode!=='cross') return; finishTyping(); openRecord(true); });
-
-  function present(ev){
-    closeRecord();
-    if(crossIdx === crossStep.line && ev === crossStep.ev){
-      crossCtrl.hidden = true; mode = 'busy'; i++; next();
-    } else {
-      mode = 'busy'; crossCtrl.hidden = true;
-      view = 'judge'; st.expr = 'stern';
-      var msg = crossIdx !== crossStep.line ? 'هذه العبارة صحيحة، ولا يناقضها أي مستند في يدك. تنقّل بين العبارات وابحث عن العبارة الكاذبة.' : 'العبارة هي المقصودة، لكن هذا المستند لا يثبت عكسها. اختر المستند الذي يكذّبها.';
-      setName('judge'); type('judge', msg, function(){
-        if(hurt()) return;
-        setTimeout(function(){ mode='cross'; crossCtrl.hidden=false; st.expr='normal'; showCrossLine(); }, 1400);
-      });
-    }
-  }
-
-  /* ---------------- choices ---------------- */
-  function startChoice(c){
-    mode = 'choice'; crossCtrl.hidden = true; moreEl.hidden = true;
-    setName('note', c.prompt); textEl.textContent = ''; textEl.className='text';
-    choicesEl.textContent = ''; choicesEl.hidden = false;
-    c.options.forEach(function(o){
-      var b = document.createElement('button'); b.type='button'; b.className='choice'; b.textContent = o.label;
-      b.addEventListener('click', function(){
-        if(mode!=='choice') return;
-        choicesEl.hidden = true;
-        if(o.ok){ beep(660,0.1,'triangle',0.06); setTimeout(function(){beep(990,0.15,'triangle',0.06);},110); mode='busy'; i++; next(); }
-        else {
-          mode = 'busy'; view='judge'; st.expr='stern';
-          setName('judge'); type('judge', o.why, function(){
-            if(hurt()) return;
-            setTimeout(function(){ st.expr='normal'; startChoice(c); }, 1600);
-          });
-        }
-      });
-      choicesEl.appendChild(b);
-    });
-  }
-
-  /* ---------------- effects ---------------- */
-  function objection(){
-    mode = 'busy'; crossCtrl.hidden = true; moreEl.hidden = true;
-    var o = $('c-obj'), f = $('c-flash'), s = $('c-stage');
-    o.hidden = false; f.classList.remove('on'); void f.offsetWidth; if(!reduce) f.classList.add('on');
-    s.classList.remove('shake'); void s.offsetWidth; if(!reduce) s.classList.add('shake');
-    beep(220,0.18,'sawtooth',0.07); setTimeout(function(){ beep(330,0.25,'square',0.06); },120);
-    setTimeout(function(){ o.hidden = true; next(); }, reduce ? 300 : 1000);
-  }
-  function gavel(){
-    mode = 'busy'; view = 'judge';
-    var hits = 0;
-    (function hit(){
-      gavelT = 0; beep(120,0.12,'square',0.08); beep(900,0.04,'square',0.04);
-      var s = $('c-stage'); s.classList.remove('shake'); void s.offsetWidth; if(!reduce) s.classList.add('shake');
-      hits++; if(hits<3) setTimeout(hit, 420); else setTimeout(next, 500);
+  var root = document.documentElement, btns = document.querySelectorAll('.theme-btn');
+  function sync(){ var light = root.getAttribute('data-theme')==='light', label = light ? 'التبديل إلى الوضع الداكن' : 'التبديل إلى الوضع الفاتح';
+    Array.prototype.forEach.call(btns, function(b){ b.setAttribute('aria-pressed', String(light)); b.setAttribute('aria-label', label); b.title = label; }); }
+  Array.prototype.forEach.call(btns, function(b){ b.addEventListener('click', function(){
+    var light = root.getAttribute('data-theme')!=='light';
+    if(light) root.setAttribute('data-theme','light'); else root.removeAttribute('data-theme');
+    try{ localStorage.setItem('jali-theme', light ? 'light' : 'dark'); }catch(e){}
+    sync(); }); });
+  sync();
+})();
+</script>
+<script>
+/* Mock court loader: fetches ./court/ the first time someone opens the game, then hands over to the real window.openCourt. */
+(function(){
+  var stub, loading = false;
+  function fail(btn){ loading = false; if(btn) btn.removeAttribute('aria-busy'); window.alert('تعذّر تحميل المحكمة. تحقّق من اتصالك ثم حاول مرة أخرى.'); }
+  stub = function(btn){
+    if(loading) return; loading = true;
+    if(btn) btn.setAttribute('aria-busy', 'true');
+    var files = ['./court/art.js', './court/cases.js', './court/engine.js'], k = 0, cssReady = false, jsReady = false;
+    function go(){ if(!cssReady || !jsReady) return; if(btn) btn.removeAttribute('aria-busy'); if(window.openCourt !== stub) window.openCourt(btn); else fail(btn); }
+    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = './court/court.css';
+    css.onload = function(){ cssReady = true; go(); }; css.onerror = function(){ fail(btn); };
+    document.head.appendChild(css);
+    (function nextFile(){
+      if(k === files.length){ jsReady = true; go(); return; }
+      var s = document.createElement('script'); s.src = files[k++]; s.onload = nextFile; s.onerror = function(){ fail(btn); };
+      document.head.appendChild(s);
     })();
-  }
-
-  /* ---------------- record ---------------- */
-  function drawIcon(canvas, color){
-    var g = canvas.getContext('2d'); g.imageSmoothingEnabled=false;
-    g.fillStyle='#0d0b09'; g.fillRect(0,0,11,11);
-    g.fillStyle=color; g.fillRect(2,1,7,9);
-    g.fillStyle='#5a4a3a'; g.fillRect(3,3,5,1); g.fillRect(3,5,5,1); g.fillRect(3,7,3,1);
-  }
-  var recModal = $('c-recModal'), recList = $('c-recList'), lastFocus = null;
-  function openRecord(presenting){
-    lastFocus = document.activeElement;
-    $('c-recHint').hidden = !presenting; recList.textContent = '';
-    if(!record.length){ var p = document.createElement('p'); p.className='empty'; p.textContent='لا توجد مستندات بعد.'; recList.appendChild(p); }
-    record.forEach(function(id){
-      var e = EVID[id], card = document.createElement('div'); card.className='ev';
-      var ic = document.createElement('canvas'); ic.width=11; ic.height=11; drawIcon(ic, e.icon); card.appendChild(ic);
-      var body = document.createElement('div'), h = document.createElement('h3'), p = document.createElement('p');
-      h.textContent = e.title; p.textContent = e.desc; body.appendChild(h); body.appendChild(p);
-      if(presenting){ var b = document.createElement('button'); b.type='button'; b.className='pbtn gold'; b.textContent='قدّم هذا المستند'; b.addEventListener('click', function(){ present(id); }); body.appendChild(b); }
-      card.appendChild(body); recList.appendChild(card);
-    });
-    recModal.hidden = false; $('c-recClose').focus();
-  }
-  function closeRecord(){ recModal.hidden = true; if(lastFocus && lastFocus.focus) lastFocus.focus(); }
-  $('c-recBtn').addEventListener('click', function(){ openRecord(false); });
-  $('c-recClose').addEventListener('click', closeRecord);
-  recModal.addEventListener('click', function(e){ if(e.target===recModal) closeRecord(); });
-  document.addEventListener('keydown', function(e){ if($('court').hidden || e.key!=='Escape') return; if(!recModal.hidden) closeRecord(); else closeCourt(); });
-
-  /* ---------------- case select / start / end ---------------- */
-  var caseList = $('c-caseList');
-  function buildCaseList(){
-    caseList.textContent = '';
-    CASES.forEach(function(c, n){
-      var b = document.createElement('button'); b.type='button'; b.className='case';
-      var no = document.createElement('span'); no.className='no'; no.textContent = String(n+1);
-      var mid = document.createElement('span'); var t = document.createElement('b'); t.textContent = c.title;
-      var s1 = document.createElement('small'); s1.textContent = c.sub + ' · ' + c.arts;
-      var s2 = document.createElement('small'); s2.textContent = c.intro;
-      mid.appendChild(t); mid.appendChild(s1); mid.appendChild(s2);
-      var badge = document.createElement('span'); badge.className = 'badge ' + (done[c.id] ? 'done' : 'new'); badge.textContent = done[c.id] ? 'كسبتها' : 'جديدة';
-      b.appendChild(no); b.appendChild(mid); b.appendChild(badge);
-      b.addEventListener('click', function(){ ac(); startCase(n); });
-      caseList.appendChild(b);
-    });
-  }
-  function showCases(){ buildCaseList(); $('c-endModal').hidden = true; $('c-startModal').hidden = false; var f = caseList.querySelector('button'); if(f) f.focus(); }
-  var curIdx = 0;
-  function startCase(n){
-    curIdx = n; cur = CASES[n]; S = cur.script; EVID = cur.evid; client = cur.client;
-    i = 0; trust = 5; record = []; mistakes = 0; view='lobby'; st = {expr:'worried', pose:null, dir:1, mouth:false, blink:false, breath:false};
-    crossCtrl.hidden = true; choicesEl.hidden = true; renderTrust();
-    $('c-caseTitle').textContent = '· ' + cur.title;
-    $('c-startModal').hidden = true; $('c-endModal').hidden = true;
-    next(); $('c-box').focus({preventScroll:true});
-  }
-  function para(t, strong){ var p = document.createElement('p'); p.style.margin='0'; if(strong){ p.style.color='var(--gold)'; p.style.fontWeight='700'; } p.textContent = t; return p; }
-  function win(){
-    mode='end'; done[cur.id] = true;
-    try{ localStorage.setItem('jali-court-done', JSON.stringify(done)); }catch(e){}
-    var b = $('c-endBody'); b.textContent='';
-    $('c-endTitle').textContent = 'كسبت القضية';
-    b.appendChild(para('حصل ' + CLIENTS[cur.client].name + ' على ' + cur.total + ' ريال' + (mistakes ? '، بعد ' + mistakes + ' أخطاء.' : ' دون أي خطأ.'), true));
-    cur.summary.forEach(function(t){ b.appendChild(para(t)); });
-    var remaining = CASES.filter(function(c){ return !done[c.id]; }).length;
-    if(!remaining) b.appendChild(para('كسبت كل القضايا. أحسنت يا أستاذ فيصل!', true));
-    $('c-nextCaseBtn').hidden = curIdx >= CASES.length - 1;
-    $('c-endModal').hidden = false; ($('c-nextCaseBtn').hidden ? $('c-listBtn') : $('c-nextCaseBtn')).focus();
-  }
-  function lose(){
-    mode='end'; var b = $('c-endBody'); b.textContent='';
-    $('c-endTitle').textContent = 'فقدت ثقة المحكمة';
-    b.appendChild(para('لا بأس، المحامي الجيد يتعلم من الجلسة. راجع موضوع «نهاية الخدمة» في جَلِيّ ثم حاول مرة أخرى.'));
-    $('c-nextCaseBtn').hidden = true;
-    $('c-endModal').hidden = false; $('c-againBtn').focus();
-  }
-  $('c-againBtn').addEventListener('click', function(){ startCase(curIdx); });
-  $('c-nextCaseBtn').addEventListener('click', function(){ startCase(curIdx + 1); });
-  $('c-listBtn').addEventListener('click', showCases);
-  $('c-casesBtn').addEventListener('click', function(){ if(typing){ clearInterval(typing); typing=null; } crossCtrl.hidden = true; choicesEl.hidden = true; mode = 'idle'; showCases(); });
-  buildCaseList();
-  renderTrust();
-  /* ---- open / close inside the site ---- */
-  var opener = null;
-  window.openCourt = function(btn){
-    opener = btn || null;
-    $('court').hidden = false; document.body.style.overflow = 'hidden';
-    if(!$('c-startModal').hidden){ buildCaseList(); var f = caseList.querySelector('button'); if(f) f.focus(); } else $('c-box').focus({preventScroll:true});
   };
-  function closeCourt(){
-    $('court').hidden = true; document.body.style.overflow = '';
-    if(typing){ clearInterval(typing); typing = null; textEl.textContent = full; } if(mode==='say') moreEl.hidden = false;
-    if(opener && opener.focus) opener.focus();
-  }
-  $('c-exit').addEventListener('click', closeCourt);
+  window.openCourt = stub;
 })();
 </script>
 

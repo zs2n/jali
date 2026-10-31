@@ -1190,6 +1190,47 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
 #court .modal{z-index:60}
 #court *{box-sizing:border-box}
 
+
+/* ===== Session 5 — courtroom entry point + overlay polish (game palette, pixel rendering and JS untouched) ===== */
+/* Entry point on the homepage: premium card, game-flavoured button and framed pixel canvas */
+#court-promo{overflow:hidden}
+#court-promo .promo-text h3{font-size:clamp(1.35rem,2.6vw,1.75rem);line-height:1.4}
+#court-promo .promo-text p{line-height:1.9;max-width:34rem}
+#court-promo #playCourt{min-height:48px;padding:10px 22px;border:2px solid #000;border-radius:6px;box-shadow:0 4px 0 #000,inset 0 0 0 1px color-mix(in srgb,var(--gold-champagne) 45%,transparent);transition:transform var(--dur-fast) steps(2),box-shadow var(--dur-fast) steps(2)}
+#court-promo #playCourt:hover{transform:translateY(-1px);box-shadow:0 5px 0 #000,inset 0 0 0 1px var(--gold-champagne)}
+#court-promo #playCourt:active{transform:translateY(3px);box-shadow:0 1px 0 #000}
+#court-promo #promoArt{border-width:4px;border-radius:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gold-champagne) 40%,transparent),0 18px 40px -18px rgb(0 0 0 / .8);transition:box-shadow var(--dur-base) var(--ease)}
+#court-promo:hover #promoArt{box-shadow:0 0 0 2px var(--gold-champagne),0 18px 40px -18px rgb(0 0 0 / .8)}
+@media (max-width:820px){#court-promo #promoArt{order:-1}#court-promo #playCourt{justify-self:stretch}}
+
+/* Overlay: warm stage-light vignette and a stepped (pixel-style) entrance */
+#court{background:radial-gradient(120% 60% at 50% 0%,#221C17 0%,var(--bg) 60%)}
+#court:not([hidden]){animation:c-enter .24s steps(4) both}
+@keyframes c-enter{from{opacity:0}to{opacity:1}}
+/* HUD stays reachable while the overlay scrolls (modals stay above it) */
+#court .hud{position:sticky;top:0;z-index:5;margin-inline:-16px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:2px solid #000;box-shadow:0 2px 0 var(--line)}
+#court .pbtn{min-height:38px}
+#court .choice{min-height:44px;line-height:1.7}
+#court .sheet{max-height:88dvh}
+@media (max-width:600px){
+  #court .cwrap{padding-inline:10px;gap:10px;padding-block:0 28px}
+  #court .hud{position:static;margin-inline:-10px;padding:8px 10px;gap:8px}
+  #court .title{font-size:1.1rem}
+  #court .hud-r{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  #court .hud-r .trust{grid-column:1/-1}
+  #court .pbtn{min-height:44px;padding:8px 10px}
+  #court .hud-r .pbtn{padding-inline:4px;font-size:.84rem}
+  #court .stage{border-width:3px}
+  #court .box{padding:12px 14px 14px;min-height:8.5em}
+  #court .text{font-size:1rem;line-height:1.9}
+  #court .ctrl .pbtn{flex:1 1 auto}
+  #court .ctrl .sp{display:none}
+  #court .choice{min-height:48px;padding:10px 12px}
+  #court .modal{padding:10px}
+  #court .sheet{padding:14px}
+  #court .case{padding:12px;gap:10px}
+}
+@media (prefers-reduced-motion: reduce){#court:not([hidden]){animation:none}#court-promo #playCourt,#court-promo #promoArt{transition:none}}
 </style>
 <div id="court" hidden role="dialog" aria-modal="true" aria-label="محكمة جَلِيّ">
 <div class="cwrap" dir="rtl" lang="ar">

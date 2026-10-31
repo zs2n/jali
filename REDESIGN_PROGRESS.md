@@ -31,4 +31,13 @@
 - **Verified:** 462 scripted input cases (every contract-end type × contract type × service years 0/1/2/4/5/7/10/25 × months 0/11 × checkbox on/off, plus validation/boundary cases: months 12/−1, empty/negative years, wage 0/empty/1/12345.67, notice −1/60/61, remaining empty/0). Total, line items, notes, error messages and visible fields are byte-identical before and after. No JS errors, no overflow at 360/1280, all controls ≥44px tall, keyboard focus visible. Dark, light and error-state screenshots inspected.
 - **Not pushed** (awaiting approval).
 
-### Next: 4b. Interactive guide (awaiting authorization)
+### Remaining: 4b guide, 4c وين أروح, 4d quiz (not yet authorized)
+
+## Session 5 — Mock Courtroom ✅ Complete
+- **Changed:** `index.html` — CSS appended to the courtroom's own `<style>` block only (`#court`, `#court-promo`). Scripts and all markup outside `<style>` are byte-identical to the previous commit.
+- **Entry point:** pixel-style raised «ادخل قاعة المحكمة» button (black drop shadow, gold inset) bridging site and game; gold-framed `#promoArt`; art shown first and full-width button on mobile.
+- **Overlay:** warm stage-light vignette, stepped pixel-style fade-in (off under reduced motion), sticky HUD with pixel border on desktop; on ≤600px a compact static HUD (trust row + 3 equal buttons), 44px+ buttons, 48px choices, tighter padding. Game palette, fonts, canvases and `image-rendering:pixelated` untouched.
+- **Verified:** scripted playthrough of case 1 (case list → dialogue → cross-examination → evidence modal → choices → «كسبت القضية») at 360 and 1280 with no JS errors; Escape closes and focus returns to `#playCourt`; no overflow; all mobile buttons ≥44px; all 5 canvases still pixelated. Run-to-run comparison of the step sequence wasn't usable (the old version varies too, from bot/animation timing), so logic preservation is shown by identical scripts instead. Screenshots inspected. Evidence sheet opens scrolled on mobile, as before (existing behavior).
+- **Not pushed** (awaiting approval).
+
+## Next: Session 6 (awaiting prompt)

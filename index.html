@@ -1182,9 +1182,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   stub = function(btn){
     if(loading) return; loading = true;
     if(btn) btn.setAttribute('aria-busy', 'true');
-    var files = ['./court/art.js', './court/cases.js', './court/engine.js'], k = 0, cssReady = false, jsReady = false;
+    var files = ['./court/art.js?v=4', './court/cases.js?v=4', './court/engine.js?v=4'], k = 0, cssReady = false, jsReady = false;
     function go(){ if(!cssReady || !jsReady) return; if(btn) btn.removeAttribute('aria-busy'); if(window.openCourt !== stub) window.openCourt(btn); else fail(btn); }
-    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = './court/court.css';
+    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = './court/court.css?v=4';
     css.onload = function(){ cssReady = true; go(); }; css.onerror = function(){ fail(btn); };
     document.head.appendChild(css);
     (function nextFile(){
@@ -1480,7 +1480,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     /* the redesigned judge scene replaces the placeholder above once it has loaded */
     var im = new Image();
     im.onload = function(){ c.width = 480; c.height = 270; var k = c.getContext('2d'); k.imageSmoothingEnabled = false; k.drawImage(im, 0, 0); };
-    im.src = './court/promo.webp';
+    im.src = './court/promo.webp?v=4';
   })();
   $('playCourt').addEventListener('click', function(){ if(window.openCourt) window.openCourt(this); });
 

@@ -24,4 +24,11 @@
 - **Not touched:** guide, calculator, quiz internals (Session 4).
 - **Verified (Playwright 360/1280):** all 11 `main` sections present in order; every in-page anchor resolves; no horizontal overflow or elements wider than the viewport; no JS errors; with JS disabled the `main` text is identical to the previous commit apart from the new links. Screenshots of how/help/students inspected.
 
-## Next: Session 4 (awaiting prompt)
+## Session 4 — Interactive Components (one per task)
+### 4a. Calculator ✅ Complete
+- **Changed:** `index.html` — one CSS block scoped to `#calc`. No HTML/JS changes; all JS hooks (`#calcForm`, field IDs, `err-*`, `#total`, `.out .line`, `data-l/n/v`) intact.
+- **Styling:** card panels with soft shadow; 48px inputs/selects with gold SVG chevron (RTL, light-theme variant), hover/focus rings; boxed checkbox with checked state; error messages as tinted alert boxes with icon; result panel with emerald glow, gold-ruled total, dashed line items, shaded assumptions box; result panel un-stuck on ≤900px.
+- **Verified:** 462 scripted input cases (every contract-end type × contract type × service years 0/1/2/4/5/7/10/25 × months 0/11 × checkbox on/off, plus validation/boundary cases: months 12/−1, empty/negative years, wage 0/empty/1/12345.67, notice −1/60/61, remaining empty/0). Total, line items, notes, error messages and visible fields are byte-identical before and after. No JS errors, no overflow at 360/1280, all controls ≥44px tall, keyboard focus visible. Dark, light and error-state screenshots inspected.
+- **Not pushed** (awaiting approval).
+
+### Next: 4b. Interactive guide (awaiting authorization)

@@ -469,6 +469,40 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
   #top .step,#top .where > .panel,#top .trust > div{padding:var(--space-4) var(--space-5)}
 }
 @media (max-width:480px){#top .sec-head{margin-bottom:var(--space-5)}}
+
+/* ===== Session 4a — calculator (visual only; IDs/classes used by JS unchanged) ===== */
+#calc .calc{gap:var(--space-5)}
+#calc .form,#calc .out{border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-md)}
+#calc .form{gap:var(--space-5);background:linear-gradient(180deg,color-mix(in srgb,var(--surface-2) 50%,var(--surface)),var(--surface))}
+#calc .row2{gap:var(--space-4)}
+#calc .field{gap:var(--space-2)}
+#calc .field label{font-size:.92rem;color:var(--ink)}
+#calc .field .help{font-size:.82rem;line-height:1.7}
+#calc input[type=number],#calc select{min-height:48px;padding:10px 14px;font-size:1rem;border:1px solid var(--line-strong);border-radius:var(--radius-md);background-color:color-mix(in srgb,var(--bg) 80%,var(--surface));color:var(--ink);transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease),background-color var(--dur-fast) var(--ease)}
+#calc input[type=number]{font-variant-numeric:tabular-nums}
+#calc select{appearance:none;-webkit-appearance:none;padding-inline-end:40px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23D4B77A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:left 16px center;background-size:12px 8px;background-repeat:no-repeat}
+:root[data-theme="light"] #calc select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238A6420' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+#calc input[type=number]:hover,#calc select:hover{border-color:color-mix(in srgb,var(--brass) 55%,var(--line-strong))}
+#calc input[type=number]:focus,#calc select:focus{border-color:var(--green);background-color:var(--bg);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}
+#calc input[type=number]:focus-visible,#calc select:focus-visible{outline:var(--focus-width) solid var(--focus-color);outline-offset:2px}
+#calc .check{min-height:44px;padding:var(--space-3) var(--space-4);border:1px solid var(--line);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface-2) 40%,transparent);cursor:pointer;line-height:1.75}
+#calc .check input{width:20px;height:20px;flex:none;margin-top:.3em;cursor:pointer}
+#calc .check:has(input:checked){border-color:color-mix(in srgb,var(--green) 55%,transparent);background:color-mix(in srgb,var(--emerald) 12%,transparent)}
+#calc .err{display:flex;gap:8px;align-items:flex-start;margin:0;padding:10px 14px;border-radius:var(--radius-md);border:1px solid color-mix(in srgb,var(--bad) 45%,transparent);background:color-mix(in srgb,var(--bad) 10%,transparent);font-weight:500;line-height:1.7}
+#calc .err::before{content:"!";flex:none;display:inline-grid;place-items:center;width:20px;height:20px;margin-top:.2em;border-radius:50%;background:var(--bad);color:var(--bg);font-size:.8rem;font-weight:700}
+#calc .err[hidden]{display:none!important}
+#calc .out{gap:var(--space-4);border-color:var(--border-gold);background:radial-gradient(90% 70% at 100% 0%,color-mix(in srgb,var(--emerald) 18%,transparent),transparent 70%),var(--surface);top:calc(var(--space-8) + 24px)}
+#calc .out .total{color:var(--green);padding-block:var(--space-2) var(--space-3);border-bottom:1px solid var(--border-gold);letter-spacing:0}
+#calc .out .total small{color:var(--brass)}
+#calc .lines{border-top:0}
+#calc .line{align-items:baseline;padding:12px 0;border-bottom-style:dashed}
+#calc .line:last-child{border-bottom:0}
+#calc .line span:last-child{color:var(--ink)}
+#calc .assume{gap:6px;padding:var(--space-4);border-radius:var(--radius-md);background:color-mix(in srgb,var(--surface-2) 45%,transparent);line-height:1.8}
+#calc .share-row{margin-top:0;padding-top:var(--space-2)}
+#calc .share-row .btn{min-height:44px}
+@media (max-width:900px){#calc .out{position:static}}
+@media (max-width:480px){#calc .form,#calc .out{padding:var(--space-5)}#calc .row2{gap:var(--space-3)}}
 </style>
 <script data-goatcounter="https://zs2n.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>

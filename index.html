@@ -35,33 +35,81 @@
 <style>
 body{margin:0}[hidden]{display:none!important}img{max-width:100%}
 /* Layout: RTL editorial column; the hero pairs the headline with a bench card where one gavel strikes a sound block and switches the article between statute language and plain language. */
+/* ===== JALI design system — Premium Emerald Luxury (Session 1) =====
+   Dark is the default theme. A light theme is prepared under [data-theme="light"] (no toggle yet).
+   Legacy names (--bg, --surface, --ink, --green, --brass…) are kept and mapped onto the new tokens
+   so existing selectors keep working. #court defines its own scoped palette and is unaffected. */
 :root{
-  --bg:#F2F5F2; --surface:#FFFFFF; --surface-2:#E8EEEA; --ink:#13241E; --muted:#58695F; --line:#D3DCD6;
-  --green:#0E4B39; --green-ink:#FFFFFF; --brass:#A87A2A; --brass-soft:#EFE3C8;
+  /* Palette — dark layers */
+  --jali-night:#071A14; --jali-deep:#0C241B; --jali-forest:#102D23; --jali-forest-2:#153829;
+  /* Emerald */
+  --emerald:#0D8B65; --emerald-strong:#0A7354; --emerald-bright:#3DBB8F; --emerald-soft:#123D2E;
+  /* Champagne gold */
+  --gold-champagne:#D4B77A; --gold-deep:#B8975A; --gold-soft:#2A2818;
+  /* Ivory text */
+  --ivory:#F2EBDD; --ivory-muted:#B4BCAD;
+  /* Light-theme surfaces (used by [data-theme="light"]) */
+  --light-bg:#F6F2E9; --light-surface:#FFFDF8; --light-surface-2:#ECE6D8; --light-line:#D9D1BF;
+  --light-ink:#10241C; --light-muted:#4F5F56;
+
+  /* Semantic tokens (dark default) */
+  --bg:var(--jali-night); --surface:var(--jali-deep); --surface-2:var(--jali-forest); --surface-3:var(--jali-forest-2);
+  --ink:var(--ivory); --muted:var(--ivory-muted); --line:#1F4434; --line-strong:#2C5A46;
+  --border-gold:color-mix(in srgb,var(--gold-champagne) 35%,transparent);
+  --primary:var(--emerald); --primary-ink:var(--ivory);
+  --green:var(--emerald-bright); --green-ink:var(--jali-night);
+  --brass:var(--gold-champagne); --brass-soft:var(--gold-soft);
+  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
+  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C;
+  --shadow-sm:0 1px 2px rgb(0 0 0 / .35);
+  --shadow-md:0 6px 18px -6px rgb(0 0 0 / .5), 0 0 0 1px rgb(255 255 255 / .02);
+  --shadow-lg:0 22px 48px -16px rgb(0 0 0 / .65);
+  --focus-color:var(--gold-champagne); --focus-width:2px; --focus-offset:3px;
+  --focus-ring:0 0 0 3px color-mix(in srgb,var(--focus-color) 35%,transparent);
+  --selection-bg:color-mix(in srgb,var(--emerald) 45%,transparent);
+
+  /* Typography — heading font: Noto Kufi Arabic (Saudi Font not yet verified for licensing/hosting) */
+  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,"Geeza Pro","Segoe UI",sans-serif;
+  --f-body:"IBM Plex Sans Arabic",Tahoma,"Geeza Pro","Segoe UI",sans-serif;
+  --font-heading:var(--f-display); --font-body:var(--f-body);
+  --fs-xs:.8rem; --fs-sm:.9rem; --fs-base:1rem; --fs-md:1.15rem; --fs-lg:1.4rem;
+  --fs-xl:clamp(1.6rem,3.2vw,2.3rem); --fs-2xl:clamp(2.6rem,7vw,4.6rem);
+  --lh-body:1.85; --lh-heading:1.35; --measure:68ch;
+
+  /* Spacing, radii, transitions */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-xl:24px; --radius-pill:999px;
+  --r:var(--radius-md); --wrap:1120px;
+  --ease:cubic-bezier(.2,.7,.2,1); --dur-fast:.15s; --dur-base:.25s; --dur-slow:.45s;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:var(--light-bg); --surface:var(--light-surface); --surface-2:var(--light-surface-2); --surface-3:#E3DCCB;
+  --ink:var(--light-ink); --muted:var(--light-muted); --line:var(--light-line); --line-strong:#C4BAA3;
+  --border-gold:color-mix(in srgb,#8A6420 35%,transparent);
+  --primary:var(--emerald-strong); --primary-ink:#FFFFFF;
+  --green:#0B6E50; --green-ink:#FFFFFF;
+  --brass:#8A6420; --brass-soft:#F0E4C6;
   --wood:#6E4027; --wood-2:#4B2A19; --wood-hi:#8C5636; --metal:#C9A45C;
   --good:#1F7A4D; --warn:#9A6A12; --bad:#A63A2E;
-  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;
-  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
-  --r:10px; --wrap:1120px;
+  --shadow-sm:0 1px 2px rgb(16 36 28 / .08);
+  --shadow-md:0 6px 18px -8px rgb(16 36 28 / .18);
+  --shadow-lg:0 22px 48px -18px rgb(16 36 28 / .25);
+  --focus-color:#8A6420;
+  --selection-bg:color-mix(in srgb,var(--emerald) 25%,transparent);
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0B1411; --surface:#121E19; --surface-2:#18271F; --ink:#E4EDE8; --muted:#97A99F; --line:#26372F;
-  --green:#5DBA94; --green-ink:#0B1411; --brass:#D9A954; --brass-soft:#352B18;
-  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
-  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0B1411; --surface:#121E19; --surface-2:#18271F; --ink:#E4EDE8; --muted:#97A99F; --line:#26372F;
-  --green:#5DBA94; --green-ink:#0B1411; --brass:#D9A954; --brass-soft:#352B18;
-  --wood:#8E5738; --wood-2:#5F3621; --wood-hi:#AE7049; --metal:#D9B46A;
-  --good:#5CC48F; --warn:#E0B04F; --bad:#E57A6C; color-scheme:dark}
+@media (prefers-reduced-motion: reduce){:root{--dur-fast:0s;--dur-base:0s;--dur-slow:0s}}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.85}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--selection-bg);color:var(--ink)}
 .site{position:relative;padding-inline:16px;overflow-x:clip}
 .wrap{max-width:var(--wrap);margin-inline:auto}
 a{color:var(--green)}
-:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:var(--focus-width) solid var(--focus-color);outline-offset:var(--focus-offset);border-radius:4px}
 h1,h2,h3{font-family:var(--f-display);line-height:1.35;text-wrap:balance;margin:0}
 h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:600}
 h3{font-size:1.2rem;font-weight:600}

@@ -4,7 +4,7 @@
    - Icons, manifest and fonts: served from cache and refreshed in the background.
    - VERSION changes on every publish, which makes the browser install the new
      worker and delete the old caches automatically. */
-const VERSION = '20261031-release-2';
+const VERSION = '20261031-release-3';
 const PAGES = 'jali-pages-' + VERSION;
 const ASSETS = 'jali-assets-' + VERSION;
 const FONTS = 'jali-fonts';
@@ -27,7 +27,8 @@ const COURT = [
   './court/art.js',
   './court/cases.js',
   './court/engine.js',
-  './court/cast.webp'
+  './court/cast.webp',
+  './court/promo.webp'
 ];
 
 self.addEventListener('install', (event) => {

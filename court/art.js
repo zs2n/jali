@@ -587,7 +587,7 @@
     judge:  {normal:0, listen:2, think:1, stern:3, judgment:4, gavel:4, worried:2, shock:3, angry:3, sweat:2, nervous:2, happy:0, smug:0, confident:0},
     faisal: {normal:0, confident:1, happy:1, listen:1, stern:1, smug:1, judgment:1, point:2, present:2, angry:2, think:3, shock:4, worried:4, sweat:4, nervous:4},
     majed:  {normal:0, smug:0, confident:0, happy:0, listen:0, think:1, sweat:2, nervous:2, worried:2, shock:3, angry:4, stern:4, judgment:4},
-    witness:{normal:0, confident:0, listen:1, think:1, stern:1, happy:2, worried:3, sweat:3, nervous:3, shock:3, angry:3},
+    witness:{normal:0, confident:0, listen:1, think:1, stern:1, happy:2, worried:1, sweat:1, nervous:1, shock:1, angry:1},
     clerk:  {normal:0, confident:0, think:1, listen:2, happy:2, stern:2, worried:3, sweat:3, nervous:3, shock:3, angry:3},
     client: {normal:0, listen:0, happy:0, confident:0, worried:1, think:1, stern:1, angry:1, sweat:2, nervous:2, shock:3},
     lawyer: {normal:0, confident:1, happy:1, listen:1, stern:1, worried:2, think:2, angry:2, sweat:2, nervous:2, shock:2, present:3}

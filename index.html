@@ -1477,6 +1477,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-bet
     R(42,10,12,11,'#C98E62'); R(40,8,16,4,'#F1EEE8'); R(39,10,3,12,'#F1EEE8'); R(54,10,3,12,'#F1EEE8'); R(40,8,16,1,'#111');
     R(44,14,2,1,'#1b1b1b'); R(50,14,2,1,'#1b1b1b'); R(43,18,10,3,'#8E8A84');
     R(10,36,76,18,'#6E4428'); R(10,34,76,3,'#8B5A35'); R(70,30,8,3,'#3E2414'); R(72,24,5,6,'#5E3A22'); R(75,26,8,2,'#8B5A35');
+    /* the redesigned judge scene replaces the placeholder above once it has loaded */
+    var im = new Image();
+    im.onload = function(){ c.width = 480; c.height = 270; var k = c.getContext('2d'); k.imageSmoothingEnabled = false; k.drawImage(im, 0, 0); };
+    im.src = './court/promo.webp';
   })();
   $('playCourt').addEventListener('click', function(){ if(window.openCourt) window.openCourt(this); });
 

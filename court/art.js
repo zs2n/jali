@@ -71,12 +71,10 @@
     khalid: { skin:'light', build:'slim', face:'oval', fw:29, head:'ghutra', agal:true, hang:'front', outfit:'thobe',
               thobe:['#8E948F','#A9AFAA','#C3C8C3','#D6DAD5','#E8EBE7'], beard:'goatee', beardC:['#1E1510','#2C2018','#4A382A'],
               brow:2, browC:'#22180F', glasses:'square', eyes:'normal', nose:'straight', age:1, badge:true },
-    nasser: { skin:'medium', build:'normal', face:'long', fw:30, head:'shemagh', agal:true, hang:'both', outfit:'bisht', stoop:3,
-              robe:['#3E3022','#57452F','#72603F','#8D7A52','#A69268'], trim:'none', beard:'full', beardC:['#A59F95','#C8C2B8','#EEEAE3'],
-              brow:2, browC:'#D2CCC2', eyes:'soft', nose:'long', age:4 },
-    abdullah:{ skin:'deep', build:'broad', face:'square', fw:31, head:'hair', hairC:['#0A0706','#16100C','#251C15'], outfit:'coverall',
-              cov:['#122744','#1B3557','#24476F','#305C8C','#4A78AA'], beard:'moustache', beardC:['#0A0706','#16100C','#2A1F18'],
-              brow:3, browC:'#0E0A08', eyes:'normal', nose:'wide', age:1 },
+    nasser: { skin:'medium', build:'slim', face:'oval', fw:26, head:'niqab', veil:['#040405','#09090B','#111114','#1A1A1F','#2A2A31'], outfit:'abaya',
+              robe:['#060607','#0D0D0F','#16161A','#202025','#2C2C33'], embroid:['#2A2A31','#5A5A64'], beard:'none', brow:1, browC:'#24170F', eyes:'lash', nose:'small', age:0 },
+    abdullah:{ skin:'tan', build:'slim', face:'oval', fw:26, head:'niqab', veil:['#040405','#09090B','#111114','#1A1A1F','#2A2A31'], outfit:'abaya',
+              robe:['#060607','#0D0D0F','#16161A','#202025','#2C2C33'], embroid:['#0F4030','#D4B77A'], beard:'none', brow:1, browC:'#24170F', eyes:'lash', nose:'small', age:0, hold:'folder' },
     reem:   { skin:'light', build:'slim', face:'oval', fw:26, head:'niqab', veil:['#040405','#09090B','#111114','#1A1A1F','#2A2A31'], outfit:'abaya',
               robe:['#060607','#0D0D0F','#16161A','#202025','#2C2C33'], embroid:[EM[5],GOLD[4]], beard:'none', brow:1, browC:'#24170F',
               eyes:'lash', nose:'small', age:0, hold:'folder' },
@@ -579,6 +577,40 @@
     g.drawImage(c, cx-240, 0);
   }
 
+
+  /* ---------- character sprites from the approved concept sheet (court/cast.webp) ----------
+     Code-drawn characters above stay as the fallback until the image has loaded. */
+  var BASE = (document.currentScript && document.currentScript.src || '').replace(/[^\/]*$/, '');
+  var SHEET = { pos:{"judge0": [0, 0, 136, 148], "judge1": [138, 0, 122, 150], "judge2": [262, 0, 121, 148], "judge3": [385, 0, 124, 151], "judge4": [511, 0, 137, 151], "faisal0": [650, 0, 149, 154], "faisal1": [801, 0, 135, 149], "faisal2": [0, 156, 126, 150], "faisal3": [128, 156, 131, 152], "faisal4": [261, 156, 156, 149], "majed0": [419, 156, 170, 159], "majed1": [591, 156, 147, 150], "majed2": [740, 156, 144, 150], "majed3": [0, 317, 146, 150], "majed4": [148, 317, 164, 150], "lawyer0": [314, 317, 111, 144], "lawyer1": [427, 317, 104, 150], "lawyer2": [533, 317, 107, 149], "lawyer3": [642, 317, 120, 150], "client0": [764, 317, 104, 144], "client1": [870, 317, 114, 150], "client2": [0, 469, 105, 149], "client3": [107, 469, 127, 151], "witness0": [236, 469, 122, 160], "witness1": [360, 469, 97, 150], "witness2": [459, 469, 89, 150], "witness3": [550, 469, 97, 151], "clerk0": [649, 469, 119, 162], "clerk1": [770, 469, 93, 152], "clerk2": [865, 469, 85, 147], "clerk3": [0, 633, 104, 151]}, img:null, ready:false, cbs:[] };
+  var SPRITE_SET = { judge:'judge', player:'faisal', rival:'majed', salem:'witness', khalid:'clerk', nasser:'client', abdullah:'lawyer' };
+  var SPRITE_EXPR = {
+    judge:  {normal:0, listen:2, think:1, stern:3, judgment:4, gavel:4, worried:2, shock:3, angry:3, sweat:2, nervous:2, happy:0, smug:0, confident:0},
+    faisal: {normal:0, confident:1, happy:1, listen:1, stern:1, smug:1, judgment:1, point:2, present:2, angry:2, think:3, shock:4, worried:4, sweat:4, nervous:4},
+    majed:  {normal:0, smug:0, confident:0, happy:0, listen:0, think:1, sweat:2, nervous:2, worried:2, shock:3, angry:4, stern:4, judgment:4},
+    witness:{normal:0, confident:0, listen:1, think:1, stern:1, happy:2, worried:1, sweat:1, nervous:1, shock:1, angry:1},
+    clerk:  {normal:0, confident:0, think:1, listen:2, happy:2, stern:2, worried:3, sweat:3, nervous:3, shock:3, angry:3},
+    client: {normal:0, listen:0, happy:0, confident:0, worried:1, think:1, stern:1, angry:1, sweat:2, nervous:2, shock:3},
+    lawyer: {normal:0, confident:1, happy:1, listen:1, stern:1, worried:2, think:2, angry:2, sweat:2, nervous:2, shock:2, present:3}
+  };
+  (function load(){
+    if(typeof Image === 'undefined') return;
+    var im = new Image();
+    im.onload = function(){ SHEET.img = im; SHEET.ready = true; cache = {}; cacheKeys = []; SHEET.cbs.forEach(function(f){ try{ f(); }catch(e){} }); SHEET.cbs = []; };
+    im.src = BASE + 'cast.webp';
+  })();
+  function onReady(f){ if(SHEET.ready) f(); else SHEET.cbs.push(f); }
+  function spriteFrame(id, st){
+    var set = SPRITE_SET[id]; if(!SHEET.ready || !set) return null;
+    var map = SPRITE_EXPR[set], expr = st.expr==='normal' && DEFAULT_EXPR[id] ? DEFAULT_EXPR[id] : st.expr, k;
+    if(st.pose==='gavel' || st.pose==='point' || st.pose==='present') k = map[st.pose];
+    if(k===undefined) k = map[expr];
+    if(k===undefined) k = 0;
+    return SHEET.pos[set + k] || SHEET.pos[set + '0'];
+  }
+  function drawSprite(f, cx, bottom, br){
+    g.drawImage(SHEET.img, f[0], f[1], f[2], f[3], Math.round(cx - f[2]/2), Math.round(bottom - f[3] + (br?1:0)), f[2], f[3]);
+  }
+
   /* ---------- environment pieces ---------- */
   function woodWall(x, y, w, h, panelW){
     R(x, y, w, h, WOOD[2]);
@@ -855,7 +887,9 @@
         var st = o.st || {expr:'normal'};
         var st2 = {expr:st.expr, pose:st.pose, dir:st.dir, mouth:st.mouth, blink:st.blink, breath:st.breath};
         if(view==='judge' && o.gavelT>=0) st2.pose = 'gavel';
-        cachedPerson(id, L.cx, L.top, st2, {deskY:L.deskY, gavelT:o.gavelT});
+        var fr = spriteFrame(id, st2);
+        if(fr) drawSprite(fr, L.cx, L.deskY + 16, st2.breath);
+        else cachedPerson(id, L.cx, L.top, st2, {deskY:L.deskY, gavelT:o.gavelT});
       }
     }
     g.drawImage(cached(FG, view, v.fg), 0, 0);
@@ -866,6 +900,14 @@
 
   /* ---------- public: portraits and documents ---------- */
   function portrait(canvas, id, expr){
+    var fr = spriteFrame(id, {expr:expr||'normal'});
+    if(fr){
+      var k0 = canvas.getContext('2d'); k0.imageSmoothingEnabled = false;
+      k0.fillStyle = EM[2]; k0.fillRect(0,0,canvas.width,canvas.height);
+      var side = Math.round(fr[2]*0.78);
+      k0.drawImage(SHEET.img, fr[0] + Math.round((fr[2]-side)/2), fr[1], side, side, 0, 0, canvas.width, canvas.height);
+      return;
+    }
     var c = document.createElement('canvas'); c.width = W; c.height = H;
     var keep = g; g = c.getContext('2d'); g.imageSmoothingEnabled = false;
     person(id, 240, 40, {expr:expr||'normal'}, {deskY:400});
@@ -921,5 +963,5 @@
     });
   }
 
-  window.JaliCourtArt = { W:W, H:H, CAST:CAST, EXPR:EXPR, scene:scene, portrait:portrait, doc:doc, sheet:sheet, mini:mini };
+  window.JaliCourtArt = { W:W, H:H, CAST:CAST, EXPR:EXPR, scene:scene, portrait:portrait, doc:doc, sheet:sheet, mini:mini, onReady:onReady };
 })();

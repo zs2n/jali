@@ -18,4 +18,10 @@
 - **Hero:** emerald/gold radial glow, gold-outlined eyebrow pill, emerald accent word + gold dot. Hero-scoped CTA styling (`.hero .cta …`) so other buttons are unaffected; AA-contrast primary (#0A7354→#085E45 with ivory text); full-width CTAs ≤480px.
 - **Verified (Playwright 360/768/1280):** no horizontal overflow, RTL, all 8 nav + 2 CTA targets exist, primary CTA navigates to `#guide`, no `.level`/nav overlap, no JS errors (only sandbox-blocked font/analytics requests). Dark + light screenshots inspected.
 
-## Next: Session 3 (awaiting prompt)
+## Session 3 — Homepage Sections ✅ Complete
+- **Changed:** `index.html` — one scoped CSS block (all selectors under `#top`, so the `#court` overlay and `#promoArt` pixel art are untouched) + `.step-links` added to the three «كيف يعمل» cards linking to existing anchors (`#topic`, `#guide`, `#calc`, `#help`). No other text changed; section order kept.
+- **Styling:** consistent section rhythm with hairline dividers and gold-dash eyebrows; shared card look (radius-lg, soft gradient, gold border on hover) for steps, FAQ, where-to-go, topics and trust; FAQ open state + circular toggle; topic article header tint, gold-ruled example, striped tables; highlighted «متاح» topic; numbered student path; emerald/gold court promo.
+- **Not touched:** guide, calculator, quiz internals (Session 4).
+- **Verified (Playwright 360/1280):** all 11 `main` sections present in order; every in-page anchor resolves; no horizontal overflow or elements wider than the viewport; no JS errors; with JS disabled the `main` text is identical to the previous commit apart from the new links. Screenshots of how/help/students inspected.
+
+## Next: Session 4 (awaiting prompt)

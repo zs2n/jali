@@ -4,7 +4,7 @@
    - Icons, manifest and fonts: served from cache and refreshed in the background.
    - VERSION changes on every publish, which makes the browser install the new
      worker and delete the old caches automatically. */
-const VERSION = '20261031-court-b';
+const VERSION = '20261031-release-1';
 const PAGES = 'jali-pages-' + VERSION;
 const ASSETS = 'jali-assets-' + VERSION;
 const FONTS = 'jali-fonts';

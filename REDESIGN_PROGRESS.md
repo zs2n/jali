@@ -67,3 +67,11 @@ Keep/enrich سالم; improve خالد, عبدالله; replace ناصر; add ر
 - **Functionality:** calculator 462 cases identical to `main`; guide (6 situations), «وين أروح» links, nav targets OK; quiz run identical to `main` with a fixed random seed (same final score); courtroom wins at 390px; IDs and data-attributes outside the court identical, court IDs preserved in `court/engine.js`; non-court scripts byte-identical.
 - **Layout/a11y:** no overflow at 360/1280 on all four pages; RTL; visible keyboard focus; reduced-motion rules present; no console errors.
 - **Open items:** privacy.html (6b) and offline.html still use the old light design; no theme toggle exists (light theme prepared only); Session 4b–4d (guide, «وين أروح», quiz styling) not done; courtroom Stage C blocked on official legal sources; new character art direction awaiting approval (concept sheet in Canva); nothing pushed since Session 3 (5 local commits).
+
+## Release 1 — completion pass
+- **4b–4d:** guide, «وين أروح», quiz styled (scoped CSS only).
+- **6b:** privacy.html aligned (text/links identical to main); offline.html aligned.
+- **Theme switch:** light/dark button on index, about, privacy (dark default, remembered per device).
+- **Courtroom art:** cartoon proportions (heads ×1.32, large expressive eyes); judge in red shemagh without agal; male lawyers in red shemagh + agal with the shemagh under a gold-trimmed bisht; Faisal's royal pleats; all women in black abaya + niqab (eyes only).
+- **Not done (blocked):** Stage C/D legal case work (ريم, سعد, enriched سالم/خالد/عبدالله, replacing ناصر) — laws.boe.gov.sa and hrsd.gov.sa unreachable from this environment; existing four cases unchanged.
+- **Verified:** calculator 462 cases = main; quiz seeded run = main; guide/links/nav; all 4 court cases won (1280 + 360); offline court via service worker; no overflow/console errors on all pages; URLs and article references unchanged.

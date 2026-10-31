@@ -54,13 +54,13 @@
 
   /* ---------- cast: every character has its own silhouette, outfit, face and palette ---------- */
   var CAST = {
-    judge:  { skin:'medium', build:'broad', face:'square', fw:32, head:'ghutra', agal:true, hang:'both', outfit:'bisht',
+    judge:  { skin:'medium', build:'broad', face:'square', fw:32, head:'shemagh', agal:false, outfit:'bisht',
               robe:['#070605','#0F0D0B','#1A1714','#27221E','#38312A'], trim:'heavy', beard:'full', beardC:['#8A847A','#ACA69C','#D6D1C8'],
               brow:3, browC:'#C7C0B4', glasses:'half', eyes:'deep', nose:'long', age:3, pen:true },
-    player: { skin:'medium', build:'slim', face:'oval', fw:30, head:'shemagh', agal:true, hang:'back', peak:true, outfit:'bisht',
+    player: { skin:'medium', build:'slim', face:'oval', fw:30, head:'shemagh', agal:true, peak:true, pleats:true, outfit:'bisht',
               robe:['#040706','#09110D','#102019','#183027','#224436'], trim:'fine', beard:'trim', beardC:['#120C08','#1E150F','#3A2B20'],
               brow:2, browC:'#160F0B', eyes:'keen', nose:'straight', age:1 },
-    rival:  { skin:'tan', build:'heavy', face:'round', fw:34, head:'ghutra', agal:true, hang:'both', outfit:'bisht',
+    rival:  { skin:'tan', build:'heavy', face:'round', fw:34, head:'shemagh', agal:true, outfit:'bisht',
               robe:['#3B2614','#55381E','#73502B','#8F693A','#AA824E'], trim:'fine', beard:'goatee', beardC:['#140D09','#21170F','#3E2E22'],
               brow:2, browC:'#1A120C', glasses:'rect', eyes:'hooded', nose:'wide', age:2, ring:true },
     clerk:  { skin:'light', build:'thin', face:'long', fw:27, head:'ghutra', agal:true, hang:'back', outfit:'vest',
@@ -77,12 +77,12 @@
     abdullah:{ skin:'deep', build:'broad', face:'square', fw:31, head:'hair', hairC:['#0A0706','#16100C','#251C15'], outfit:'coverall',
               cov:['#122744','#1B3557','#24476F','#305C8C','#4A78AA'], beard:'moustache', beardC:['#0A0706','#16100C','#2A1F18'],
               brow:3, browC:'#0E0A08', eyes:'normal', nose:'wide', age:1 },
-    reem:   { skin:'light', build:'slim', face:'oval', fw:26, head:'hijab', hijab:['#071610','#0C221A','#133226','#1B4535','#255A46'], outfit:'abaya',
+    reem:   { skin:'light', build:'slim', face:'oval', fw:26, head:'niqab', veil:['#040405','#09090B','#111114','#1A1A1F','#2A2A31'], outfit:'abaya',
               robe:['#060607','#0D0D0F','#16161A','#202025','#2C2C33'], embroid:[EM[5],GOLD[4]], beard:'none', brow:1, browC:'#24170F',
               eyes:'lash', nose:'small', age:0, hold:'folder' },
     saad:   { skin:'tan', build:'normal', face:'oval', fw:30, head:'wrap', outfit:'hivis', beard:'short', beardC:['#120C08','#1E150F','#3A2B20'],
               brow:2, browC:'#160F0B', eyes:'normal', nose:'straight', age:1 },
-    hind:   { skin:'medium', build:'slim', face:'oval', fw:26, head:'hijab', hijab:['#0B0F1C','#121A2E','#1B2742','#253556','#33466C'], outfit:'abaya',
+    hind:   { skin:'medium', build:'slim', face:'oval', fw:26, head:'niqab', veil:['#040405','#09090B','#111114','#1A1A1F','#2A2A31'], outfit:'abaya',
               robe:['#060607','#0D0D0F','#16161A','#202025','#2C2C33'], embroid:['#59627A','#A9B0C2'], beard:'none', brow:1, browC:'#2A1B12',
               glasses:'round', eyes:'lash', nose:'small', age:2, badge:true },
     fahd:   { skin:'medium', build:'slim', face:'oval', fw:29, head:'hair', hairC:['#0D0907','#1A130E','#2C2219'], curly:true, outfit:'shirt',
@@ -213,76 +213,75 @@
     R(cx-6, sy+36, 10, 13, IVORY[4]); R(cx-6, sy+36, 10, 4, EM[5]); R(cx-4, sy+42, 6, 1, IVORY[1]); R(cx-4, sy+45, 4, 1, IVORY[1]); R(cx-6,sy+48,10,1,IVORY[0]);
   }
 
-  /* ---------- head ---------- */
+  /* ---------- head: cartoon proportions (head scaled by K) and large expressive eyes ---------- */
+  var K = 1.32;
+  function s(n){ return Math.round(n*K); }
   function faceInset(shape, r){
-    var start = shape==='round'?17:shape==='square'?25:shape==='long'?24:21, len = 36-start, inset = 0;
-    if(r>start){ var t=(r-start)/len; inset = Math.round(shape==='square' ? t*t*7 : shape==='round' ? t*t*11 : t*t*9); }
-    if(r<3) inset = Math.max(inset, [3,1,0][r]);
-    return inset;
+    var b = r / K, start = shape==='round'?17:shape==='square'?25:shape==='long'?24:21, len = 36-start, inset = 0;
+    if(b>start){ var t=Math.min(1,(b-start)/len); inset = shape==='square' ? t*t*7 : shape==='round' ? t*t*11 : t*t*9; }
+    if(b<3) inset = Math.max(inset, [3,1,0][Math.max(0,Math.floor(b))]);
+    return Math.round(inset*K);
   }
+  var LID = '#1C110B', WHITE = '#F4F0E8', IRIS = '#2B1A10';
   function face(sp, cx, fy, st){
-    var fw = sp.fw, fx = cx - fw/2, sk = SKIN[sp.skin], shape = sp.face, rows = sp.head==='hijab' ? 33 : 36;
+    var fw = sp.fw, fx = cx - fw/2, sk = SKIN[sp.skin], shape = sp.face, rows = s(36), veiled = sp.head==='niqab';
     var e = EXPR[st.expr] || EXPR.normal;
-    spans(fy, fy+rows, function(y){ var r=y-fy, n=faceInset(shape, r+(36-rows)); return [fx+n, fx+fw-n]; }, sk[1]);
-    spans(fy, fy+rows, function(y){ var r=y-fy, n=faceInset(shape, r+(36-rows)); return [fx+fw-n-6, fx+fw-n]; }, sk[2]);
-    spans(fy, fy+rows, function(y){ var r=y-fy, n=faceInset(shape, r+(36-rows)); return [fx+fw-n-2, fx+fw-n]; }, sk[3]);
-    for(var y=fy; y<fy+rows; y++){ var n=faceInset(shape, y-fy+(36-rows)); if((y&1)) P(fx+fw-n-7, y, sk[2]); }
-    dith(fx+4, fy+17, 5, 6, sk[0]); R(fx+5, fy+5, fw-12, 1, sk[0]);
-    if(sp.head!=='hair') R(fx+2, fy, fw-4, 3, sk[2]);
-    var ey = fy+14, my = fy+27, exL = cx-7, exR = cx+6;
-    if(sp.head==='hijab'){ ey = fy+12; my = fy+25; }
-    if(sp.age>=2){ line(cx-6, ey+7, cx-8, my, 1, sk[2]); line(cx+5, ey+7, cx+7, my, 1, sk[3]); P(exL-4, ey+1, sk[2]); P(exR+4, ey+1, sk[3]); }
-    if(sp.age>=3){ P(exL-4, ey+2, sk[2]); P(exR+4, ey+2, sk[3]); R(exL-2, ey+3, 4, 1, sk[2]); R(exR-1, ey+3, 4, 1, sk[3]); }
-    if(sp.age>=4){ R(cx-5, fy+4, 10, 1, sk[2]); line(cx-9, ey+9, cx-10, my+3, 1, sk[2]); }
-    /* nose */
-    var nl = sp.nose==='long' ? 10 : sp.nose==='small' ? 7 : 9, nw = sp.nose==='wide' ? 4 : 3;
-    for(var k=1;k<nl;k++) if(k>2||(k&1)) P(cx+1, ey+k, sk[2]);
-    P(cx+2, ey+nl-2, sk[3]); P(cx, ey+nl-2, sk[0]);
-    P(cx-nw+1, ey+nl, sk[3]); P(cx+nw, ey+nl, sk[4]); R(cx-nw+2, ey+nl+1, nw*2-2, 1, sk[2]);
-    /* cheeks */
-    if(e.fx==='blush'){ dith(fx+3, ey+6, 6, 3, '#E58C7A'); dith(fx+fw-9, ey+6, 6, 3, '#C9705E'); }
-    /* beard first (mouth and moustache are drawn on top) */
-    beard(sp, cx, fx, fw, fy, ey, my, shape, st);
-    mouth(sp, cx, my, st.mouth && e.mouth!=='shout' && e.mouth!=='teeth' ? 'open' : e.mouth, sk);
-    moustache(sp, cx, my);
+    spans(fy, fy+rows, function(y){ var n=faceInset(shape, y-fy); return [fx+n, fx+fw-n]; }, sk[1]);
+    spans(fy, fy+rows, function(y){ var n=faceInset(shape, y-fy); return [fx+fw-n-7, fx+fw-n]; }, sk[2]);
+    spans(fy, fy+rows, function(y){ var n=faceInset(shape, y-fy); return [fx+fw-n-2, fx+fw-n]; }, sk[3]);
+    for(var y=fy; y<fy+rows; y++){ var n0=faceInset(shape, y-fy); if(y&1) P(fx+fw-n0-8, y, sk[2]); }
+    dith(fx+5, fy+s(17), 7, 7, sk[0]); R(fx+6, fy+6, fw-14, 1, sk[0]);
+    if(sp.head!=='hair') R(fx+2, fy, fw-4, 4, sk[2]);
+    var ey = fy+s(14), my = fy+s(28), exL = cx-s(8), exR = cx+s(7);
+    if(!veiled){
+      if(sp.age>=2){ line(cx-s(6), ey+s(7), cx-s(8), my, 1, sk[2]); line(cx+s(5), ey+s(7), cx+s(7), my, 1, sk[3]); }
+      if(sp.age>=4){ R(cx-s(5), fy+5, s(10), 1, sk[2]); }
+      var nl = s(sp.nose==='long' ? 9 : sp.nose==='small' ? 6 : 8), nw = sp.nose==='wide' ? 4 : 3;
+      for(var k=2;k<nl;k++) if(k>3||(k&1)) P(cx+1, ey+k, sk[2]);
+      P(cx+2, ey+nl-2, sk[3]); P(cx, ey+nl-2, sk[0]); P(cx-1, ey+nl-1, sk[0]);
+      P(cx-nw+1, ey+nl, sk[3]); P(cx+nw, ey+nl, sk[4]); R(cx-nw+2, ey+nl+1, nw*2-2, 1, sk[2]);
+      if(e.fx==='blush'){ dith(fx+4, ey+s(6), 7, 4, '#E58C7A'); dith(fx+fw-11, ey+s(6), 7, 4, '#C9705E'); }
+      beard(sp, cx, fx, fw, fy, ey, my, shape, st);
+      mouth(sp, cx, my, st.mouth && e.mouth!=='shout' && e.mouth!=='teeth' ? 'open' : e.mouth, sk);
+      moustache(sp, cx, my);
+    }
     eyes(sp, exL, exR, ey, st, e, sk);
   }
   function eyes(sp, exL, exR, ey, st, e, sk){
     var lk = e.look||0, lky = e.lookY||0, kind = st.blink && e.eyes!=='happy' ? 'blink' : e.eyes;
-    var lid = sk[4], white = '#F2EEE6', iris = '#2A1A10';
+    if(sp.eyes==='hooded' && kind==='n') kind = 'hooded';
     [[exL,-1],[exR,1]].forEach(function(p){
       var x = p[0], side = p[1];
-      if(sp.eyes==='deep'){ R(x-3, ey-2, 7, 1, sk[3]); }
-      if(sp.eyes==='hooded' && kind==='n'){ kind = 'hooded'; }
-      if(kind==='blink'){ R(x-2, ey+1, 5, 1, lid); P(x+2*side, ey, lid); return; }
-      if(kind==='happy'){ P(x-2,ey+1,lid); R(x-1,ey,3,1,lid); P(x+2,ey+1,lid); return; }
-      if(kind==='wide'){ R(x-3, ey-2, 7, 1, lid); R(x-2, ey-1, 5, 3, white); R(x-1+lk, ey, 2, 2, iris); P(x-1+lk, ey, '#5A3A26'); return; }
-      if(kind==='narrow'){ R(x-3, ey, 7, 1, lid); R(x-2, ey+1, 5, 1, white); R(x-1+lk, ey+1, 2, 1, iris); return; }
-      if(kind==='hooded'){ R(x-3, ey-1, 7, 2, lid); R(x-2, ey+1, 5, 1, white); R(x-1+lk, ey+1, 2, 1, iris); P(x+2*side, ey+2, sk[3]); return; }
-      R(x-3, ey-1, 7, 1, lid); R(x-2, ey, 5, 2, white); R(x-1+lk, ey+lky, 2, 2, iris); P(x-1+lk, ey+lky, '#6A4A36');
-      if(sp.eyes==='lash'){ P(x+3*side, ey-2, lid); P(x+3*side, ey-1, lid); R(x-2, ey-2, 5, 1, lid); }
-      if(sp.eyes==='keen'){ P(x+3*side, ey-1, lid); P(x-3*side, ey+2, sk[3]); }
-      if(sp.eyes==='soft'){ R(x-2, ey+2, 5, 1, sk[2]); }
+      if(sp.eyes==='deep') R(x-4, ey-3, 9, 1, sk[3]);
+      if(kind==='blink'){ R(x-3, ey+1, 7, 1, LID); P(x+3*side, ey, LID); return; }
+      if(kind==='happy'){ R(x-2, ey-1, 5, 2, LID); P(x-3, ey+1, LID); P(x+3, ey+1, LID); return; }
+      if(kind==='wide'){ R(x-3, ey-3, 7, 1, LID); R(x-3, ey-2, 7, 6, WHITE); R(x-1+lk, ey, 2, 2, IRIS); P(x-1+lk, ey, '#fff'); R(x-3, ey+4, 7, 1, sk[2]); return; }
+      if(kind==='narrow'){ R(x-3, ey, 7, 1, LID); R(x-3, ey+1, 7, 2, WHITE); R(x-1+lk, ey+1, 3, 2, IRIS); P(x-1+lk, ey+1, '#6A4A36'); return; }
+      if(kind==='hooded'){ R(x-3, ey-1, 7, 2, LID); R(x-3, ey+1, 7, 2, WHITE); R(x-1+lk, ey+1, 3, 2, IRIS); R(x-2, ey+3, 5, 1, sk[2]); return; }
+      R(x-3, ey-2, 7, 1, LID); R(x-3, ey-1, 7, 4, WHITE);
+      R(x-1+lk, ey-1+lky, 3, 4, IRIS); P(x-1+lk, ey-1+lky, '#FFFFFF'); P(x+1+lk, ey+1+lky, '#5A3A26');
+      R(x-2, ey+3, 5, 1, sk[2]);
+      if(sp.eyes==='lash'){ R(x-3, ey-3, 7, 1, LID); P(x+4*side, ey-3, LID); P(x+4*side, ey-2, LID); P(x+3*side, ey-4, LID); }
+      if(sp.eyes==='keen'){ P(x+4*side, ey-2, LID); }
     });
-    brows(sp, exL, exR, ey-4, e.brow);
+    brows(sp, exL, exR, ey-s(5), e.brow);
     glasses(sp, exL, exR, ey, e);
   }
   function brows(sp, exL, exR, by, kind){
-    var th = sp.brow||2, c = sp.browC;
+    var th = (sp.brow||2)+1, c = sp.browC;
     [[exL,-1],[exR,1]].forEach(function(p){
       var x = p[0], side = p[1];
-      for(var i=0;i<7;i++){
-        var px = x + side*(3 - i), inner = i/6, outer = 1-inner, dy = 0;
-        if(kind==='angry') dy = Math.round(-1*outer + 2*inner);
-        else if(kind==='worried') dy = Math.round(1*outer - 2*inner);
-        else if(kind==='raised') dy = -2;
-        else if(kind==='stern') dy = Math.round(inner*1.4);
+      for(var i=0;i<8;i++){
+        var px = x + side*(4 - i), inner = i/7, outer = 1-inner, dy = 0;
+        if(kind==='angry') dy = Math.round(-1*outer + 3*inner);
+        else if(kind==='worried') dy = Math.round(1*outer - 3*inner);
+        else if(kind==='raised') dy = -3;
+        else if(kind==='stern') dy = Math.round(inner*2);
         else if(kind==='soft') dy = -1;
-        else if(kind==='smug') dy = side>0 ? -2+Math.round(inner) : Math.round(inner);
-        else if(kind==='think') dy = side>0 ? -2 : 1;
+        else if(kind==='smug') dy = side>0 ? -3+Math.round(inner) : Math.round(inner);
+        else if(kind==='think') dy = side>0 ? -3 : 1;
         else dy = i===0 ? 1 : 0;
-        var t = th - (i===0||i===6 ? 1 : 0);
-        R(px, by+dy, 1, Math.max(1,t), c);
+        R(px, by+dy, 1, Math.max(1, th - (i===0||i===7 ? 1 : 0)), c);
       }
     });
   }
@@ -291,75 +290,72 @@
     var f = '#15110E', glint = e.fx==='glint';
     [exL, exR].forEach(function(x, n){
       if(sp.glasses==='rect' || sp.glasses==='square'){
-        var hh = sp.glasses==='square' ? 6 : 5;
-        R(x-4, ey-2, 9, 1, f); R(x-4, ey-3+hh, 9, 1, f); R(x-4, ey-2, 1, hh, f); R(x+4, ey-2, 1, hh, f);
-        if(glint){ R(x-3, ey-1, 7, hh-2, '#DDEDEA'); } else { P(x-3+n, ey-1, '#E9F3F1'); P(x-2+n, ey-1, 'rgba(233,243,241,.5)'); }
+        var hh = sp.glasses==='square' ? 8 : 7;
+        R(x-5, ey-3, 11, 1, f); R(x-5, ey-4+hh, 11, 1, f); R(x-5, ey-3, 1, hh, f); R(x+5, ey-3, 1, hh, f);
+        if(glint) R(x-4, ey-2, 9, hh-2, '#DDEDEA'); else { P(x-4+n, ey-2, '#E9F3F1'); P(x-3+n, ey-2, 'rgba(233,243,241,.5)'); }
       } else if(sp.glasses==='round'){
-        R(x-2, ey-2, 5, 1, f); R(x-2, ey+3, 5, 1, f); R(x-3, ey-1, 1, 4, f); R(x+3, ey-1, 1, 4, f);
-        if(glint) R(x-2, ey-1, 5, 4, '#DDEDEA'); else P(x-2, ey-1, '#E9F3F1');
+        R(x-3, ey-3, 7, 1, f); R(x-3, ey+4, 7, 1, f); R(x-4, ey-2, 1, 6, f); R(x+4, ey-2, 1, 6, f);
+        if(glint) R(x-3, ey-2, 7, 6, '#DDEDEA'); else P(x-3, ey-2, '#E9F3F1');
       } else if(sp.glasses==='half'){
-        R(x-4, ey+3, 9, 1, '#2B2622'); R(x-4, ey, 1, 3, '#2B2622'); R(x+4, ey, 1, 3, '#2B2622'); R(x-4, ey, 9, 1, 'rgba(232,240,236,.35)');
-        if(glint) R(x-3, ey, 7, 3, '#DDEDEA');
+        R(x-5, ey+4, 11, 1, '#2B2622'); R(x-5, ey+1, 1, 3, '#2B2622'); R(x+5, ey+1, 1, 3, '#2B2622'); R(x-4, ey+1, 9, 1, 'rgba(232,240,236,.35)');
+        if(glint) R(x-4, ey+1, 9, 3, '#DDEDEA');
       }
     });
-    var by = sp.glasses==='half' ? ey+1 : ey-1;
-    R(exL+5, by, exR-exL-9, 1, f);
-    R(exL-5, by, 2, 1, f); R(exR+4, by, 2, 1, f);
+    var by = sp.glasses==='half' ? ey+2 : ey-1;
+    R(exL+6, by, exR-exL-11, 1, f); R(exL-7, by, 2, 1, f); R(exR+6, by, 2, 1, f);
   }
   function beard(sp, cx, fx, fw, fy, ey, my, shape, st){
     var b = sp.beardC; if(!b || sp.beard==='none' || sp.beard==='moustache') return;
-    var chin = fy+36;
+    var chin = fy+s(36);
     if(sp.beard==='stubble'){
-      for(var y=ey+8; y<chin; y++){ var n=faceInset(shape, y-fy); for(var x=fx+n+1; x<fx+fw-n-1; x++){ var inMouth = Math.abs(x-cx)<6 && Math.abs(y-my)<2; if(!inMouth && hash(x,y)<0.32 && (y>my-3 || x<fx+n+6 || x>fx+fw-n-7)) P(x,y,b[1]); } }
+      for(var y=ey+s(8); y<chin; y++){ var n=faceInset(shape, y-fy); for(var x=fx+n+1; x<fx+fw-n-1; x++){ var inMouth = Math.abs(x-cx)<7 && Math.abs(y-my)<3; if(!inMouth && hash(x,y)<0.32 && (y>my-3 || x<fx+n+7 || x>fx+fw-n-8)) P(x,y,b[1]); } }
       return;
     }
     if(sp.beard==='goatee'){
-      spans(my+2, chin+2, function(y){ var w = y<chin-2 ? 6 : 4; return [cx-w, cx+w]; }, b[0]);
-      R(cx-6, my-1, 2, 4, b[0]); R(cx+4, my-1, 2, 4, b[0]); dith(cx-4, my+3, 4, 4, b[2]);
+      spans(my+2, chin+3, function(y){ var w = y<chin-2 ? 7 : 5; return [cx-w, cx+w]; }, b[0]);
+      R(cx-7, my-1, 2, 5, b[0]); R(cx+5, my-1, 2, 5, b[0]); dith(cx-4, my+4, 4, 4, b[2]);
       return;
     }
-    var side = sp.beard==='trim' || sp.beard==='short' ? 3 : 5;
-    var top = sp.beard==='full' ? ey+7 : ey+9;
-    for(var y2=top; y2<chin+3; y2++){
-      var n2 = faceInset(shape, Math.min(35, y2-fy)), x0 = fx+n2, x1 = fx+fw-n2;
-      if(y2>=chin){ var k=y2-chin+1; x0 = cx-(fw/2-8)+k*3; x1 = cx+(fw/2-8)-k*3; if(x1<=x0) continue; }
-      if(y2 < my-3){ R(x0, y2, side, 1, b[1]); R(x1-side, y2, side, 1, b[0]); if(y2===top||y2===top+1){ P(x0+side, y2, b[1]); } continue; }
-      R(x0, y2, x1-x0, 1, b[1]); R(x1-5, y2, 5, 1, b[0]);
+    var side = sp.beard==='trim' || sp.beard==='short' ? 4 : 6;
+    var top = sp.beard==='full' ? ey+s(7) : ey+s(9);
+    for(var y2=top; y2<chin+4; y2++){
+      var n2 = faceInset(shape, Math.min(s(36)-1, y2-fy)), x0 = fx+n2, x1 = fx+fw-n2;
+      if(y2>=chin){ var k=y2-chin+1; x0 = cx-(fw/2-10)+k*3; x1 = cx+(fw/2-10)-k*3; if(x1<=x0) continue; }
+      if(y2 < my-3){ R(x0, y2, side, 1, b[1]); R(x1-side, y2, side, 1, b[0]); continue; }
+      R(x0, y2, x1-x0, 1, b[1]); R(x1-6, y2, 6, 1, b[0]);
     }
-    for(var y3=my+2; y3<chin+2; y3+=3) for(var x3=fx+4; x3<fx+fw-8; x3+=5) if(hash(x3,y3)<0.25) P(x3, y3, b[2]);
+    for(var y3=my+2; y3<chin+2; y3+=3) for(var x3=fx+5; x3<fx+fw-9; x3+=5) if(hash(x3,y3)<0.25) P(x3, y3, b[2]);
     spans(top, my-3, function(y){ var n4=faceInset(shape,y-fy); return [fx+n4+side, fx+n4+side+1]; }, b[2]);
-    if(sp.beard==='trim' || sp.beard==='short'){
-      spans(top, my-3, function(y){ var n3=faceInset(shape,y-fy); return [fx+n3+side, fx+n3+side+2]; }, SKIN[sp.skin][2]);
-    }
-    R(cx-5, my+3, 10, 1, b[2]);
+    R(cx-6, my+3, 12, 1, b[2]);
   }
   function mouth(sp, cx, my, kind, sk){
     var lip = sp.beard && sp.beard!=='none' && sp.beard!=='stubble' && sp.beard!=='moustache' ? '#3A1F18' : '#7A3A2E', dark = '#2A0F0B', teeth = '#EFE8DC';
-    if(kind==='open'){ R(cx-3, my-1, 7, 4, dark); R(cx-2, my-1, 5, 1, teeth); R(cx-2, my+3, 5, 1, sk[3]); return; }
-    if(kind==='shout'){ R(cx-4, my-2, 9, 6, dark); R(cx-3, my-2, 7, 1, teeth); R(cx-2, my+2, 5, 2, '#9C3A32'); R(cx-3, my+4, 7, 1, sk[3]); return; }
-    if(kind==='teeth'){ R(cx-5, my-1, 11, 4, dark); R(cx-4, my, 9, 2, teeth); R(cx-1, my, 1, 2, '#BDB4A5'); R(cx+2, my, 1, 2, '#BDB4A5'); return; }
-    if(kind==='smile'){ R(cx-4, my, 9, 1, lip); P(cx-5, my-1, lip); P(cx+5, my-1, lip); R(cx-3, my+1, 7, 1, sk[0]); return; }
-    if(kind==='smug'){ R(cx-4, my, 8, 1, lip); P(cx+4, my-1, lip); P(cx+5, my-2, lip); R(cx-2, my+1, 5, 1, sk[0]); return; }
-    if(kind==='frown'){ R(cx-3, my, 7, 1, lip); P(cx-4, my+1, lip); P(cx+4, my+1, lip); return; }
-    if(kind==='wavy'){ P(cx-4,my+1,lip); P(cx-3,my,lip); P(cx-2,my,lip); P(cx-1,my+1,lip); P(cx,my+1,lip); P(cx+1,my,lip); P(cx+2,my,lip); P(cx+3,my+1,lip); return; }
-    if(kind==='side'){ R(cx-1, my, 5, 1, lip); P(cx+4, my-1, lip); return; }
-    if(kind==='flat'){ R(cx-4, my, 9, 1, lip); return; }
-    R(cx-3, my, 7, 1, lip); R(cx-2, my+1, 5, 1, sk[0]);
+    if(kind==='open'){ R(cx-4, my-1, 9, 5, dark); R(cx-3, my-1, 7, 1, teeth); R(cx-2, my+2, 5, 2, '#9C3A32'); R(cx-3, my+4, 7, 1, sk[3]); return; }
+    if(kind==='shout'){ R(cx-5, my-3, 11, 8, dark); R(cx-4, my-3, 9, 2, teeth); R(cx-3, my+2, 7, 3, '#9C3A32'); R(cx-4, my+5, 9, 1, sk[3]); return; }
+    if(kind==='teeth'){ R(cx-6, my-2, 13, 5, dark); R(cx-5, my-1, 11, 3, teeth); R(cx-1, my-1, 1, 3, '#BDB4A5'); R(cx+2, my-1, 1, 3, '#BDB4A5'); return; }
+    if(kind==='smile'){ R(cx-5, my, 11, 2, lip); P(cx-6, my-1, lip); P(cx+6, my-1, lip); R(cx-3, my+1, 7, 1, '#9C3A32'); R(cx-4, my+2, 9, 1, sk[0]); return; }
+    if(kind==='smug'){ R(cx-4, my, 9, 1, lip); P(cx+5, my-1, lip); P(cx+6, my-2, lip); R(cx-2, my+1, 6, 1, sk[0]); return; }
+    if(kind==='frown'){ R(cx-4, my, 9, 1, lip); P(cx-5, my+1, lip); P(cx+5, my+1, lip); return; }
+    if(kind==='wavy'){ for(var i=-5;i<=5;i++) P(cx+i, my+(((i+6)>>1)&1), lip); return; }
+    if(kind==='side'){ R(cx-1, my, 6, 1, lip); P(cx+5, my-1, lip); return; }
+    if(kind==='flat'){ R(cx-5, my, 11, 1, lip); return; }
+    R(cx-4, my, 9, 1, lip); R(cx-3, my+1, 7, 1, sk[0]);
   }
   function moustache(sp, cx, my){
     var b = sp.beardC; if(!b || sp.beard==='none' || sp.beard==='stubble') return;
-    var thick = sp.beard==='moustache' ? 3 : 2, w = sp.beard==='moustache' ? 7 : 6;
+    var thick = sp.beard==='moustache' ? 4 : 3, w = sp.beard==='moustache' ? 9 : 8;
     R(cx-w, my-2-thick+1, w*2, thick, b[1]); R(cx, my-2-thick+1, w, thick, b[0]);
-    P(cx-w-1, my-1, b[1]); P(cx+w, my-1, b[0]); P(cx-1, my-2-thick+1, b[2]); P(cx-4, my-2-thick+1, b[2]);
+    P(cx-w-1, my-1, b[1]); P(cx+w, my-1, b[0]); P(cx-2, my-2-thick+1, b[2]); P(cx-5, my-2-thick+1, b[2]);
   }
   function hair(sp, cx, fy){
     var h = sp.hairC, fw = sp.fw, fx = cx-fw/2, sk = SKIN[sp.skin];
-    R(fx-2, fy+12, 3, 8, sk[2]); R(fx+fw-1, fy+12, 3, 8, sk[3]); P(fx-1, fy+14, sk[3]);
-    spans(fy-14, fy+7, function(y){ var d=(y-(fy+4))/18; if(d*d>1) return null; var w=(fw/2+2)*Math.sqrt(1-d*d); return [cx-w, cx+w]; }, h[1]);
-    R(fx, fy+4, fw, 3, h[1]); R(fx-1, fy+6, 3, 8, h[1]); R(fx+fw-2, fy+6, 3, 8, h[0]);
-    spans(fy-14, fy+7, function(y){ var d=(y-(fy+4))/18; if(d*d>1) return null; var w=(fw/2+2)*Math.sqrt(1-d*d); return [cx+w*0.3, cx+w]; }, h[0]);
-    for(var y=fy-12; y<fy+5; y+=2) for(var x=fx; x<fx+fw; x+=sp.curly?2:3) if(hash(x,y)<(sp.curly?0.5:0.3)) P(x, y, h[2]);
-    if(sp.curly){ for(var x2=fx+1; x2<fx+fw-1; x2+=3){ P(x2, fy+7, h[1]); } }
+    R(fx-3, fy+s(12), 4, s(9), sk[2]); R(fx+fw-1, fy+s(12), 4, s(9), sk[3]); P(fx-2, fy+s(14), sk[3]);
+    var hc = fy+s(4), hr = s(18);
+    spans(fy-s(15), fy+s(7), function(y){ var d=(y-hc)/hr; if(d*d>1) return null; var w=(fw/2+3)*Math.sqrt(1-d*d); return [cx-w, cx+w]; }, h[1]);
+    R(fx, fy+s(4), fw, 4, h[1]); R(fx-1, fy+s(6), 4, s(8), h[1]); R(fx+fw-3, fy+s(6), 4, s(8), h[0]);
+    spans(fy-s(15), fy+s(7), function(y){ var d=(y-hc)/hr; if(d*d>1) return null; var w=(fw/2+3)*Math.sqrt(1-d*d); return [cx+w*0.3, cx+w]; }, h[0]);
+    for(var y=fy-s(13); y<fy+s(5); y+=2) for(var x=fx; x<fx+fw; x+=sp.curly?2:3) if(hash(x,y)<(sp.curly?0.5:0.3)) P(x, y, h[2]);
+    if(sp.curly){ for(var x2=fx+1; x2<fx+fw-1; x2+=3) P(x2, fy+s(7), h[1]); }
   }
   function cloth(sp){ return sp.head==='shemagh' ? 'red' : 'white'; }
   function clothFn(kind, fold){
@@ -373,66 +369,64 @@
     };
   }
   function headCap(sp, cx, top, fy){
-    var fw = sp.fw, rx = fw/2+6, kind = cloth(sp), cy = fy+3;
-    var pts = []; for(var a=0;a<=20;a++){ var t=Math.PI*(1+a/20); pts.push([cx+Math.cos(t)*rx, cy+Math.sin(t)*(cy-top)]); }
+    var fw = sp.fw, rx = fw/2+s(6), kind = cloth(sp), cy = fy+3;
+    var pts = []; for(var a=0;a<=24;a++){ var t=Math.PI*(1+a/24); pts.push([cx+Math.cos(t)*rx, cy+Math.sin(t)*(cy-top)]); }
     pts.push([cx+rx, cy+2]); pts.push([cx-rx, cy+2]);
-    polyF(pts, clothFn(kind, function(x,y){ return x>cx+rx-5 ? 2 : (x>cx+rx*0.35 ? 1 : 0); }));
-    if(sp.peak){ poly([[cx-6,top+3],[cx,top-4],[cx+6,top+3]], kind==='red'?SHEMAGH_RED[2]:GHUTRA[3]); line(cx, top-3, cx, top+5, 1, kind==='red'?SHEMAGH_RED[0]:GHUTRA[0]); }
-    /* brim fold over the forehead */
-    R(cx-rx+2, fy-1, rx*2-4, 3, kind==='red'?GHUTRA[2]:GHUTRA[3]); R(cx-rx+2, fy+2, rx*2-4, 1, GHUTRA[0]);
+    polyF(pts, clothFn(kind, function(x,y){ return x>cx+rx-6 ? 2 : (x>cx+rx*0.35 ? 1 : 0); }));
+    if(sp.peak){ var pk = s(5); poly([[cx-pk-2,top+4],[cx,top-pk],[cx+pk+2,top+4]], kind==='red'?SHEMAGH_RED[2]:GHUTRA[3]); line(cx, top-pk+1, cx, top+6, 1, kind==='red'?SHEMAGH_RED[0]:GHUTRA[0]); }
+    R(cx-rx+2, fy-2, rx*2-4, 4, kind==='red'?GHUTRA[2]:GHUTRA[3]); R(cx-rx+2, fy+2, rx*2-4, 1, GHUTRA[0]);
     if(sp.agal){
-      [top+9, top+12].forEach(function(y){
+      [top+s(9), top+s(13)].forEach(function(y){
         var d=(y-cy)/(cy-top), w = rx*Math.sqrt(Math.max(0,1-d*d))+1;
-        R(cx-w, y, w*2, 2, '#0E0C0B'); R(cx-w+3, y, w*0.9, 1, '#45403C'); P(cx-w, y+1, '#000'); P(cx+w-1, y+1, '#000');
+        R(cx-w, y, w*2, 3, '#0E0C0B'); R(cx-w+3, y, w*0.9, 1, '#4A4540'); P(cx-w, y+2, '#000'); P(cx+w-1, y+2, '#000');
       });
-      R(cx-rx+2, top+11, rx*2-4, 1, GHUTRA[0]);
     }
   }
-  function headHang(sp, cx, fy, sy, layer){
-    var fw = sp.fw, fx = cx-fw/2, kind = cloth(sp), hang = sp.hang||'both';
+  /* Side panels of the shemagh. With a bisht they rest on the shoulders and are drawn BEFORE the bisht,
+     so the bisht's collar and gold-trimmed front edges lie on top of them. */
+  function headHang(sp, cx, fy, sy, under){
+    var fw = sp.fw, fx = cx-fw/2, kind = cloth(sp), c30 = fy+s(30);
     var foldFn = function(x,y){ var r=(x*3+y)%9; return r===0 ? 2 : r<3 ? 1 : 0; };
-    var leftFront = hang==='both' || hang==='front', rightFront = hang==='both';
-    if(layer==='back'){
-      if(!leftFront) polyF([[fx-6,fy+2],[fx+1,fy+4],[fx-2,sy+2],[fx-22,sy+8],[fx-12,fy+30]], clothFn(kind, function(){ return 1; }));
-      if(!rightFront) polyF([[fx+fw+6,fy+2],[fx+fw-1,fy+4],[fx+fw+2,sy+2],[fx+fw+22,sy+8],[fx+fw+12,fy+30]], clothFn(kind, function(){ return 2; }));
-      return;
+    var bottom = under ? sy+16 : sy+44, outer = under ? 18 : 16;
+    polyF([[fx-7,fy+1],[fx+1,fy+3],[fx+1,c30],[cx-12,sy-4],[cx-15,bottom],[fx-outer,bottom+4],[fx-13,sy+4],[fx-9,c30]], clothFn(kind, foldFn));
+    polyF([[fx+fw+7,fy+1],[fx+fw-1,fy+3],[fx+fw-1,c30],[cx+12,sy-4],[cx+15,bottom],[fx+fw+outer,bottom+4],[fx+fw+13,sy+4],[fx+fw+9,c30]], clothFn(kind, function(x,y){ return foldFn(x,y)+1; }));
+    if(sp.pleats){
+      /* royal pleats: crisp stacked creases on the right panel */
+      for(var k=0;k<5;k++){ var yy = fy+s(8)+k*s(5); line(fx+fw, yy, fx+fw+5, yy+3, 1, SHEMAGH_RED[0]); line(fx+fw, yy+1, fx+fw+5, yy+4, 1, GHUTRA[4]); }
     }
-    if(leftFront) polyF([[fx-6,fy+1],[fx+1,fy+3],[fx+1,fy+30],[cx-11,sy-4],[cx-14,sy+40],[fx-16,sy+46],[fx-12,sy+6],[fx-8,fy+30]], clothFn(kind, foldFn));
-    else polyF([[fx-6,fy+1],[fx+1,fy+3],[fx+1,fy+28],[fx-3,sy-2],[fx-10,sy+2],[fx-8,fy+24]], clothFn(kind, foldFn));
-    if(rightFront) polyF([[fx+fw+6,fy+1],[fx+fw-1,fy+3],[fx+fw-1,fy+30],[cx+11,sy-4],[cx+14,sy+40],[fx+fw+16,sy+46],[fx+fw+12,sy+6],[fx+fw+8,fy+30]], clothFn(kind, function(x,y){ return foldFn(x,y)+1; }));
-    else polyF([[fx+fw+6,fy+1],[fx+fw-1,fy+3],[fx+fw-1,fy+28],[fx+fw+3,sy-2],[fx+fw+10,sy+2],[fx+fw+8,fy+24]], clothFn(kind, function(){ return 2; }));
-    if(kind==='red'){ var fr = function(x0,y0,x1){ for(var x=x0;x<x1;x+=2) R(x, y0, 1, 2+((x>>1)&1), SHEMAGH_RED[1]); };
-      if(leftFront) fr(fx-15, sy+45, cx-14); if(rightFront) fr(cx+14, sy+45, fx+fw+16); }
+    if(!under && kind==='red'){ for(var x=fx-15; x<cx-14; x+=2) R(x, bottom+4, 1, 2+((x>>1)&1), SHEMAGH_RED[1]); for(var x2=cx+14; x2<fx+fw+16; x2+=2) R(x2, bottom+4, 1, 2+((x2>>1)&1), SHEMAGH_RED[1]); }
   }
   function wrap(sp, cx, top, fy){
-    var fw = sp.fw, rx = fw/2+5, cy = fy+2;
+    var fw = sp.fw, rx = fw/2+s(5), cy = fy+2;
     var pts=[]; for(var a=0;a<=16;a++){ var t=Math.PI*(1+a/16); pts.push([cx+Math.cos(t)*rx, cy+Math.sin(t)*(cy-top-4)]); }
     polyF(pts, clothFn('red', function(x,y){ return ((x+y*2)%7===0) ? 2 : x>cx+rx*0.4 ? 1 : 0; }));
-    for(var k=0;k<3;k++){ var yy = fy-3-k*5; var d=(yy-cy)/(cy-top-4), w=rx*Math.sqrt(Math.max(0,1-d*d))-1; line(cx-w, yy+2, cx+w, yy-2, 1, SHEMAGH_RED[0]); }
+    for(var k=0;k<3;k++){ var yy = fy-3-k*s(5); var d=(yy-cy)/(cy-top-4), w=rx*Math.sqrt(Math.max(0,1-d*d))-1; line(cx-w, yy+2, cx+w, yy-2, 1, SHEMAGH_RED[0]); }
     R(cx-rx+1, fy-1, rx*2-2, 2, SHEMAGH_RED[1]);
-    polyF([[cx+rx-3,fy-6],[cx+rx+5,fy-2],[cx+rx+7,fy+14],[cx+rx+2,fy+18],[cx+rx-1,fy+2]], clothFn('red', function(){ return 1; }));
-    for(var f=0;f<6;f+=2) R(cx+rx+2+f/2, fy+18, 1, 3, SHEMAGH_RED[1]);
+    polyF([[cx+rx-3,fy-6],[cx+rx+6,fy-2],[cx+rx+8,fy+s(14)],[cx+rx+2,fy+s(18)],[cx+rx-1,fy+2]], clothFn('red', function(){ return 1; }));
   }
-  function hijab(sp, cx, top, fy, sy, layer){
-    var hj = sp.hijab, fw = sp.fw, rx = fw/2+8;
+  /* Black head cover and niqab: only the eye band (brows + eyes) stays visible. */
+  function veil(sp, cx, top, fy, sy, layer){
+    var hj = sp.veil, fw = sp.fw, rx = fw/2+s(8), ey = fy+s(14), chin = fy+s(36);
     if(layer==='back'){
-      ell(cx, fy+12, rx, fy+12-top+2, hj[2]);
-      poly([[cx-rx+1,fy+20],[cx+rx-1,fy+20],[cx+rx+12,sy+22],[cx-rx-12,sy+22]], hj[2]);
-      poly([[cx+4,fy+20],[cx+rx-1,fy+20],[cx+rx+12,sy+22],[cx+6,sy+22]], hj[1]);
-      dith(cx-rx-4, sy, 10, 16, hj[3]);
-      spans(top-1, fy+10, function(y){ var d=(y-(fy+12))/(fy+12-top+2); if(d*d>1) return null; var w=rx*Math.sqrt(1-d*d); return [cx+w*0.35, cx+w]; }, hj[1]);
-      dith(cx-rx+3, top+6, 8, 14, hj[3]);
-      for(var k=0;k<3;k++) line(cx-rx+6+k*6, sy-2, cx-rx-4+k*6, sy+20, 1, hj[1]);
+      ell(cx, fy+s(14), rx, fy+s(14)-top+2, hj[2]);
+      poly([[cx-rx+1,fy+s(22)],[cx+rx-1,fy+s(22)],[cx+rx+14,sy+24],[cx-rx-14,sy+24]], hj[2]);
+      poly([[cx+4,fy+s(22)],[cx+rx-1,fy+s(22)],[cx+rx+14,sy+24],[cx+6,sy+24]], hj[1]);
+      spans(top-1, fy+s(12), function(y){ var d=(y-(fy+s(14)))/(fy+s(14)-top+2); if(d*d>1) return null; var w=rx*Math.sqrt(1-d*d); return [cx+w*0.35, cx+w]; }, hj[1]);
+      dith(cx-rx+4, top+6, 9, s(12), hj[3]);
       return;
     }
-    /* front frame around the face and under the chin */
-    spans(fy-2, fy+3, function(y){ return [cx-fw/2-1, cx+fw/2+1]; }, hj[3]);
-    R(cx-fw/2+1, fy+3, fw-2, 1, hj[1]);
-    for(var y=fy+3; y<fy+34; y++){ var n=faceInset(sp.face, y-fy+3); R(cx-fw/2+n-3, y, 3, 1, hj[3]); R(cx+fw/2-n, y, 3, 1, hj[1]); }
-    poly([[cx-fw/2+4,fy+30],[cx+fw/2-4,fy+30],[cx+9,sy+6],[cx-9,sy+6]], hj[2]);
-    poly([[cx+1,fy+33],[cx+fw/2-4,fy+30],[cx+9,sy+6],[cx+2,sy+6]], hj[1]);
-    line(cx-6, fy+36, cx-4, sy+4, 1, hj[3]);
-    if(sp.embroid){ R(cx-fw/2+1, fy-2, fw-2, 1, sp.embroid[1]); }
+    var bandTop = ey-s(5)-3, bandBot = ey+s(4)+1;
+    /* forehead cover */
+    spans(fy-3, bandTop, function(){ return [cx-fw/2-3, cx+fw/2+3]; }, hj[2]);
+    R(cx-fw/2-3, bandTop-1, fw+6, 1, hj[3]);
+    /* frame at the sides of the eye band */
+    R(cx-fw/2-3, bandTop, 5, bandBot-bandTop, hj[2]); R(cx+fw/2-2, bandTop, 5, bandBot-bandTop, hj[1]);
+    /* niqab */
+    poly([[cx-fw/2-3,bandBot],[cx+fw/2+3,bandBot],[cx+fw/2+8,sy+16],[cx-fw/2-8,sy+16]], hj[2]);
+    poly([[cx+2,bandBot],[cx+fw/2+3,bandBot],[cx+fw/2+8,sy+16],[cx+4,sy+16]], hj[1]);
+    R(cx-fw/2-3, bandBot, fw+6, 1, hj[4]);
+    for(var k=0;k<3;k++) line(cx-fw/2+4+k*s(7), bandBot+6, cx-fw/2+2+k*s(7), sy+14, 1, hj[3]);
+    if(sp.embroid){ R(cx-fw/2-3, bandBot+1, fw+6, 1, sp.embroid[0]); for(var x=cx-fw/2; x<cx+fw/2; x+=4) P(x, bandBot+1, sp.embroid[1]); }
   }
 
   /* ---------- arms and hands (poses) ---------- */
@@ -510,17 +504,18 @@
 
   /* ---------- full character ---------- */
   function person(id, cx, top, st, X){
-    var sp = CAST[id]; if(!sp) return;
+    var base = CAST[id]; if(!base) return;
     X = X || {};
+    var sp = Object.create(base); sp.fw = Math.round(base.fw*K);
     var stoop = sp.stoop||0, br = st.breath ? 1 : 0;
-    var fy = top + 16, sy = fy + 44 + stoop + br, hw = BUILD[sp.build]/2, sk = SKIN[sp.skin];
+    var fy = top + s(16), chin = fy + s(36), sy = chin + 9 + stoop + br, hw = BUILD[sp.build]/2, sk = SKIN[sp.skin];
     var expr = st.expr==='normal' && DEFAULT_EXPR[id] ? DEFAULT_EXPR[id] : st.expr;
-    var s = {expr:expr, pose:st.pose, dir:st.dir, mouth:st.mouth, blink:st.blink};
+    var ss = {expr:expr, pose:st.pose, dir:st.dir, mouth:st.mouth, blink:st.blink};
     var e = EXPR[expr] || EXPR.normal;
-    if(e.fx==='dots' && !s.pose) s.pose = 'think';
-    X.chin = fy+36;
-    if(sp.head==='hijab') hijab(sp, cx, top, fy, sy, 'back');
-    if(sp.head==='shemagh'||sp.head==='ghutra') headHang(sp, cx, fy, sy, 'back');
+    if(e.fx==='dots' && !ss.pose) ss.pose = 'think';
+    X.chin = chin;
+    var cloak = sp.outfit==='bisht', scarf = sp.head==='shemagh'||sp.head==='ghutra';
+    if(sp.head==='niqab') veil(sp, cx, top, fy, sy, 'back');
     /* body */
     if(sp.outfit==='coverall') coverall(sp, cx, sy, hw);
     else if(sp.outfit==='shirt') shirt(sp, cx, sy, hw);
@@ -528,24 +523,25 @@
     else if(sp.outfit==='hivis') hivis(sp, cx, sy, hw);
     else thobe(sp, cx, sy, hw);
     /* neck */
-    R(cx-7, fy+30, 14, sy-fy-30, sk[2]); R(cx+2, fy+30, 5, sy-fy-30, sk[3]);
-    if(sp.outfit==='thobe'||sp.outfit==='bisht'||sp.outfit==='vest'||sp.outfit==='hivis') collar(sp, cx, sy);
-    if(sp.outfit==='bisht') bisht(sp, cx, sy, hw);
+    R(cx-s(5), chin-6, s(10), sy-chin+6, sk[2]); R(cx+2, chin-6, s(4), sy-chin+6, sk[3]);
+    if(sp.outfit==='thobe'||cloak||sp.outfit==='vest'||sp.outfit==='hivis') collar(sp, cx, sy);
+    /* shemagh first, bisht on top */
+    if(cloak && scarf) headHang(sp, cx, fy, sy, true);
+    if(cloak) bisht(sp, cx, sy, hw);
     if(sp.outfit==='vest') vest(sp, cx, sy, hw);
     if(sp.badge) badge(cx, sy);
-    if(sp.pen && sp.outfit!=='bisht'){ R(cx-hw+18, sy+18, 2, 10, GOLD[4]); }
+    if(sp.pen && !cloak){ R(cx-hw+18, sy+18, 2, 10, GOLD[4]); }
     /* head */
-    face(sp, cx, fy, s);
+    face(sp, cx, fy, ss);
     if(sp.head==='hair') hair(sp, cx, fy);
-    if(sp.head==='shemagh'||sp.head==='ghutra'){ headHang(sp, cx, fy, sy, 'front'); headCap(sp, cx, top, fy); }
+    if(scarf){ if(!cloak) headHang(sp, cx, fy, sy, false); headCap(sp, cx, top, fy); }
     if(sp.head==='wrap') wrap(sp, cx, top, fy);
-    if(sp.head==='hijab') hijab(sp, cx, top, fy, sy, 'front');
-    /* eyes and glasses again on top of headwear edges */
-    arms(sp, cx, sy, hw, s, X);
+    if(sp.head==='niqab'){ veil(sp, cx, top, fy, sy, 'front'); eyes(sp, cx-s(8), cx+s(7), fy+s(14), ss, e, sk); }
+    arms(sp, cx, sy, hw, ss, X);
     fx(sp, cx, fy, e);
   }
   function fx(sp, cx, fy, e){
-    var fw = sp.fw;
+    var fw = Math.round(sp.fw*K);
     if(e.fx==='sweat'){ [[cx+fw/2+3, fy+8],[cx+fw/2+6, fy+18],[cx-fw/2-4, fy+12]].forEach(function(p){ R(p[0], p[1], 2, 3, '#CDEBFA'); P(p[0], p[1]-1, '#CDEBFA'); R(p[0], p[1]+3, 2, 1, '#6FA9C9'); P(p[0]+1, p[1]+1, '#FFFFFF'); }); }
     if(e.fx==='vein'){ var vx = cx+fw/2-2, vy = fy-6; R(vx, vy, 5, 1, '#E0533F'); R(vx+2, vy-2, 1, 5, '#E0533F'); P(vx+1,vy-1,'#E0533F'); P(vx+3,vy+1,'#E0533F'); }
     if(e.fx==='dots'){ [0,1,2].forEach(function(k){ R(cx+fw/2+10+k*7, fy-10-k*4, 3+k, 3+k, IVORY[4]); }); }
@@ -694,7 +690,7 @@
     if(sp.outfit==='bisht' && sp.trim && sp.trim!=='none'){ R(x-2, y+9, 1, 16, GOLD[3]); R(x+1, y+9, 1, 16, GOLD[3]); R(x-1,y+9,2,16,(sp.thobe||THOBE)[3]); }
     R(x-3, y+1, 6, 8, sk[1]); R(x+1, y+1, 2, 8, sk[2]);
     if(sp.head==='shemagh'||sp.head==='ghutra'){ var c = sp.head==='shemagh' ? SHEMAGH_RED[2] : GHUTRA[2]; R(x-5, y-2, 10, 4, c); R(x-5, y+2, 2, 8, c); R(x+3, y+2, 2, 8, c); R(x-4, y-1, 8, 1, INK); }
-    else if(sp.head==='hijab'){ R(x-5, y-2, 10, 12, sp.hijab[2]); R(x-3, y+1, 6, 7, sk[1]); }
+    else if(sp.head==='niqab'){ R(x-5, y-2, 10, 12, sp.veil[2]); R(x-3, y+3, 6, 2, sk[1]); P(x-2, y+3, INK); P(x+1, y+3, INK); }
     else if(sp.head==='wrap'){ R(x-4, y-2, 8, 4, SHEMAGH_RED[2]); }
     else { R(x-3, y-1, 6, 3, (sp.hairC||['#000','#111'])[1]); }
     if(sp.beard && sp.beard!=='none' && sp.beard!=='stubble'){ R(x-2, y+6, 4, 3, sp.beardC[1]); }
@@ -836,11 +832,11 @@
 
   /* ---------- public: draw a view ---------- */
   var LAYOUT = {
-    judge:   {who:'judge',  cx:240, top:66, deskY:180},
-    player:  {who:'player', cx:224, top:52, deskY:200},
-    rival:   {who:'rival',  cx:252, top:50, deskY:200},
-    lobby:   {who:'client', cx:240, top:58, deskY:214},
-    witness: {who:'witness',cx:240, top:58, deskY:190}
+    judge:   {who:'judge',  cx:240, top:50, deskY:180},
+    player:  {who:'player', cx:224, top:36, deskY:200},
+    rival:   {who:'rival',  cx:252, top:34, deskY:200},
+    lobby:   {who:'client', cx:240, top:42, deskY:214},
+    witness: {who:'witness',cx:240, top:42, deskY:190}
   };
   function scene(ctx, view, o){
     g = ctx; g.imageSmoothingEnabled = false;
@@ -876,7 +872,7 @@
     g = keep; finish(c);
     var k = canvas.getContext('2d'); k.imageSmoothingEnabled = false;
     k.fillStyle = EM[2]; k.fillRect(0,0,canvas.width,canvas.height);
-    k.drawImage(c, 240-32, 34, 64, 64, 0, 0, canvas.width, canvas.height);
+    k.drawImage(c, 240-40, 32, 80, 80, 0, 0, canvas.width, canvas.height);
   }
   var DOC_KIND = { contract:'contract', letter:'letter', notice:'letter', attendance:'table', bank:'bank', release:'release', email:'email' };
   function doc(canvas, key){

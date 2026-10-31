@@ -580,7 +580,8 @@
 
   /* ---------- character sprites from the approved concept sheet (court/cast.webp) ----------
      Code-drawn characters above stay as the fallback until the image has loaded. */
-  var BASE = (document.currentScript && document.currentScript.src || '').replace(/[^\/]*$/, '');
+  var SRC = (document.currentScript && document.currentScript.src) || '';
+  var BASE = SRC.split('?')[0].replace(/[^\/]*$/, ''), VQ = SRC.indexOf('?') >= 0 ? SRC.slice(SRC.indexOf('?')) : '';
   var SHEET = { pos:{"judge0": [0, 0, 136, 148], "judge1": [138, 0, 122, 150], "judge2": [262, 0, 121, 148], "judge3": [385, 0, 124, 151], "judge4": [511, 0, 137, 151], "faisal0": [650, 0, 149, 154], "faisal1": [801, 0, 135, 149], "faisal2": [0, 156, 126, 150], "faisal3": [128, 156, 131, 152], "faisal4": [261, 156, 156, 149], "majed0": [419, 156, 170, 159], "majed1": [591, 156, 147, 150], "majed2": [740, 156, 144, 150], "majed3": [0, 317, 146, 150], "majed4": [148, 317, 164, 150], "lawyer0": [314, 317, 111, 144], "lawyer1": [427, 317, 104, 150], "lawyer2": [533, 317, 107, 149], "lawyer3": [642, 317, 120, 150], "client0": [764, 317, 104, 144], "client1": [870, 317, 114, 150], "client2": [0, 469, 105, 149], "client3": [107, 469, 127, 151], "witness0": [236, 469, 122, 160], "witness1": [360, 469, 97, 150], "witness2": [459, 469, 89, 150], "witness3": [550, 469, 97, 151], "clerk0": [649, 469, 119, 162], "clerk1": [770, 469, 93, 152], "clerk2": [865, 469, 85, 147], "clerk3": [0, 633, 104, 151]}, img:null, ready:false, cbs:[] };
   var SPRITE_SET = { judge:'judge', player:'faisal', rival:'majed', salem:'witness', khalid:'clerk', nasser:'client', abdullah:'lawyer' };
   var SPRITE_EXPR = {
@@ -596,7 +597,7 @@
     if(typeof Image === 'undefined') return;
     var im = new Image();
     im.onload = function(){ SHEET.img = im; SHEET.ready = true; cache = {}; cacheKeys = []; SHEET.cbs.forEach(function(f){ try{ f(); }catch(e){} }); SHEET.cbs = []; };
-    im.src = BASE + 'cast.webp';
+    im.src = BASE + 'cast.webp' + VQ;
   })();
   function onReady(f){ if(SHEET.ready) f(); else SHEET.cbs.push(f); }
   function spriteFrame(id, st){

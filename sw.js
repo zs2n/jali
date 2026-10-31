@@ -4,7 +4,7 @@
    - Icons, manifest and fonts: served from cache and refreshed in the background.
    - VERSION changes on every publish, which makes the browser install the new
      worker and delete the old caches automatically. */
-const VERSION = '20261031-release-3';
+const VERSION = '20261031-release-4';
 const PAGES = 'jali-pages-' + VERSION;
 const ASSETS = 'jali-assets-' + VERSION;
 const FONTS = 'jali-fonts';
@@ -22,20 +22,23 @@ const PRECACHE = [
   './icons/favicon-32.png'
 ];
 /* The mock court loads on demand; precache it so the game also works offline. */
+/* The ?v= suffix must match the one used by index.html, so each release gets fresh URLs. */
 const COURT = [
-  './court/court.css',
-  './court/art.js',
-  './court/cases.js',
-  './court/engine.js',
-  './court/cast.webp',
-  './court/promo.webp'
+  './court/court.css?v=4',
+  './court/art.js?v=4',
+  './court/cases.js?v=4',
+  './court/engine.js?v=4',
+  './court/cast.webp?v=4',
+  './court/promo.webp?v=4'
 ];
+/* cache: 'reload' skips the browser's HTTP cache, so a new release never precaches stale files. */
+const fresh = (urls) => urls.map((u) => new Request(u, { cache: 'reload' }));
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     Promise.all([
-      caches.open(PAGES).then((cache) => cache.addAll(PRECACHE)),
-      caches.open(ASSETS).then((cache) => cache.addAll(COURT))
+      caches.open(PAGES).then((cache) => cache.addAll(fresh(PRECACHE))),
+      caches.open(ASSETS).then((cache) => cache.addAll(fresh(COURT)))
     ]).then(() => self.skipWaiting())
   );
 });
